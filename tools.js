@@ -1431,7 +1431,7 @@ async function parseRcloneSections(newCfg = false) {
 
   try {
     const rcloneCmd = global.currentConfiguration.rclonePath;
-    const out = await execShellCommand(`"${rcloneCmd}" --config="${global.currentConfiguration.rcloneConf}" config show`);
+    const out = await execShellCommand(`"${rcloneCmd}" --config="${global.currentConfiguration.rcloneConf}" listremotes`);
     if (!out) {
       return console.error('rclone config is empty', global.currentConfiguration.rcloneConf, out);
     }

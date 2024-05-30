@@ -1436,7 +1436,7 @@ async function parseRcloneSections(newCfg = false) {
       return console.error('rclone config is empty', global.currentConfiguration.rcloneConf, out);
     }
 
-    const sections = out.split('\n');
+    const sections = out.split('\n').map(section => section.replace(/:$/, ''));
     if (sections.length) sections.pop();
     if (!sections.length) {
       return console.error('rclone config sections not found', global.currentConfiguration.rcloneConf, { out, sections });

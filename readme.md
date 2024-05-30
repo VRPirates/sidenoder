@@ -25,17 +25,17 @@ What makes sidenoder better than other sideloaders ?
 
 #### Run precompiled release on windows:
 1. Install latest [winfsp](https://github.com/billziss-gh/winfsp/releases/latest)
-2. Download and unpack(or run Setup.exe) the latest [windows release](https://github.com/vKolerts/sidenoder/releases/latest)
+2. Download and unpack(or run Setup.exe) the latest [windows release](https://github.com/VRPirates/sidenoder/releases/latest)
 3. Run the `sidenoder.exe` application
 
 #### Run precompiled release on linux:
-1. Download and unpack the latest [AppImage/deb](https://github.com/vKolerts/sidenoder/releases/latest)
+1. Download and unpack the latest [AppImage/deb](https://github.com/VRPirates/sidenoder/releases/latest)
 2. Make the AppImage executable. Or install deb package
 3. Run the AppImage
 
 #### Run precompiled release on mac:
 1. Install latest [osxfuse](https://github.com/osxfuse/osxfuse/releases) (4.2.0+)
-2. Download and unpack the latest [mac release](https://github.com/vKolerts/sidenoder/releases/latest) (.App)
+2. Download and unpack the latest [mac release](https://github.com/VRPirates/sidenoder/releases/latest) (.App)
 3. Run the .App
 
 
@@ -55,15 +55,9 @@ Also android tools and scrcpy is required:
 brew install android-platform-tools
 ```
 
-#### Planned:
-https://github.com/vKolerts/quest-sidenoder/projects/1
-
-#### Nightly versions at dev branch ;)
-https://github.com/vKolerts/quest-sidenoder/tree/dev
-
 ---
 
 Please report any issues here :
 
-https://github.com/vKolerts/sidenoder/issues
+https://github.com/VRPirates/sidenoder/issues
 

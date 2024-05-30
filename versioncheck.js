@@ -5,7 +5,7 @@ global.version = pkg.version;
 
 async function checkVersion() {
   try {
-    const res = await fetch('https://api.github.com/repos/vKolerts/sidenoder/releases/latest');
+    const res = await fetch('https://api.github.com/repos/VRPirates/sidenoder/releases/latest');
     const content = JSON.parse(await res.text())
     const remoteversion = content.name;
 

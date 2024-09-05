@@ -81,6 +81,8 @@
   ipcRenderer.on('data_backup', (event, arg) => {
     $id('backupDataBtn').removeClass('disabled');
     $id('restoreDataBtn').removeClass('disabled');
+    $id('backupAppPath').removeClass('disabled');
+
     if (arg.error) {
       id('tools_transfer_state').innerHTML = `<b class="text-danger">Backup Error: ${arg.error}</b>`;
     }
@@ -110,39 +112,39 @@
     $id('processingModal').modal('hide');
 
     const {
-      package,
+      pkg,
       backupPath,
       availableRestore,
       availableConfig,
     } = arg;
 
-    $id('packageName').text(package);
+    $id('packageName').text(pkg);
 
     $id('startAppBtn').click(({ target }) => {
-      startApp(package);
+      startApp(pkg);
       return true;
     });
     $id('uninstallAppBtn').click(({ target }) => {
-      uninstall(target, package);
+      uninstall(target, pkg);
       return true;
     });
     $id('backupAppBtn').click(({ target }) => {
       target.classList.add('disabled');
-      setAppBackupPath(package);
+      setAppBackupPath(pkg);
       return true;
     });
     $id('backupDataBtn').click(({ target }) => {
       target.classList.add('disabled');
-      ipcRenderer.send('data_backup', package);
+      ipcRenderer.send('data_backup', pkg);
       return true;
     });
     $id('restoreDataBtn').click(({ target }) => {
       target.classList.add('disabled');
-      ipcRenderer.send('data_restore', package);
+      ipcRenderer.send('data_restore', pkg);
       return true;
     });
     $id('backupAppPath').click((e) => {
-      shell.openPath(path.join(remote.getGlobal('sidenoderHome'), 'backup_data', package));
+      shell.openPath(path.join(remote.getGlobal('sidenoderHome'), 'backup_data', pkg));
       return true;
     });
 
@@ -159,7 +161,7 @@
       .val(availableConfig.username)
       .change(({ target }) => {
         $(target).removeClass('is-valid');
-        ipcRenderer.send('app_config_set', { package,  key: 'username', val: target.value });
+        ipcRenderer.send('app_config_set', { pkg,  key: 'username', val: target.value });
         return true;
       });
     }
@@ -167,7 +169,7 @@
     $id('appToolModal').modal('show');
   });
 
-  async function setAppBackupPath(package) {
+  async function setAppBackupPath(pkg) {
     const file = await dialog.showOpenDialog(null, {
       title: 'Set backup path',
       message: 'Browse location for new backup',
@@ -175,10 +177,10 @@
     });
     if (file.canceled) return $id('backupAppBtn').removeClass('disabled');
 
-    console.log('setAppBackupPath', package, file);
+    console.log('setAppBackupPath', pkg, file);
     const location = file.filePaths[0];
 
-    ipcRenderer.send('app_backup', { location, package });
+    ipcRenderer.send('app_backup', { location, pkg });
     return path;
   }
 </script>

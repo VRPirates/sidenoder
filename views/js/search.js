@@ -38,10 +38,6 @@ function openSearch() {
     search = null;
   }
 
-  const parentElement = id('listTable');
-  if (!parentElement) return;
-
-
   search = new FindInPage(remote.getCurrentWebContents(), {
     // parentElement,
     duration: 1,

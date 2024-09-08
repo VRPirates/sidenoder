@@ -1,17 +1,29 @@
-<div class="modal" id="tweaksModal" >
-  <div role="document" style="margin: 1.75rem auto; min-width:800px; max-width:50%"> <!-- class="modal-dialog"  -->
+<div class="modal" id="tweaksModal">
+  <div
+    role="document"
+    style="margin: 1.75rem auto; min-width: 800px; max-width: 50%"
+  >
+    <!-- class="modal-dialog" -->
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="tweaksModalLabel">Device Tweaks</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
           <span>&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <div class="alert alert-warning"><small>
-          <i class="fa fa-exclamation-triangle"></i>
-          WARNING: All changes your own risk. Some of this tweaks may reset to default when you restart your headset
-        </small></div>
+        <div class="alert alert-warning">
+          <small>
+            <i class="fa fa-exclamation-triangle"></i>
+            WARNING: All changes your own risk. Some of this tweaks may reset to
+            default when you restart your headset
+          </small>
+        </div>
         <div class="card bg-primary mb-2">
           <div class="card-header">Tools:</div>
           <div class="card-body">
@@ -19,7 +31,11 @@
               <a id="scrcpyCfg" class="adbdev btn btn-primary">
                 <i class="fa fa-share-square"></i> Screen share
               </a>
-              <a id="enableMTP" class="adbdev btn btn-primary" title="mount device as usb storage">
+              <a
+                id="enableMTP"
+                class="adbdev btn btn-primary"
+                title="mount device as usb storage"
+              >
                 <i class="fa fa-plug"></i> Switch USB mode to MTP
               </a>
               <a id="rebootDevice" class="adbdev btn btn-danger">
@@ -30,17 +46,23 @@
               </a>
             </div>
 
-            <!-- <div class="form-group mb-3">
-              <h6 class="card-title">
-                Proximity sensor
-                <a id="proximityOn" class="btn btn-sm btn-info" />Enable</a>
-                <a id="proximityOff" class="btn btn-sm btn-primary" />Disable</a>
-              </h6>
-            </div> -->
+            <!--
+              <div class="form-group mb-3">
+                <h6 class="card-title">
+                  Proximity sensor
+                  <a id="proximityOn" class="btn btn-sm btn-info" />Enable</a>
+                  <a id="proximityOff" class="btn btn-sm btn-primary" />Disable</a>
+                </h6>
+              </div>
+            -->
 
             <div class="form-check mb-3">
               <label for="guardian_pause" class="form-check-label">
-                <input class="adbdev form-check-input" type="checkbox" id="guardian_pause">
+                <input
+                  class="adbdev form-check-input"
+                  type="checkbox"
+                  id="guardian_pause"
+                >
                 Pause the guardian(temporary disable it)
               </label>
             </div>
@@ -52,35 +74,32 @@
                   Will not change for apps that are already installed
                 </small>
               </label>
-              <input id="mp_name" class="adbdev form-control" value="" />
+              <input id="mp_name" class="adbdev form-control" value="">
             </div>
-
           </div>
         </div>
 
         <div class="card bg-primary mb-2">
-          <div class="card-header">
-            FW Update (experimental):
-          </div>
+          <div class="card-header">FW Update (experimental):</div>
           <div class="card-body">
             <div class="alert alert-info">
               <small>
                 <h6>Instructions:</h6>
-                                <ol style="margin-bottom: 0">
-                                  <li>Reboot to bootloader.</li>
-                                  <li>
-                                    Select the "firmware update" option on your device using the
-                                    volume buttons to move the selection, and power button to
-                                    select.
-                                  </li>
-                                  <li>Sideload update.zip</li>
-                                </ol>
+                <ol style="margin-bottom: 0">
+                  <li>Reboot to bootloader.</li>
+                  <li>
+                    Select the "firmware update" option on your device using the
+                    volume buttons to move the selection, and power button to
+                    select.
+                  </li>
+                  <li>Sideload update.zip</li>
+                </ol>
               </small>
             </div>
             <div class="form-group mb-0">
               <label for="updateFwPath" class="mb-0">Path to update.zip:</label>
               <div class="input-group mb-2">
-                <input id="updateFwPath" class="form-control" value="" />
+                <input id="updateFwPath" class="form-control" value="">
                 <a class="btn btn-primary" id="updateFwPathBtn">Browse</a>
               </div>
               <a id="rebootBootloader" class="adbdev btn btn-danger">
@@ -90,74 +109,83 @@
                 <i class="fa fa-download"></i> Sideload update.zip
               </a>
             </div>
-
           </div>
         </div>
-
 
         <div class="card bg-primary mb-2">
           <div class="card-header">Snapshots:</div>
           <div class="card-body">
-            <!-- <div class="form-group">
-              <a id="pullScreenshots" class="adbdev btn btn-primary">
-                <i class="fa fa-download"></i> Grub the Screenshots
-              </a>
-              <a id="pullVideoshots" class="adbdev btn btn-primary">
-                <i class="fa fa-download"></i> Grub the Videoshots
-              </a>
-            </div>
-            <div class="form-check mb-3">
-              <label for="snapshotsDelete" class="form-check-label">
-                <input class="adbdev form-check-input" type="checkbox" id="snapshotsDelete">
-                Clear from device after pulling
-              </label>
-            </div>
-            <hr/> -->
+            <!--
+              <div class="form-group">
+                <a id="pullScreenshots" class="adbdev btn btn-primary">
+                  <i class="fa fa-download"></i> Grub the Screenshots
+                </a>
+                <a id="pullVideoshots" class="adbdev btn btn-primary">
+                  <i class="fa fa-download"></i> Grub the Videoshots
+                </a>
+              </div>
+              <div class="form-check mb-3">
+                <label for="snapshotsDelete" class="form-check-label">
+                  <input class="adbdev form-check-input" type="checkbox" id="snapshotsDelete">
+                  Clear from device after pulling
+                </label>
+              </div>
+              <hr/>
+            -->
             <div class="form-group mb-3">
               <label class="mb-0" for="cres">
                 <h6 class="card-title mb-0">Set Screenshots Size</h6>
-                <small class="card-text">This changes the resolution of screenshots on the Quest
+                <small class="card-text"
+                  >This changes the resolution of screenshots on the Quest
                 </small>
               </label>
               <select class="adbdev custom-select" id="cres">
                 <option value="640x480">640x480</option>
-                                <option value="1024x1024">1024x1024 (Quest2)</option>
-                                <option value="1280x720">1280x720</option>
-                                <option value="1920x1080">1920x1080</option>
-                                <option value="3840x1920">3840x1920 (default - Quest3)</option>
+                <option value="1024x1024">1024x1024 (Quest2)</option>
+                <option value="1280x720">1280x720</option>
+                <option value="1920x1080">1920x1080</option>
+                <option value="3840x1920">3840x1920 (default - Quest3)</option>
               </select>
             </div>
             <div class="form-group mb-3">
               <label class="mb-0" for="vres">
                 <h6 class="card-title mb-0">Set Video Capture Size</h6>
-                <small class="card-text">This changes the resolution of captured videos on the Quest</small>
+                <small class="card-text"
+                  >This changes the resolution of captured videos on the Quest</small
+                >
               </label>
               <select class="adbdev custom-select" id="vres">
                 <option value="1024">1024</option>
                 <option value="1536">1536</option>
               </select>
             </div>
-            <!-- <div class="form-group mb-3">
-              <label class="mb-1" for="svb">
-                <h6 class="card-title mb-0">Capture Video Bitrate ( Go Only )</h6>
-                <small class="card-text">This will increase the quality of captured videos on Oculus Go.
-                </small>
-              </label>
-              <select class="adbdev custom-select" id="svb">
-                <option value="5000000">5Mbps</option>
-                <option value="15000000">15Mbps</option>
-                <option value="25000000">25Mbps</option>
-              </select>
-            </div> -->
+            <!--
+              <div class="form-group mb-3">
+                <label class="mb-1" for="svb">
+                  <h6 class="card-title mb-0">Capture Video Bitrate ( Go Only )</h6>
+                  <small class="card-text">This will increase the quality of captured videos on Oculus Go.
+                  </small>
+                </label>
+                <select class="adbdev custom-select" id="svb">
+                  <option value="5000000">5Mbps</option>
+                  <option value="15000000">15Mbps</option>
+                  <option value="25000000">25Mbps</option>
+                </select>
+              </div>
+            -->
             <div class="form-check mb-0">
               <label for="frc" class="form-check-label">
-                <input class="adbdev form-check-input" type="checkbox" id="frc">
-                Full rate capture for videos recorded i.e. 60/72fps rather than 30fps.
+                <input
+                  class="adbdev form-check-input"
+                  type="checkbox"
+                  id="frc"
+                >
+                Full rate capture for videos recorded i.e. 60/72fps rather than
+                30fps.
               </label>
             </div>
           </div>
         </div>
-
 
         <div class="card bg-primary mb-2">
           <div class="card-header">Graficaly tweaks:</div>
@@ -165,9 +193,15 @@
             <div class="form-group mb-3">
               <label class="mb-0" for="gRR">
                 <h6 class="card-title mb-0">Refresh Rate</h6>
-                <small class="card-text">This will allow you to change to 90Hz refresh rate for 90fps support in games on Quest 2.
-                  <br/>
-                  WARNING: This does not work in all games, and does not work with Oculus Link. This setting may also reset to default when you restart your headset. You may need to press the power button twice to turn the screen off and on to enable this setting for apps that dont have it natively enabled.
+                <small class="card-text"
+                  >This will allow you to change to 90Hz refresh rate for 90fps
+                  support in games on Quest 2.
+                  <br>
+                  WARNING: This does not work in all games, and does not work
+                  with Oculus Link. This setting may also reset to default when
+                  you restart your headset. You may need to press the power
+                  button twice to turn the screen off and on to enable this
+                  setting for apps that dont have it natively enabled.
                 </small>
               </label>
               <select class="adbdev custom-select" id="gRR">
@@ -190,9 +224,14 @@
             </div>
             <div class="form-group mb-3">
               <label class="mb-0" for="gFFR">
-                <h6 class="card-title mb-0">FFR(Fixed Foveated Rendering) level</h6>
+                <h6 class="card-title mb-0">
+                  FFR(Fixed Foveated Rendering) level
+                </h6>
                 <small class="card-text">
-                  This will change how the view is rendered in the outer edges of the viewscreen for each eye. Higher is better performance, lower is better quality. This gets reset when you reboot the device.
+                  This will change how the view is rendered in the outer edges
+                  of the viewscreen for each eye. Higher is better performance,
+                  lower is better quality. This gets reset when you reboot the
+                  device.
                 </small>
               </label>
               <select class="adbdev custom-select" id="gFFR">
@@ -208,7 +247,8 @@
               <label class="mb-0" for="gSSO">
                 <h6 class="card-title mb-0">Default Texture Size</h6>
                 <small class="card-text">
-                  This will change how high quality some of the in game textures are rendered at.
+                  This will change how high quality some of the in game textures
+                  are rendered at.
                 </small>
               </label>
               <select class="adbdev custom-select" id="gSSO">
@@ -233,11 +273,11 @@
                 </label>
                 <select class="adbdev custom-select" id="CPU">
                   <option value="-1">dynamic</option>
-                                    <option value="0">level 0 (slowest)</option>
-                                    <option value="1">level 1</option>
-                                    <option value="2">level 2</option>
-                                    <option value="3">level 3</option>
-                                    <option value="4">level 4 (fastest)</option>
+                  <option value="0">level 0 (slowest)</option>
+                  <option value="1">level 1</option>
+                  <option value="2">level 2</option>
+                  <option value="3">level 3</option>
+                  <option value="4">level 4 (fastest)</option>
                 </select>
               </div>
               <div class="form-group col-6">
@@ -249,11 +289,11 @@
                 </label>
                 <select class="adbdev custom-select" id="GPU">
                   <option value="-1">dynamic</option>
-                                    <option value="0">level 0 (slowest)</option>
-                                    <option value="1">level 1</option>
-                                    <option value="2">level 2</option>
-                                    <option value="3">level 3</option>
-                                    <option value="4">level 4 (fastest)</option>
+                  <option value="0">level 0 (slowest)</option>
+                  <option value="1">level 1</option>
+                  <option value="2">level 2</option>
+                  <option value="3">level 3</option>
+                  <option value="4">level 4 (fastest)</option>
                 </select>
               </div>
             </div>
@@ -261,113 +301,128 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
       </div>
     </div>
   </div>
 </div>
 
-<script>{
-  console.log('ONLOAD tweaks');
-  const TWEAKS_KEYS = [
-    'mp_name', 'cres', 'vres', 'gRR', 'gCA', 'gFFR', 'gSSO', 'CPU', 'GPU'
-  ];
-  const TWEAKS_CHECKBOXES = [
-    'guardian_pause', 'frc'
-  ];
+<script>
+  {
+    console.log('ONLOAD tweaks');
+    const TWEAKS_KEYS = [
+      'mp_name',
+      'cres',
+      'vres',
+      'gRR',
+      'gCA',
+      'gFFR',
+      'gSSO',
+      'CPU',
+      'GPU',
+    ];
+    const TWEAKS_CHECKBOXES = ['guardian_pause', 'frc'];
 
-  for (const key of TWEAKS_KEYS) {
-    ipcRenderer.send('device_tweaks', { cmd: 'get', key });
-  }
-  for (const key of TWEAKS_CHECKBOXES) {
-    ipcRenderer.send('device_tweaks', { cmd: 'get', key });
-  }
-
-  ipcRenderer.removeAllListeners('device_tweaks');
-  ipcRenderer.on('device_tweaks', (event, arg) => {
-    // console.log('device_tweaks ! ', arg);
-    if (arg.cmd == 'get') {
-      for (const key of TWEAKS_KEYS) {
-        if (arg[key]) $id('' + key).val(arg[key]);
-      }
-
-      for (const key of TWEAKS_CHECKBOXES) {
-        if (arg[key]) $id('' + key).prop('checked', arg[key] == '1');
-      }
+    for (const key of TWEAKS_KEYS) {
+      ipcRenderer.send('device_tweaks', { cmd: 'get', key });
+    }
+    for (const key of TWEAKS_CHECKBOXES) {
+      ipcRenderer.send('device_tweaks', { cmd: 'get', key });
     }
 
-    if (arg.cmd == 'set') {
-      for (const key of TWEAKS_KEYS) {
-        if (typeof arg[key] != 'undefined') $id('' + key).addClass('is-valid');
+    ipcRenderer.removeAllListeners('device_tweaks');
+    ipcRenderer.on('device_tweaks', (event, arg) => {
+      // console.log('device_tweaks ! ', arg);
+      if (arg.cmd == 'get') {
+        for (const key of TWEAKS_KEYS) {
+          if (arg[key]) $id('' + key).val(arg[key]);
+        }
+
+        for (const key of TWEAKS_CHECKBOXES) {
+          if (arg[key]) $id('' + key).prop('checked', arg[key] == '1');
+        }
       }
+
+      if (arg.cmd == 'set') {
+        for (const key of TWEAKS_KEYS) {
+          if (typeof arg[key] != 'undefined')
+            $id('' + key).addClass('is-valid');
+        }
+      }
+    });
+
+    for (const key of TWEAKS_KEYS) {
+      $id(key).on('change', function ({ target }) {
+        $(target).removeClass('is-valid');
+        ipcRenderer.send('device_tweaks', { cmd: 'set', [key]: target.value });
+      });
     }
-  });
 
-  for (const key of TWEAKS_KEYS) {
-    $id(key).on('change', function ({ target }) {
-      $(target).removeClass('is-valid');
-      ipcRenderer.send('device_tweaks', { cmd: 'set', [key]: target.value });
+    for (const key of TWEAKS_CHECKBOXES) {
+      $id(key).on('change.bootstrapSwitch', ({ target }) => {
+        ipcRenderer.send('device_tweaks', {
+          cmd: 'set',
+          [key]: target.checked,
+        });
+      });
+    }
+
+    if (remote.getGlobal('currentConfiguration').snapshotsDelete) {
+      $id('snapshotsDelete').prop('checked', true);
+    }
+    $id('snapshotsDelete').on('change.bootstrapSwitch', (e) => {
+      ipcRenderer.send('change_config', {
+        key: 'snapshotsDelete',
+        val: e.target.checked,
+      });
     });
-  }
 
-  for (const key of TWEAKS_CHECKBOXES) {
-    $id(key).on('change.bootstrapSwitch', ({ target }) => {
-      ipcRenderer.send('device_tweaks', {cmd: 'set', [key]: target.checked});
+    $id('enableMTP').on('click', function (e) {
+      ipcRenderer.send('enable_mtp', '');
     });
-  }
-
-
-  if (remote.getGlobal('currentConfiguration').snapshotsDelete) {
-    $id('snapshotsDelete').prop('checked', true);
-  }
-  $id('snapshotsDelete').on('change.bootstrapSwitch', (e) => {
-    ipcRenderer.send('change_config', {key: 'snapshotsDelete', val: e.target.checked});
-  });
-
-  $id('enableMTP').on('click', function (e) {
-    ipcRenderer.send('enable_mtp', '');
-  });
-  $id('scrcpyCfg').on('click', function (e) {
-    $id('scrcpyModal').modal('show');
-  });
-  $id('rebootDevice').on('click', function (e) {
-    ipcRenderer.send('reboot_device', '');
-  });
-  $id('rebootRecovery').on('click', function (e) {
-    ipcRenderer.send('reboot_recovery', '');
-  });
-  $id('rebootBootloader').on('click', function (e) {
-    ipcRenderer.send('reboot_bootloader', '');
-  });
-  $id('sideloadeFw').on('click', function (e) {
-    ipcRenderer.send('sideload_update', $id('updateFwPath').val());
-  });
-
-  $id('updateFwPathBtn').on('click', updateFwPath);
-
-  async function updateFwPath() {
-    $id('updateFwPath').removeClass('is-valid');
-    const file = await dialog.showOpenDialog(null, {
-      properties: ['openFile'],
-      title: 'Update.zip path',
-      message: 'Browse to update.zip',
-      filters: [{
-        name: 'Zip', extensions: ['zip'],
-      }],
+    $id('scrcpyCfg').on('click', function (e) {
+      $id('scrcpyModal').modal('show');
     });
-    if (file.canceled) return;
+    $id('rebootDevice').on('click', function (e) {
+      ipcRenderer.send('reboot_device', '');
+    });
+    $id('rebootRecovery').on('click', function (e) {
+      ipcRenderer.send('reboot_recovery', '');
+    });
+    $id('rebootBootloader').on('click', function (e) {
+      ipcRenderer.send('reboot_bootloader', '');
+    });
+    $id('sideloadeFw').on('click', function (e) {
+      ipcRenderer.send('sideload_update', $id('updateFwPath').val());
+    });
 
-    const val = file.filePaths[0];
-    $id('updateFwPath')
-      .val(val)
-      .addClass('is-valid');
-    return val;
-  }
+    $id('updateFwPathBtn').on('click', updateFwPath);
 
-  $id('tweaksModal')
-    .modal('show')
+    async function updateFwPath() {
+      $id('updateFwPath').removeClass('is-valid');
+      const file = await dialog.showOpenDialog(null, {
+        properties: ['openFile'],
+        title: 'Update.zip path',
+        message: 'Browse to update.zip',
+        filters: [
+          {
+            name: 'Zip',
+            extensions: ['zip'],
+          },
+        ],
+      });
+      if (file.canceled) return;
+
+      const val = file.filePaths[0];
+      $id('updateFwPath').val(val).addClass('is-valid');
+      return val;
+    }
+
+    $id('tweaksModal').modal('show');
     /*.on('hidden.bs.modal', () => {
       console.log('tweaks closed');
     });*/
-
-}</script>
+  }
+</script>

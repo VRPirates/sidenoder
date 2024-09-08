@@ -6,20 +6,13 @@
     clearTimeout(timer);
     if (!remote.getGlobal('adbDevice')) {
       id('deviceBatteryCharge').innerHTML = 'unknown';
-      return ;
+      return;
     }
 
     timer = setTimeout(() => ipcRenderer.send('get_device_info', ''), 30000);
 
     console.log('get_device_info ! ', arg);
-    const {
-      storage,
-      user,
-      fw,
-      battery,
-      wifi,
-      ip,
-    } = arg;
+    const { storage, user, fw, battery, wifi, ip } = arg;
     if (storage) {
       let bg = 'success';
       let percent = +storage.percent.replace('%', '');
@@ -32,35 +25,37 @@
       <div class="progress" style="border: 1px solid #666;">
         <div class="progress-bar progress-bar-striped bg-${bg}" role="progressbar" style="width: ${storage.percent};" aria-valuenow="${percent}" aria-valuemin="0" aria-valuemax="100"></div>
       </div>`;
-    }
-    else {
+    } else {
       id('storageDiv').innerHTML = 'Can`t get storage status';
     }
-
 
     let bat_charge = 'none';
     let bat_note = '';
     let bat_level = 'XX';
     if (battery) {
       bat_level = battery.level;
-      if (battery.temperature) bat_note = `Temperature: ${battery.temperature / 10}°C`;
+      if (battery.temperature)
+        bat_note = `Temperature: ${battery.temperature / 10}°C`;
       if (battery.ACpowered) bat_charge = 'AC';
       if (battery.USBpowered) bat_charge = 'USB';
       if (battery.Wirelesspowered) bat_charge = 'AIR';
       if (battery.Maxchargingcurrent && battery.Maxchargingvoltage) {
         const current = battery.Maxchargingcurrent / 1000000;
         const voltage = battery.Maxchargingvoltage / 1000000;
-       bat_note+= `\nMax Current: ${current}A\nMax Voltage: ${voltage}V\nMax Power: ${current * voltage}W`;
+        bat_note += `\nMax Current: ${current}A\nMax Voltage: ${voltage}V\nMax Power: ${current * voltage}W`;
       }
     }
 
-    id('deviceUserName').innerHTML = user && user.name || '<i>Unknown</i>';
-    id('deviceFwVersion').innerText = fw && fw.version || 'v.XX';
+    id('deviceUserName').innerHTML = (user && user.name) || '<i>Unknown</i>';
+    id('deviceFwVersion').innerText = (fw && fw.version) || 'v.XX';
     id('deviceBatteryLevel').innerText = bat_level;
     id('deviceBatteryLevel').parentNode.title = bat_note;
     id('deviceBatteryCharge').innerText = bat_charge;
     id('deviceWifi').innerText = wifi ? 'On' : 'Off';
-    id('deviceIp').innerText = (wifi && ip) || remote.getGlobal('currentConfiguration').lastIp || 'X.X.X.X';
+    id('deviceIp').innerText =
+      (wifi && ip) ||
+      remote.getGlobal('currentConfiguration').lastIp ||
+      'X.X.X.X';
   });
 </script>
 
@@ -68,32 +63,32 @@
   <div class="row col-8">
     <div class="col-3">
       <div>
-        <i class="fa fa-user-circle-o"></i> User:
-        <br/><small id="deviceUserName">Unknown</small>
+        <i class="fa fa-user-circle-o"></i> User: <br>
+        <small
+          id="deviceUserName"
+          >Unknown</small
+        >
       </div>
     </div>
     <div class="col-3">
       <div>
-        <i class="fa fa-tag"></i> FW:
-        <br/><span id="deviceFwVersion">v.XX</span>
+        <i class="fa fa-tag"></i> FW: <br>
+        <span id="deviceFwVersion">v.XX</span>
       </div>
     </div>
     <div class="col-3">
       <div>
         <i class="fa fa-battery-3"></i>
-        <span id="deviceBatteryLevel">XX</span>%
-        <br/><small>
-          Charge: <span id="deviceBatteryCharge"></span>
-
-        </small>
+        <span id="deviceBatteryLevel">XX</span>% <br>
+        <small> Charge: <span id="deviceBatteryCharge"></span> </small>
       </div>
     </div>
     <div class="col-3">
       <div>
         <i class="fa fa-wifi"></i>
         <span id="deviceWifi">Off</span>
-        <br/><small>IP: <span id="deviceIp">X.X.X.X</span>
-        </small>
+        <br>
+        <small>IP: <span id="deviceIp">X.X.X.X</span> </small>
       </div>
     </div>
   </div>

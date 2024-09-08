@@ -3,23 +3,45 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="donateModalLabel">Donate</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
           <span>×</span>
         </button>
       </div>
       <div class="modal-body text-center" id="donateModalBody">
         Your donation will motivate me to work on lot of new features.
-        <br>Thanks and please don't forget add your nickname at description
+        <br>
+        Thanks and please don't forget add your nickname at description
         <hr>
-        <a class="btn btn-outline-info disabled"  nonclick="shell.openExternal('https://paypal.me/1xyst')"><i class="fa fa-paypal"></i> PayPal (blocked)</a>
-        <a class="btn btn-outline-light" onclick="shell.openExternal('https://yoomoney.ru/to/410011725792647')"><i class="fa fa-money"></i> YooMoney</a>
+        <a
+          class="btn btn-outline-info disabled"
+          nonclick="shell.openExternal('https://paypal.me/1xyst')"
+          ><i class="fa fa-paypal"></i> PayPal (blocked)</a
+        >
+        <a
+          class="btn btn-outline-light"
+          onclick="shell.openExternal('https://yoomoney.ru/to/410011725792647')"
+          ><i class="fa fa-money"></i> YooMoney</a
+        >
         <hr>
         <img class="mb-2" alt="eth-qr" src="./img/qreth.jpg">
-        <br> ETH or BSC or POLYGON blockchains
-        <br><input readonly="readonly" value="0xc3F7cA87e558C423A546Ed3B6B037424454c0000" size="40" onclick="copyInput(this)">
+        <br>
+        ETH or BSC or POLYGON blockchains <br>
+        <input
+          readonly="readonly"
+          value="0xc3F7cA87e558C423A546Ed3B6B037424454c0000"
+          size="40"
+          onclick="copyInput(this)"
+        >
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
       </div>
     </div>
   </div>
@@ -28,9 +50,9 @@
 <script>
   ipcRenderer.send('change_config', { key: 'donShown', val: Date.now() });
   $id('donateModal')
-  .modal('show')
-  .on('hidden.bs.modal', () => {
-    console.log('donateModal closed');
-    id('donatemodaldiv').innerHTML = '';
-  });
+    .modal('show')
+    .on('hidden.bs.modal', () => {
+      console.log('donateModal closed');
+      id('donatemodaldiv').innerHTML = '';
+    });
 </script>

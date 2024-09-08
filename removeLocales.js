@@ -1,12 +1,12 @@
 //https://www.electron.build/configuration/configuration#afterpack
-const LOCALES = ['en-US.pak', 'ru.pak'];
+const LOCALES = ["en-US.pak", "ru.pak"];
 
-exports.default = async function(context) {
+exports.default = async function (context) {
   // console.log(context);
-  var fs = require('fs');
-  var localeDir = context.appOutDir + '/locales/';
+  var fs = require("fs");
+  var localeDir = context.appOutDir + "/locales/";
 
-  fs.readdir(localeDir, function(err, files) {
+  fs.readdir(localeDir, function (err, files) {
     //files is array of filenames (basename form)
     if (!(files && files.length)) return;
     for (const file of files) {
@@ -14,4 +14,4 @@ exports.default = async function(context) {
       fs.unlinkSync(localeDir + file);
     }
   });
-}
+};

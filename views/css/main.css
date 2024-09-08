@@ -1,11 +1,14 @@
 .browse-file,
 .browse-folder,
-a { cursor: pointer; }
+a {
+  cursor: pointer;
+}
 
 .card-header {
-  padding: .4rem 0.75rem;
+  padding: 0.4rem 0.75rem;
 }
-.btn-floating, [class*="btn-outline-"].btn-floating {
+.btn-floating,
+[class*="btn-outline-"].btn-floating {
   border-radius: 50px;
   position: relative;
 }
@@ -14,10 +17,10 @@ a { cursor: pointer; }
   font-weight: bold;
 }
 .btn-md {
-  padding: .4rem .75rem;
+  padding: 0.4rem 0.75rem;
 }
 .btn-success {
-  background: #7C4;
+  background: #7c4;
 }
 .btn-success:hover {
   background: #46ba46;
@@ -67,7 +70,9 @@ pre {
   overflow: visible;
 }
 
-.modal { overflow: auto !important; }
+.modal {
+  overflow: auto !important;
+}
 
 .modal-content {
   box-shadow: 0px 0px 20pt black;
@@ -78,7 +83,7 @@ pre {
 }
 
 .table-hover tbody tr:hover {
-    background-color: rgba(255,255,255,0.25);
+  background-color: rgba(255, 255, 255, 0.25);
 }
 
 .ribbon-img-container {
@@ -146,7 +151,7 @@ pre {
 }*/
 
 .content_container {
-  display:flex;
+  display: flex;
   flex-direction: column;
   height: 100%;
   width: 100%;
@@ -171,18 +176,18 @@ pre {
 #mainbody {
   /*margin-top: 110px;*/
   padding: 0 20px;
-  flex:1;
+  flex: 1;
 }
 
 .listitem.badge {
-  max-width:100%;
-  width:100%;
-  flex:auto;
+  max-width: 100%;
+  width: 100%;
+  flex: auto;
   padding: 1rem;
   margin: 0 1rem 1rem 1rem;
-  white-space:normal;
-  font-size:100%;
-  line-height:18pt;
+  white-space: normal;
+  font-size: 100%;
+  line-height: 18pt;
 }
 
 #sideloadQueueModal.fade .modal-dialog {
@@ -200,7 +205,6 @@ pre {
   right: 20pt;
   margin: 0;
 }
-
 
 #showQueue {
   position: fixed;
@@ -225,11 +229,11 @@ pre {
   padding: 0;
   height: 300pt;
   overflow: auto;
-  border-top: 1px solid rgba(0,0,0,0.4);
+  border-top: 1px solid rgba(0, 0, 0, 0.4);
 }
 
 #sideloadQueueModal th {
-  background: #32383E;
+  background: #32383e;
   position: sticky;
   top: -1px;
 }
@@ -238,15 +242,15 @@ pre {
 .table th,
 .table thead th {
   vertical-align: middle;
-  border-bottom: 1px solid rgba(0,0,0,.4);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
   border-top: none;
 }
 
 html {
-  overflow-y:  scroll;
+  overflow-y: scroll;
 }
 
- /* width */
+/* width */
 ::-webkit-scrollbar {
   width: 6pt;
   height: 6pt;
@@ -258,7 +262,7 @@ html {
   border-radius: 4px;
 }
 ::-webkit-scrollbar-corner {
-  background: rgba(0,0,0,0);
+  background: rgba(0, 0, 0, 0);
 }
 /* Handle */
 ::-webkit-scrollbar-thumb {

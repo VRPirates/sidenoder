@@ -1,72 +1,86 @@
 <!-- Modal -->
-<div class="modal" id="appinfoEventsModal" >
-  <div role="document" style="margin: 1.75rem auto; min-width:790px; max-width:44%"> <!-- class="modal-dialog"  -->
+<div class="modal" id="appinfoEventsModal">
+  <div
+    role="document"
+    style="margin: 1.75rem auto; min-width: 790px; max-width: 44%"
+  >
+    <!-- class="modal-dialog" -->
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="appinfoEventsModalLabel">Events:</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
           <span>&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <div class="alert alert-warning"><small>
-          <i class="fa fa-exclamation-triangle"></i>
-          WARNING: Info auto parsed and can contains mistakes
-        </small></div>
-        <hr/>
+        <div class="alert alert-warning">
+          <small>
+            <i class="fa fa-exclamation-triangle"></i>
+            WARNING: Info auto parsed and can contains mistakes
+          </small>
+        </div>
+        <hr>
         <div class="text-center">
-          <a id="appinfoEventsUrl" class="btn btn-primary" style="display: none">Open info on resource</a>
+          <a id="appinfoEventsUrl" class="btn btn-primary" style="display: none"
+            >Open info on resource</a
+          >
         </div>
-        <hr/>
-        <div id="appinfoEventsBody">
+        <hr>
+        <div id="appinfoEventsBody"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
         </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
+  <style type="text/css">
+    #appinfoEventsBody img {
+      max-width: 756px;
+      max-height: 480px;
+    }
+  </style>
+
+  <script>
+    console.log('ONLOAD APPINFO_EVENTS MODAL');
+    $id('appinfoEventsModal').on('hidden.bs.modal', () => {
+      console.log('appinfoEvents closed');
+      id('appinfoEventsBody').innerHTML = '';
+      $id('appinfoEventsUrl').hide();
+    });
+
+    ipcRenderer.removeAllListeners('app_events_info');
+    ipcRenderer.on('app_events_info', (event, arg) => {
+      $id('processingModal').modal('hide');
+      console.log('app_events_info received');
+      // console.log(arg);
+      if (!arg || !arg.success) return console.log(arg);
+      const data = arg.data;
+      if (!data) return;
+
+      if (data.url) {
+        id('appinfoEventsUrl').onclick = () => shell.openExternal(data.url);
+        $id('appinfoEventsUrl').show();
+      }
+
+      let events = '';
+      for (const e of data.events) {
+        let event = '';
+        if (e.date) event += `<small class="pull-right">${e.date}</small>`;
+        event += `<h4>${e.title || ''}</h4>`;
+        if (e.contents) event += `<div>${e.contents}</div>`;
+        events += `${event}<hr/>`;
+      }
+
+      id('appinfoEventsBody').innerHTML = events;
+
+      $id('appinfoEventsModal').modal('show');
+    });
+  </script>
 </div>
-<style type="text/css">
-  #appinfoEventsBody img {
-    max-width: 756px;
-    max-height: 480px;
-  }
-</style>
-
-<script>
-  console.log('ONLOAD APPINFO_EVENTS MODAL');
-  $id('appinfoEventsModal').on('hidden.bs.modal', () => {
-    console.log('appinfoEvents closed');
-    id('appinfoEventsBody').innerHTML = '';
-    $id('appinfoEventsUrl').hide();
-  })
-
-  ipcRenderer.removeAllListeners('app_events_info');
-  ipcRenderer.on('app_events_info', (event, arg) => {
-    $id('processingModal').modal('hide');
-    console.log('app_events_info received');
-    // console.log(arg);
-    if (!arg || !arg.success)  return console.log(arg);
-    const data = arg.data;
-    if (!data)  return;
-
-    if (data.url) {
-      id('appinfoEventsUrl').onclick = () => shell.openExternal(data.url);
-      $id('appinfoEventsUrl').show();
-    }
-
-    let events = '';
-    for (const e of data.events) {
-      let event = '';
-      if (e.date) event+= `<small class="pull-right">${e.date}</small>`;
-      event+= `<h4>${e.title || ''}</h4>`;
-      if (e.contents) event+= `<div>${e.contents}</div>`;
-      events+= `${event}<hr/>`;
-    }
-
-    id('appinfoEventsBody').innerHTML = events;
-
-    $id('appinfoEventsModal').modal('show');
-  });
-
-</script>

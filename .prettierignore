@@ -1,0 +1,12 @@
+.github/
+node_modules/
+syncedversion.txt
+synced.txt
+com.sample.android.apk
+/dist/*
+/out/*
+**/*.min.css
+**/*.min.css.map
+**/*.min.js
+**/*.min.js.map
+**/*.custom.js

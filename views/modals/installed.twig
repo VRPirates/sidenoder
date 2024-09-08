@@ -1,55 +1,74 @@
-<div class="modal" id="installedModal" >
-  <div role="document" style="margin: 1.75rem auto; min-width:800px; max-width:48%"> <!-- class="modal-dialog"  -->
+<div class="modal" id="installedModal">
+  <div
+    role="document"
+    style="margin: 1.75rem auto; min-width:800px; max-width:48%"
+  >
+    <!-- class="modal-dialog" -->
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title"  id="installedModalLabel">
+        <h5 class="modal-title" id="installedModalLabel">
           <div class="pull-left mt-1">
             <i class="fa fa-list"></i> Installed APP's
           </div>
           <div class="pull-right ml-4">
-            <a class="btn btn-md btn-primary" onclick="openSearch()"> <i class="fa fa-search"></i> Search</a>
-            <a onclick="getUpdates()" id="updateBadge" class="adbdev btn btn-info btn-md disabled"><i class="fa fa-search"></i> Check mount for updates</span></a>
+            <a class="btn btn-md btn-primary" onclick="openSearch()">
+              <i class="fa fa-search"></i> Search</a
+            >
+            <a
+              onclick="getUpdates()"
+              id="updateBadge"
+              class="adbdev btn btn-info btn-md disabled"
+              ><i class="fa fa-search"></i> Check mount for updates</a
+            >
           </div>
         </h5>
         <button
-                  class="btn btn-md btn-primary dropdown-toggle"
-                  type="button"
-                  onclick="$id('appmodaldropdownmenu').toggle()">
-                  <i class="fa fa-sort"></i> Sort By
-                </button>
-                <div
-                  id="appmodaldropdownmenu"
-                  class="dropdown-menu"
-                  style="right: 0; left: auto; top: auto">
-                  <a class="dropdown-item" onclick="sortApps('simplename', 1)">
-                    <i class="fa fa-sort-alpha-asc"></i>
-                    App name</a
-                  >
-                  <a class="dropdown-item" onclick="sortApps('simplename', 0)">
-                    <i class="fa fa-sort-alpha-desc"></i>
-                    App name (decending)</a
-                  >
-                  <a class="dropdown-item" onclick="sortApps('packagename', 1)">
-                    <i class="fa fa-sort-amount-asc"></i>
-                    Package name</a
-                  >
-                  <a class="dropdown-item" onclick="sortApps('packagename', 0)">
-                    <i class="fa fa-sort-amount-desc"></i>
-                    Package name (decending)</a
-                  >
-                </div>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          class="btn btn-md btn-primary dropdown-toggle"
+          type="button"
+          onclick="$id('appmodaldropdownmenu').toggle()"
+        >
+          <i class="fa fa-sort"></i> Sort By
+        </button>
+        <div
+          id="appmodaldropdownmenu"
+          class="dropdown-menu"
+          style="right: 0; left: auto; top: auto"
+        >
+          <a class="dropdown-item" onclick="sortApps('simplename', 1)">
+            <i class="fa fa-sort-alpha-asc"></i>
+            App name</a
+          >
+          <a class="dropdown-item" onclick="sortApps('simplename', 0)">
+            <i class="fa fa-sort-alpha-desc"></i>
+            App name (decending)</a
+          >
+          <a class="dropdown-item" onclick="sortApps('packagename', 1)">
+            <i class="fa fa-sort-amount-asc"></i>
+            Package name</a
+          >
+          <a class="dropdown-item" onclick="sortApps('packagename', 0)">
+            <i class="fa fa-sort-amount-desc"></i>
+            Package name (decending)</a
+          >
+        </div>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
           <span>&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <table class="table table-striped table-condensed text-white">
-          <tbody id="intalledTable">
-          </tbody>
+          <tbody id="intalledTable"></tbody>
         </table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
       </div>
     </div>
   </div>
@@ -63,16 +82,16 @@
   if (remote.getGlobal('adbDevice') && remote.getGlobal('mounted')) {
     $id('updateBadge').removeClass('disabled');
   }
-function sortApps(key, asc) {
-    const suffix = asc ? "" : "-desc";
-    sortAppElements($id("intalledTable"), key, asc);
-    $id("appmodaldropdownmenu").hide();
-    ipcRenderer.send("change_config", { key: "sortApps", val: key + suffix });
+  function sortApps(key, asc) {
+    const suffix = asc ? '' : '-desc';
+    sortAppElements($id('intalledTable'), key, asc);
+    $id('appmodaldropdownmenu').hide();
+    ipcRenderer.send('change_config', { key: 'sortApps', val: key + suffix });
   }
   function sortAppElements(el, key, asc) {
-    const sortByName = key.startsWith("simplename");
+    const sortByName = key.startsWith('simplename');
     el.html(
-      el.find("tr").sort((a, b) => {
+      el.find('tr').sort((a, b) => {
         const valA = (
           sortByName ? a.dataset.simplename : a.dataset.packagename
         ).toLowerCase();

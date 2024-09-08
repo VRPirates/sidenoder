@@ -6,13 +6,14 @@
   "dependencies": {
     "@devicefarmer/adbkit": "3.2.5",
     "@electron/remote": "2.1.0",
+    "@fortawesome/fontawesome-free": "^6.6.0",
     "adbkit-apkreader": "3.2.0",
     "command-exists": "1.2.9",
     "compare-versions": "6.1.0",
-    "electron-find": "1.0.7",
     "electron-twig": "1.1.1",
     "fix-path": "4.0.0",
     "jquery": "3.7.1",
+    "jquery-ui": "^1.14.0",
     "node-fetch": "3.3.2",
     "socks-proxy-agent": "8.0.2",
     "web-auto-extractor": "1.0.17"

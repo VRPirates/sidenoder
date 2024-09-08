@@ -27,8 +27,8 @@
       if (percent > 95) bg = 'danger';
 
       id('storageDiv').innerHTML = `
-      <small class="pull-left">Used: ${storage.used} of ${storage.size}(${storage.percent})</small>
-      <small class="pull-right">Free: ${storage.free}</small><br/>
+      <small class="float-left">Used: ${storage.used} of ${storage.size}(${storage.percent})</small>
+      <small class="float-right">Free: ${storage.free}</small><br/>
       <div class="progress" style="border: 1px solid #666;">
         <div class="progress-bar progress-bar-striped bg-${bg}" role="progressbar" style="width: ${storage.percent};" aria-valuenow="${percent}" aria-valuemin="0" aria-valuemax="100"></div>
       </div>`;

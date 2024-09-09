@@ -1,62 +1,62 @@
-console.log('ONLOAD INSTALLED');
+console.log("ONLOAD INSTALLED");
 
-ipcRenderer.on('get_installed', (event, arg) => {
-  console.log('get_installed msg came ! ', arg.success);
+ipcRenderer.on("get_installed", (event, arg) => {
+  console.log("get_installed msg came ! ", arg.success);
   if (arg.success) {
     drawInstalledApps(arg.apps, true);
-    $id('updateBadge').show();
+    $id("updateBadge").show();
   }
 
-  $id('processingModal').modal('hide');
-  $id('installedModal').modal('show');
+  $id("processingModal").modal("hide");
+  $id("installedModal").modal("show");
 });
 
-ipcRenderer.on('get_installed_with_updates', (event, arg) => {
-  console.log('get_installed msg came ! ', arg.success);
+ipcRenderer.on("get_installed_with_updates", (event, arg) => {
+  console.log("get_installed msg came ! ", arg.success);
   if (arg.success) {
     drawInstalledApps(arg.apps);
-    $id('updateBadge').hide();
+    $id("updateBadge").hide();
   }
 
-  $id('processingModal').modal('hide');
+  $id("processingModal").modal("hide");
 });
 
-ipcRenderer.on('uninstall', (event, arg) => {
-  console.log('uninstall msg came ! ');
-  $id('installedModal').modal('hide');
-  $id('appToolModal').modal('hide');
-  loadInclude('modals/installed.twig', 'installedmodaldiv');
+ipcRenderer.on("uninstall", (event, arg) => {
+  console.log("uninstall msg came ! ");
+  $id("installedModal").modal("hide");
+  $id("appToolModal").modal("hide");
+  loadInclude("modals/installed.twig", "installedmodaldiv");
 });
 
 function getUpdates() {
-  $id('processingModal').modal('show');
-  ipcRenderer.send('get_installed_with_updates', '');
+  $id("processingModal").modal("show");
+  ipcRenderer.send("get_installed_with_updates", "");
 }
 
 function update(elem) {
   elem.innerHTML = `<i class="fa fa-refresh fa-spin"></i> Please wait`;
-  ipcRenderer.send('folder_install', { path: elem.dataset.path, update: true });
+  ipcRenderer.send("folder_install", { path: elem.dataset.path, update: true });
 }
 
 function uninstall(elem, packageName) {
   elem.innerHTML = `<i class="fa fa-refresh fa-spin"></i> Please wait`;
-  ipcRenderer.send('uninstall', packageName);
+  ipcRenderer.send("uninstall", packageName);
 }
 
 function startApp(packageName) {
-  ipcRenderer.send('start_app', packageName);
+  ipcRenderer.send("start_app", packageName);
   // ipcRenderer.send('get_activities', packageName);
 }
 
 function appTools(packageName) {
-  $id('processingModal').modal('show');
-  loadInclude('modals/app_tools.twig', 'apptoolsmodaldiv', () => {
-    ipcRenderer.send('app_tools', packageName);
+  $id("processingModal").modal("show");
+  loadInclude("modals/app_tools.twig", "apptoolsmodaldiv", () => {
+    ipcRenderer.send("app_tools", packageName);
   });
 }
 
 function drawInstalledApps(apps, updates = false) {
-  console.log('drawInstalledApps', apps.length);
+  console.log("drawInstalledApps", apps.length);
 
   if (updates && apps.length === 0) {
     const row = `<tr><td class="text-center" style="width: 250px;vertical-align:middle;"><div class="alert alert-info mb-0"><i class="fa fa-info-circle"></i> <b>There are no updates available</b></div></td></tr>`;
@@ -64,7 +64,7 @@ function drawInstalledApps(apps, updates = false) {
     return;
   }
 
-  let rows = '';
+  let rows = "";
   for (const app of apps) {
     // console.log('list app', app);
     let row = `<tr data-simplename="${app.simpleName}" data-packagename="${app.packageName}"><td class="text-center" style="width: 250px;vertical-align:middle;"><img style="max-height:80px" src="${app.imagePath}"/></td>
@@ -75,8 +75,7 @@ function drawInstalledApps(apps, updates = false) {
       row += `<a onclick="startApp('${app.packageName}')" class="adbdev btn btn-md btn-info" title="Launch"><i class="fa fa-play"></i></a> `;
       row += `<a onclick="uninstall(this, '${app.packageName}')" class="adbdev btn btn-md btn-danger" title="Uninstall"><i class="fa fa-trash-can"></i></a> `;
       row += `<a onclick="appTools('${app.packageName}')" class="adbdev btn btn-md btn-primary"> <i class="fa fa-cog"></i> Tools</a> `;
-    }
-    else {
+    } else {
       row += `<a data-path="${app.update.path}" onclick='update(this)' class="btn btn-sm btn-info">
         <i class="fa fa-upload"></i> Update to
         <br/> v.${app.update.versionCode}
@@ -87,7 +86,5 @@ function drawInstalledApps(apps, updates = false) {
     rows += row;
   }
 
-  id('intalledTable').innerHTML = rows;
+  id("intalledTable").innerHTML = rows;
 }
-
-

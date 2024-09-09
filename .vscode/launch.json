@@ -2,17 +2,28 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch",
+      "name": "Electron: Main",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/main.js",
-      "stopOnEntry": false,
-      "args": [],
-      "cwd": "${workspaceRoot}",
-      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
-      "runtimeArgs": [".", "--enable-logging"],
-      "env": {},
-      "sourceMaps": false
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start"],
+      "env": {
+        "MAIN_ARGS": "--inspect=5858 --remote-debugging-port=9223"
+      }
+    },
+    {
+      "name": "Electron: Renderer",
+      "type": "chrome",
+      "request": "attach",
+      "port": 9223,
+      "webRoot": "${workspaceFolder}",
+      "timeout": 60000
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Electron: All",
+      "configurations": ["Electron: Main", "Electron: Renderer"]
     }
   ]
 }

@@ -1,32 +1,22 @@
 {% extends 'layout.twig' %}
 
-{% block onload %}
-{% endblock %}
+{% block onload %}{% endblock %}
 
-{% block navbar %}
-{% endblock %}
+{% block navbar %}{% endblock %}
 
 {% block body %}
+  <div class="card text-white bg-danger">
+    <div class="card-header">Error</div>
+    <div class="card-body">
+      <div class="card-text">
+        {# <h1>message</h1> #}
+        <h2>{{ error.status }}</h2>
+        <pre>{{error.stack}}</pre>
 
+        <pre>{{message}}</pre>
 
-    <div class="card text-white bg-danger">
-        <div class="card-header">Error</div>
-        <div class="card-body">
-            <div class="card-text">
-
-                {#<h1>message</h1>#}
-            <h2>{{error.status}}</h2>
-            <pre>{{error.stack}}</pre>
-
-            <pre>{{message}}</pre>
-
-            <a href="index.twig" class="btn btn-info">Try again</a>
-
-            </div>
-        </div>
+        <a href="index.twig" class="btn btn-info">Try again</a>
+      </div>
     </div>
-
-
-
-
+  </div>
 {% endblock %}

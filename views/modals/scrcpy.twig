@@ -1,10 +1,19 @@
 <!-- Modal -->
-<div class="modal" id="scrcpyModal" >
-  <div role="document" style="margin: 1.75rem auto; min-width:580px; max-width:40%"> <!-- class="modal-dialog"  -->
+<div class="modal" id="scrcpyModal">
+  <div
+    role="document"
+    style="margin: 1.75rem auto; min-width: 580px; max-width: 40%"
+  >
+    <!-- class="modal-dialog" -->
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="scrcpyModalLabel">Screen share</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
           <span>&times;</span>
         </button>
       </div>
@@ -12,14 +21,17 @@
         <div class="card-body">
           <div class="alert alert-warning">
             <i class="fa fa-exclamation-triangle"></i>
-            WARNING: You need installed <a class="btn btn-sm btn-info" onclick="shell.openExternal('https://github.com/Genymobile/scrcpy#linux')">scrcpy</a>
+            WARNING: You need installed
+            <a
+              class="btn btn-sm btn-info"
+              onclick="shell.openExternal('https://github.com/Genymobile/scrcpy#linux')"
+              >scrcpy</a
+            >
           </div>
           <div class="form-group">
             <label class="mb-1" for="scrcpyBitrate">
               <h6 class="card-title mb-0">Video BitRate</h6>
-              <small class="card-text">
-                Performance option
-              </small>
+              <small class="card-text"> Performance option </small>
             </label>
             <select id="scrcpyBitrate" class="adbdev custom-select"></select>
           </div>
@@ -27,10 +39,18 @@
             <label class="mb-1" for="scrcpyCrop">
               <h6 class="card-title mb-0">Crop</h6>
               <small class="card-text">
-                Crop the device screen on the server. The values are expressed in the device natural orientation (typically, portrait for a phone, landscape for a tablet). Any MaxSize value is computed on the cropped size
+                Crop the device screen on the server. The values are expressed
+                in the device natural orientation (typically, portrait for a
+                phone, landscape for a tablet). Any MaxSize value is computed on
+                the cropped size
               </small>
             </label>
-            <input id="scrcpyCrop" class="adbdev form-control col-6" style="display:inline-block;" value="" />
+            <input
+              id="scrcpyCrop"
+              class="adbdev form-control col-6"
+              style="display: inline-block"
+              value=""
+            >
             <a class="btn btn-info" id="crop_quest2">Quest 2</a>
             <a class="btn btn-info" id="crop_quest1">Quest 1</a>
           </div>
@@ -41,80 +61,98 @@
                 Limit the frame rate of screen capture
               </small>
             </label>
-            <input id="scrcpyFps" class="adbdev form-control" value="" />
+            <input id="scrcpyFps" class="adbdev form-control" value="">
           </div>
           <div class="form-group">
             <label class="mb-1" for="scrcpySize">
               <h6 class="card-title mb-0">Max Size</h6>
               <small class="card-text">
-                Limit both the width and height of the video to value. The other dimension is computed so that the device aspect-ratio is preserved
+                Limit both the width and height of the video to value. The other
+                dimension is computed so that the device aspect-ratio is
+                preserved
               </small>
             </label>
-            <input id="scrcpySize" class="adbdev form-control" value="" />
+            <input id="scrcpySize" class="adbdev form-control" value="">
           </div>
           <div class="form-check mb-3">
             <label for="scrcpyWindow" class="form-check-label">
-              <input class="form-check-input" type="checkbox" id="scrcpyWindow">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="scrcpyWindow"
+              >
               Cast in window
             </label>
           </div>
           <div class="form-check mb-3">
             <label for="scrcpyControl" class="form-check-label">
-              <input class="form-check-input" type="checkbox" id="scrcpyControl">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="scrcpyControl"
+              >
               Enable remote control
             </label>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button id="scrcpy_start" type="button" class="btn btn-primary" data-dismiss="modal">Start stream</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button
+          id="scrcpy_start"
+          type="button"
+          class="btn btn-primary"
+          data-dismiss="modal"
+        >
+          Start stream
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
       </div>
     </div>
   </div>
 </div>
-<script>{
-  console.log('ONLOAD scrcpy MODAL');
-  const OPT_KEYS = [
-    'scrcpyBitrate',
-    'scrcpyCrop',
-    'scrcpySize',
-  ];
-  const CHKBOXES = [
-    'scrcpyWindow',
-    'scrcpyControl',
-  ];
+<script>
+  {
+    console.log('ONLOAD scrcpy MODAL');
+    const OPT_KEYS = ['scrcpyBitrate', 'scrcpyCrop', 'scrcpySize'];
+    const CHKBOXES = ['scrcpyWindow', 'scrcpyControl'];
 
-  let options = '';
-  for (let i = 1; i <= 10; i++) {
-    options+= `<option value="${i}">${i} Mbits/s</option>`;
-  }
-  id('scrcpyBitrate').innerHTML = options;
+    let options = '';
+    for (let i = 1; i <= 10; i++) {
+      options += `<option value="${i}">${i} Mbits/s</option>`;
+    }
+    id('scrcpyBitrate').innerHTML = options;
 
-  for (const key of OPT_KEYS) {
-    $id(key)
-      .val(remote.getGlobal('currentConfiguration')[key])
-      .on('change', (e) => {
-        ipcRenderer.send('change_config', {key, val: e.target.value});
-        return;
-      });
-  }
-
-  for (const key of CHKBOXES) {
-    const el = $id('' + key);
-    if (remote.getGlobal('currentConfiguration')[key]) {
-      el.prop('checked', true);
+    for (const key of OPT_KEYS) {
+      $id(key)
+        .val(remote.getGlobal('currentConfiguration')[key])
+        .on('change', (e) => {
+          ipcRenderer.send('change_config', { key, val: e.target.value });
+          return;
+        });
     }
 
-    el.on('change.bootstrapSwitch', (e) => {
-      ipcRenderer.send('change_config', {key, val: e.target.checked});
+    for (const key of CHKBOXES) {
+      const el = $id('' + key);
+      if (remote.getGlobal('currentConfiguration')[key]) {
+        el.prop('checked', true);
+      }
+
+      el.on('change.bootstrapSwitch', (e) => {
+        ipcRenderer.send('change_config', { key, val: e.target.checked });
+      });
+    }
+
+    $id('crop_quest1').on('click', () =>
+      $id('scrcpyCrop').val('1280:720:1500:350').trigger('change'),
+    );
+    $id('crop_quest2').on('click', () =>
+      $id('scrcpyCrop').val('1600:900:2017:510').trigger('change'),
+    );
+
+    $id('scrcpy_start').on('click', () => {
+      ipcRenderer.send('scrcpy_start');
     });
   }
-
-  $id('crop_quest1').on('click', () => $id('scrcpyCrop').val('1280:720:1500:350').trigger('change'));
-  $id('crop_quest2').on('click', () => $id('scrcpyCrop').val('1600:900:2017:510').trigger('change'));
-
-  $id('scrcpy_start').on('click', () => {
-    ipcRenderer.send('scrcpy_start');
-  });
-}</script>
+</script>

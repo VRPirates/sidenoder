@@ -1,136 +1,141 @@
 {% extends 'layout.twig' %}
 
 {% block body %}
-
-<div id="mainbody">
-
-  <div class="card text-white bg-primary">
-    <div class="card-header">
-      <h4 class="mb-0">
-        <i class="fa fa-list-ul"></i> System check
-      </h4>
-    </div>
-    <div class="card-body">
-      <h4>
-        Platform: {{ platform }} {{ arch }}
-      </h4>
-      <h4>
-        Temp Dir: {{ tmpdir }}
-      </h4>
-      <h4>
-        Mount Dir: {{ mountFolder }}
-      </h4>
-      <h4>
-        <a class="btn btn-sm" onclick="shell.openPath(remote.getGlobal('sidenoderHome'))"><i class="fa fa-home"></i></a> Sidenoder Dir: {{ sidenoderHome }}
-      </h4>
-      <h4>
-        <div class="badge badge-warning text-left" id="adbCheckIndicator">Android Debug Bridge - checking..</div>
-      </h4>
-      <h4>
-        <div class="badge badge-warning text-left" id="rcloneCheckIndicator">RCLONE - checking..</div>
-      </h4>
-      <h4>
-        <div class="badge badge-warning text-left" id="zipCheckIndicator">7zip Archiver - checking..</div>
-      </h4>
-      <h4>
-        <div class="badge badge-warning text-left" id="scrcpyCheckIndicator">SCRCPY - checking..</div>
-      </h4>
+  <div id="mainbody">
+    <div class="card text-white bg-primary">
+      <div class="card-header">
+        <h4 class="mb-0"><i class="fa fa-list-ul"></i> System check</h4>
+      </div>
+      <div class="card-body">
+        <h4>
+          Platform: {{ platform }}
+          {{ arch }}
+        </h4>
+        <h4>Temp Dir: {{ tmpdir }}</h4>
+        <h4>Mount Dir: {{ mountFolder }}</h4>
+        <h4>
+          <a
+            class="btn btn-sm"
+            onclick="shell.openPath(remote.getGlobal('sidenoderHome'))"
+            ><i class="fa fa-home"></i
+          ></a>
+          Sidenoder Dir: {{ sidenoderHome }}
+        </h4>
+        <h4>
+          <div class="badge badge-warning text-left" id="adbCheckIndicator">
+            Android Debug Bridge - checking..
+          </div>
+        </h4>
+        <h4>
+          <div class="badge badge-warning text-left" id="rcloneCheckIndicator">
+            RCLONE - checking..
+          </div>
+        </h4>
+        <h4>
+          <div class="badge badge-warning text-left" id="zipCheckIndicator">
+            7zip Archiver - checking..
+          </div>
+        </h4>
+        <h4>
+          <div class="badge badge-warning text-left" id="scrcpyCheckIndicator">
+            SCRCPY - checking..
+          </div>
+        </h4>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-  console.log('ONLOAD INDEX');
-  console.log('sending check_deps');
+  <script>
+    console.log('ONLOAD INDEX');
+    console.log('sending check_deps');
 
-  ipcRenderer.send('check_deps', 'adb');
-  ipcRenderer.send('check_deps', 'rclone');
-  ipcRenderer.send('check_deps', 'zip');
-  ipcRenderer.send('check_deps', 'scrcpy');
+    ipcRenderer.send('check_deps', 'adb');
+    ipcRenderer.send('check_deps', 'rclone');
+    ipcRenderer.send('check_deps', 'zip');
+    ipcRenderer.send('check_deps', 'scrcpy');
 
-  ipcRenderer.removeAllListeners('check_deps');
-  ipcRenderer.on('check_deps', (event, arg) => {
-    console.log('check_deps msg came: ', arg); // prints "ping"
-    const { adb, rclone, zip, scrcpy } = arg;
-    if (adb) {
-      const el = $id('adbCheckIndicator');
-      if (adb.version) {
-        el
-          .removeClass('badge-warning')
-          .addClass('badge-success')
-          .html(`<i class="fa fa-check-circle-o"></i> ADB Instaled (${adb.cmd})
+    ipcRenderer.removeAllListeners('check_deps');
+    ipcRenderer.on('check_deps', (event, arg) => {
+      console.log('check_deps msg came: ', arg); // prints "ping"
+      const { adb, rclone, zip, scrcpy } = arg;
+      if (adb) {
+        const el = $id('adbCheckIndicator');
+        if (adb.version) {
+          el.removeClass('badge-warning').addClass('badge-success')
+            .html(`<i class="fa fa-check-circle-o"></i> ADB Instaled (${adb.cmd})
             <br/><pre style="font-size: x-small;">${adb.version}</pre>`);
+        } else {
+          el.removeClass('badge-warning')
+            .addClass('badge-danger')
+            .html(
+              `<i class="fa fa-times-circle"></i> ADB Failed. Maybe global installation will be fixed this issue`,
+            );
+          if (adb.error)
+            el.append(
+              `<br/><pre style="font-size: x-small;">error: \n${adb.error}</pre>`,
+            );
+        }
       }
-      else {
-        el
-          .removeClass('badge-warning')
-          .addClass('badge-danger')
-          .html(`<i class="fa fa-times-circle"></i> ADB Failed. Maybe global installation will be fixed this issue`);
-        if (adb.error) el.append(`<br/><pre style="font-size: x-small;">error: \n${adb.error}</pre>`);
-      }
-    }
 
-    if (rclone) {
-      const el = $id('rcloneCheckIndicator');
-      if (rclone.version) {
-        el
-          .removeClass('badge-warning')
-          .addClass('badge-success')
-          .html(`<i class="fa fa-check-circle-o"></i> RCLONE Installed (${rclone.cmd})
+      if (rclone) {
+        const el = $id('rcloneCheckIndicator');
+        if (rclone.version) {
+          el.removeClass('badge-warning').addClass('badge-success')
+            .html(`<i class="fa fa-check-circle-o"></i> RCLONE Installed (${rclone.cmd})
             <br/><pre style="font-size: x-small;">${rclone.version}</pre>`);
-        if (remote.getGlobal('currentConfiguration').autoMount) checkMount();
-      }
-      else {
-        el
-          .removeClass('badge-warning')
-          .addClass('badge-danger')
-          .html(`<i class="fa fa-times-circle-o"></i>
+          if (remote.getGlobal('currentConfiguration').autoMount) checkMount();
+        } else {
+          el.removeClass('badge-warning').addClass('badge-danger')
+            .html(`<i class="fa fa-times-circle-o"></i>
           Can't find RCLONE - try to manualy download latest <a class="btn btn-sm btn-info" onclick="shell.openExternal('https://downloads.rclone.org/')">RClone</a> and set custom location at settings`);
-          if (rclone.error) el.append(`<br/><pre style="font-size: x-small;">error: \n${rclone.error}</pre>`);
+          if (rclone.error)
+            el.append(
+              `<br/><pre style="font-size: x-small;">error: \n${rclone.error}</pre>`,
+            );
+        }
       }
-    }
 
-    if (zip) {
-      const el = $id('zipCheckIndicator');
-      if (zip.version) {
-        el
-          .removeClass('badge-warning')
-          .addClass('badge-success')
-          .html(`<i class="fa fa-check-circle-o"></i> 7zip Archiver installed (${zip.cmd})
+      if (zip) {
+        const el = $id('zipCheckIndicator');
+        if (zip.version) {
+          el.removeClass('badge-warning').addClass('badge-success')
+            .html(`<i class="fa fa-check-circle-o"></i> 7zip Archiver installed (${zip.cmd})
             <br/><pre style="font-size: x-small;">${zip.version}</pre>`);
-      }
-      else {
-        el
-          .removeClass('badge-warning')
-          .addClass('badge-danger')
-          .html(`<i class="fa fa-times-circle-o"></i>
+        } else {
+          el.removeClass('badge-warning').addClass('badge-danger')
+            .html(`<i class="fa fa-times-circle-o"></i>
           Can't find 7zip Archiver - try to manualy download latest <a class="btn btn-sm btn-info" onclick="shell.openExternal('https://www.7-zip.org/download.html')">7ZIP</a> and set custom location at settings`);
-        if (zip.error) el.append(`<br/><pre style="font-size: x-small;">error: \n${zip.error}</pre>`);
+          if (zip.error)
+            el.append(
+              `<br/><pre style="font-size: x-small;">error: \n${zip.error}</pre>`,
+            );
+        }
       }
-    }
 
-    if (scrcpy) {
-      const el = $id('scrcpyCheckIndicator');
-      if (scrcpy.version) {
-        el
-          .removeClass('badge-warning')
-          .addClass('badge-success')
-          .html(`<i class="fa fa-check-circle-o"></i> SCRCPY Installed (${scrcpy.cmd})<br/><pre style="font-size: x-small;">${scrcpy.version}</pre>`);
-      }
-      else {
-        const tag = remote.getGlobal('platform')
-          .replace('win', 'windows')
-          .replace('mac', 'macos');
-        el
-          .removeClass('badge-warning')
-          .addClass('badge-danger')
-          .html(`<i class="fa fa-times-circle-o"></i>
+      if (scrcpy) {
+        const el = $id('scrcpyCheckIndicator');
+        if (scrcpy.version) {
+          el.removeClass('badge-warning')
+            .addClass('badge-success')
+            .html(
+              `<i class="fa fa-check-circle-o"></i> SCRCPY Installed (${scrcpy.cmd})<br/><pre style="font-size: x-small;">${scrcpy.version}</pre>`,
+            );
+        } else {
+          const tag = remote
+            .getGlobal('platform')
+            .replace('win', 'windows')
+            .replace('mac', 'macos');
+          el.removeClass('badge-warning').addClass('badge-danger')
+            .html(`<i class="fa fa-times-circle-o"></i>
           SCRCPY global installation not found, please read the <a class="btn btn-sm btn-info" onclick="shell.openExternal('https://github.com/Genymobile/scrcpy#${tag}')">MANUAL</a>`);
-        if (scrcpy.error) el.append(`<br/><pre style="font-size: x-small;">error: \n${scrcpy.error}</pre>`);
+          if (scrcpy.error)
+            el.append(
+              `<br/><pre style="font-size: x-small;">error: \n${scrcpy.error}</pre>`,
+            );
+        }
       }
-    }
-  });
+    });
 
-  console.log('ONLOAD');
-</script>
+    console.log('ONLOAD');
+  </script>
 {% endblock %}

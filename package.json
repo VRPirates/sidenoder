@@ -20,8 +20,12 @@
     "web-auto-extractor": "1.0.17"
   },
   "devDependencies": {
+    "@destination/prettier-plugin-twig": "^1.5.0",
     "electron": "32.0.2",
-    "electron-builder": "25.0.5"
+    "electron-builder": "25.0.5",
+    "husky": "^9.1.5",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3"
   },
   "scripts": {
     "start": "electron ./ --dev",

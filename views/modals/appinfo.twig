@@ -1,18 +1,29 @@
 <!-- Modal -->
-<div class="modal" id="appinfoModal" >
-  <div role="document" style="margin: 1.75rem auto; min-width:800px; max-width:834px"> <!-- class="modal-dialog"  -->
+<div class="modal" id="appinfoModal">
+  <div
+    role="document"
+    style="margin: 1.75rem auto; min-width: 800px; max-width: 834px"
+  >
+    <!-- class="modal-dialog" -->
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="appinfoModalLabel">Unknown</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
           <span>&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <div class="alert alert-warning"><small>
-          <i class="fa fa-exclamation-triangle"></i>
-          WARNING: Info auto parsed and can contains mistakes
-        </small></div>
+        <div class="alert alert-warning">
+          <small>
+            <i class="fa fa-exclamation-triangle"></i>
+            WARNING: Info auto parsed and can contains mistakes
+          </small>
+        </div>
         <div class="text-center">
           <div id="appinfoSlider" class="cbp-fwslider">
             <ul></ul>
@@ -20,29 +31,42 @@
         </div>
         <div id="appinfoGenres" class="text-center mb-2"></div>
         <div class="mb-2" id="appinfoShortDesc"></div>
-        <div class="mb-2"><b>Supported laguages:</b> <span id="supportedLanguages">Unknown</span></div>
-        <div class="text-center">
-          <a id="appinfoUrl" class="btn btn-primary" style="display: none">Open info on resource</a>
-          <a id="appinfoUrlDev" class="adbdev btn btn-info" style="display: none">Open info on device</a>
-          <a id="appinfoEventsBtn" class="btn btn-success" style="display: none">Show last events</a>
+        <div class="mb-2">
+          <b>Supported laguages:</b>
+          <span id="supportedLanguages">Unknown</span>
         </div>
-        <hr/>
+        <div class="text-center">
+          <a id="appinfoUrl" class="btn btn-primary" style="display: none"
+            >Open info on resource</a
+          >
+          <a
+            id="appinfoUrlDev"
+            class="adbdev btn btn-info"
+            style="display: none"
+            >Open info on device</a
+          >
+          <a id="appinfoEventsBtn" class="btn btn-success" style="display: none"
+            >Show last events</a
+          >
+        </div>
+        <hr>
         <b>Description:</b>
-        <br/>
+        <br>
         <div id="appinfoText"></div>
         <div id="appinfoAbout" class="text-center"></div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
       </div>
     </div>
   </div>
 </div>
 
-
-  <link rel="stylesheet" type="text/css" href="css/component.css" />
-  <script src="js/modernizr.custom.js"></script>
-  <script src="js/jquery.cbpFWSlider.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/component.css">
+<script src="js/modernizr.custom.js"></script>
+<script src="js/jquery.cbpFWSlider.min.js"></script>
 <script>
   console.log('ONLOAD APPINFO MODAL');
   const appinfoSlider = $id('appinfoSlider');
@@ -65,21 +89,21 @@
     $id('processingModal').modal('hide');
     console.log('app_info received');
     // console.log('app_info received', arg);
-    if (!arg || !arg.success)  return console.log(arg);
+    if (!arg || !arg.success) return console.log(arg);
     const data = arg.data;
-    if (!data)  return;
+    if (!data) return;
 
     if (data.res == 'steam') {
       $id('appinfoText').addClass('text-center');
     }
 
     // if (['steam', 'oculus'].includes(data.res)) {
-      id('appinfoEventsBtn').onclick = () => {
-        $id('processingModal').modal('show');
-        ipcRenderer.send('app_events_info', {res: data.res, pkg: data.pkg});
-      }
+    id('appinfoEventsBtn').onclick = () => {
+      $id('processingModal').modal('show');
+      ipcRenderer.send('app_events_info', { res: data.res, pkg: data.pkg });
+    };
 
-      $id('appinfoEventsBtn').show();
+    $id('appinfoEventsBtn').show();
     // }
 
     $id('appinfoModalLabel').text(data.name || '');
@@ -88,18 +112,21 @@
     $id('appinfoAbout').html(data.about_the_game || '');
     if (data.supported_languages) {
       $id('supportedLanguages')
-      .html(data.supported_languages
-        .replace('русский', '<b>русский</b>')
-        .replace('Русский', '<b>Русский</b>')
-      )
-      .parent().show();
+        .html(
+          data.supported_languages
+            .replace('русский', '<b>русский</b>')
+            .replace('Русский', '<b>Русский</b>'),
+        )
+        .parent()
+        .show();
     }
 
     if (data.url) {
       id('appinfoUrl').onclick = () => shell.openExternal(data.url);
       $id('appinfoUrl').show();
       if (data.res != 'steam') {
-        id('appinfoUrlDev').onclick = () => ipcRenderer.send('dev_open_url', data.url);
+        id('appinfoUrlDev').onclick = () =>
+          ipcRenderer.send('dev_open_url', data.url);
         $id('appinfoUrlDev').show();
       }
     }
@@ -108,39 +135,40 @@
       for (const genre of data.genres) {
         const genre_text = genre.description || genre;
         if (['Бесплатно', 'Free'].includes(genre_text)) continue;
-        $id('appinfoGenres').append(`<span class="badge badge-secondary">${genre_text}</span> `);
+        $id('appinfoGenres').append(
+          `<span class="badge badge-secondary">${genre_text}</span> `,
+        );
       }
     }
 
     let slides = '<ul>';
     if (data.header_image) {
-      slides+= `<li><img src="${data.header_image}" width="800" style="max-height: 405px;" alt="header"/></li>`;
+      slides += `<li><img src="${data.header_image}" width="800" style="max-height: 405px;" alt="header"/></li>`;
     }
 
     if (data.movies) {
       for (const movie of data.movies) {
         if (!movie.mp4) continue;
-        slides+= `<li><video width="800" style="max-height: 405px;" controls><source src="${movie.mp4['480']}" type="video/mp4"></video></li>`;
+        slides += `<li><video width="800" style="max-height: 405px;" controls><source src="${movie.mp4['480']}" type="video/mp4"></video></li>`;
       }
     }
 
     if (data.youtube) {
       for (const link of data.youtube) {
-        slides+= `<li><iframe width="800" height="405" src="${link}" frameborder="0" allowfullscreen></iframe></li>`;
+        slides += `<li><iframe width="800" height="405" src="${link}" frameborder="0" allowfullscreen></iframe></li>`;
       }
     }
 
     if (data.screenshots) {
       for (const screenshot of data.screenshots) {
-        slides+= `<li><img src="${screenshot.path_thumbnail}" width="800" style="max-height: 405px;" alt="screenshot_${screenshot.id}" /></li>`;
+        slides += `<li><img src="${screenshot.path_thumbnail}" width="800" style="max-height: 405px;" alt="screenshot_${screenshot.id}" /></li>`;
       }
     }
 
-    slides+= '</ul>';
+    slides += '</ul>';
 
     appinfoSlider[0].innerHTML = slides;
-    appinfoSlider.cbpFWSlider({current: 0});
+    appinfoSlider.cbpFWSlider({ current: 0 });
     $id('appinfoModal').modal('show');
   });
-
 </script>

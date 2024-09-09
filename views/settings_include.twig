@@ -5,41 +5,50 @@
   <div class="card-body">
     <div class="card-text container">
       <div class="card bg-primary mb-2">
-        <div class="card-header">Rclone configs (needed for mount remote disks):</div>
+        <div class="card-header">
+          Rclone configs (needed for mount remote disks):
+        </div>
         <div class="card-body">
           <div class="form-group mb-3">
-            <label for="cfgSection">Select mirror(click on mount status button to remount):</label>
-            <select class="custom-select" id="cfgSection">
-            </select>
+            <label for="cfgSection"
+              >Select mirror(click on mount status button to remount):</label
+            >
+            <select class="custom-select" id="cfgSection"></select>
           </div>
 
           <div class="form-group mb-4">
             <label for="rclonePath">Custom binary path:</label>
             <div class="input-group">
-              <input id="rclonePath" class="form-control" value="" />
+              <input id="rclonePath" class="form-control" value="">
               <a class="btn btn-primary" id="rclonePathBtn">Browse</a>
-              <a class="btn btn-info" onclick="shell.openExternal('https://downloads.rclone.org/')">Download</a>
+              <a
+                class="btn btn-info"
+                onclick="shell.openExternal('https://downloads.rclone.org/')"
+                >Download</a
+              >
             </div>
           </div>
 
           <div class="form-group mb-4">
             <label for="rcloneConf">Path config:</label>
             <div class="input-group">
-              <input id="rcloneConf" class="form-control" value="" />
+              <input id="rcloneConf" class="form-control" value="">
               <a class="btn btn-primary" id="rcloneConfBtn">Browse</a>
             </div>
           </div>
 
           {% if platform == 'mac' %}
-          <div class="form-group mb-4">
-            <label for="rcloneConf">Path config:</label>
-            <div class="input-group">
-              <select class="adbdev custom-select" id="mountCmd">
-                <option value="mount">mount</option>
-                <option value="cmount">cmount (support old rclone versions)</option>
-              </select>
+            <div class="form-group mb-4">
+              <label for="rcloneConf">Path config:</label>
+              <div class="input-group">
+                <select class="adbdev custom-select" id="mountCmd">
+                  <option value="mount">mount</option>
+                  <option value="cmount">
+                    cmount (support old rclone versions)
+                  </option>
+                </select>
+              </div>
             </div>
-          </div>
           {% endif %}
 
           <div class="form-check mb-0">
@@ -51,37 +60,53 @@
         </div>
       </div>
 
-
       <div class="card bg-primary mb-2">
         <div class="card-header">Main:</div>
         <div class="card-body">
           <div class="form-group mb-4">
-            <label for="scrcpyPath"><a onclick="shell.openExternal('https://github.com/Genymobile/scrcpy/releases/latest')">SCRCPY</a> custom path:</label>
+            <label for="scrcpyPath"
+              ><a onclick="shell.openExternal('https://github.com/Genymobile/scrcpy/releases/latest')"
+                >SCRCPY</a
+              >
+              custom path:</label
+            >
             <div class="input-group">
-              <input id="scrcpyPath" class="form-control" value="" />
+              <input id="scrcpyPath" class="form-control" value="">
               <a class="btn btn-primary" id="scrcpyPathBtn">Browse</a>
-                  <a class="btn btn-info" onclick="shell.openExternal('https://github.com/Genymobile/scrcpy/releases/latest')">Download</a>
+              <a
+                class="btn btn-info"
+                onclick="shell.openExternal('https://github.com/Genymobile/scrcpy/releases/latest')"
+                >Download</a
+              >
             </div>
           </div>
 
           <div class="form-group mb-4">
             <label for="tmpdir">Custom temp dirrectory:</label>
             <div class="input-group">
-              <input id="tmpdir" class="form-control" value="" />
+              <input id="tmpdir" class="form-control" value="">
               <a class="btn btn-primary" id="tmpdirBtn">Browse</a>
             </div>
           </div>
 
           <div class="form-check mb-3">
             <label for="allowOtherDevices" class="form-check-label">
-              <input class="form-check-input" type="checkbox" id="allowOtherDevices">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="allowOtherDevices"
+              >
               Allow to connect not oculus devices
             </label>
           </div>
 
           <div class="form-check mb-3">
             <label for="cacheOculusGames" class="form-check-label">
-              <input class="form-check-input" type="checkbox" id="cacheOculusGames">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="cacheOculusGames"
+              >
               Cache Oculus Games on first opening(for faster reopening)
             </label>
           </div>
@@ -93,11 +118,13 @@
             </label>
           </div>
 
-          <!-- <div class="form-group">
-            <a id="debugTool" class="btn btn-primary">
-              <i class="fa fa-bug"></i> Open debug tools
-            </a>
-          </div> -->
+          <!--
+            <div class="form-group">
+              <a id="debugTool" class="btn btn-primary">
+                <i class="fa fa-bug"></i> Open debug tools
+              </a>
+            </div>
+          -->
         </div>
       </div>
 
@@ -105,14 +132,23 @@
         <div class="card-header">Proxy settings EXPERIMENTAL:</div>
         <div class="card-body">
           <div class="form-group mb-4">
-            <label for="proxyUrl">Socks proxy url (for example from https://hideip.me/ru/proxy/socks5list):</label>
-            <input id="proxyUrl" class="form-control" value="" placeholder="socks://[HOST]:[PORT]" />
+            <label for="proxyUrl"
+              >Socks proxy url (for example from
+              https://hideip.me/ru/proxy/socks5list):</label
+            >
+            <input
+              id="proxyUrl"
+              class="form-control"
+              value=""
+              placeholder="socks://[HOST]:[PORT]"
+            >
           </div>
 
           <div class="form-check mb-0">
             <label for="proxyOculus" class="form-check-label">
               <input class="form-check-input" type="checkbox" id="proxyOculus">
-              <img src="img/oculus.svg" width="14" style="margin-top: -2px;" /> Enable proxy for fetch Oculus information
+              <img src="img/oculus.svg" width="14" style="margin-top: -2px;">
+              Enable proxy for fetch Oculus information
             </label>
           </div>
           <div class="form-check mb-0">
@@ -124,115 +160,162 @@
           <div class="form-check mb-0">
             <label for="proxySQ" class="form-check-label">
               <input class="form-check-input" type="checkbox" id="proxySQ">
-              <img src="img/sq-white.svg" width="14" /> Enable proxy for fetch SideQuest information
+              <img src="img/sq-white.svg" width="14"> Enable proxy for fetch
+              SideQuest information
             </label>
           </div>
 
-          <!-- <div class="form-group">
-            <a id="debugTool" class="btn btn-primary">
-              <i class="fa fa-bug"></i> Open debug tools
-            </a>
-          </div> -->
+          <!--
+            <div class="form-group">
+              <a id="debugTool" class="btn btn-primary">
+                <i class="fa fa-bug"></i> Open debug tools
+              </a>
+            </div>
+          -->
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<script>{
-  console.log('ONLOAD settings');
-  const OPT_KEYS = [
-    'cfgSection',
-    'adbPath',
-    'rclonePath',
-    'rcloneConf',
-    'mountCmd',
-    'scrcpyPath',
-    'tmpdir',
-    'proxyUrl',
-  ];
-  const CHKBOXES = [
-    'autoMount',
-    'allowOtherDevices',
-    'cacheOculusGames',
-    'userHide',
-    'proxyOculus',
-    'proxySteam',
-    'proxySQ',
-  ];
-
-  let options = '';
-  for (const section of remote.getGlobal('rcloneSections')) {
-    options+= `<option value="${section}">${section}</option>`;
-  }
-  id('cfgSection').innerHTML = options;
-
-  for (const key of OPT_KEYS) {
-    $id(key)
-      .val(remote.getGlobal('currentConfiguration')[key])
-      .on('change', ({ target }) => {
-        $(target).removeClass('is-valid');
-        ipcRenderer.send('change_config', {key, val: target.value});
-      });
-  }
-
-  for (const key of CHKBOXES) {
-    const el = $id('' + key);
-    if (remote.getGlobal('currentConfiguration')[key]) {
-      el.prop('checked', true);
-    }
-
-    el.on('change.bootstrapSwitch', ({ target }) => {
-      ipcRenderer.send('change_config', {key, val: target.checked});
-    });
-  }
-
-
-  $id('debugTool').on('click', (e) => {
-    remote.getGlobal('win').webContents.openDevTools();
-  });
-
-  $id('adbPathBtn').on('click', (e) => setCustomPath('adbPath', 'Android Debug Bridge custom path', 'Browse to adb binary location'));
-  $id('rclonePathBtn').on('click', (e) => setCustomPath('rclonePath', 'RClone custom path', 'Browse to rclone binary location'));
-  $id('scrcpyPathBtn').on('click', (e) => setCustomPath('scrcpyPath', 'SCRCPY custom path', 'Browse to scrcpy binary location'));
-  $id('rcloneConfBtn').on('click', (e) => setCustomPath('rcloneConf', 'RClone config location', 'Browse to rclone config location', [{
-    name: 'Config', extensions: ['conf', 'cfg', 'ini'],
-    name: 'All', extensions: ['*'],
-  }]));
-  $id('tmpdirBtn').on('click', (e) => setCustomPath('tmpdir', 'Temp dirrectory custom path', 'Browse to new temp dirrectory location', undefined, 'openDirectory'));
-
-  ipcRenderer.removeAllListeners('change_config');
-  ipcRenderer.on('change_config', (event, { key, val }) => {
-    if (!OPT_KEYS.includes(key)) return;
-    if ([
+<script>
+  {
+    console.log('ONLOAD settings');
+    const OPT_KEYS = [
       'cfgSection',
+      'adbPath',
+      'rclonePath',
       'rcloneConf',
       'mountCmd',
-    ].includes(key)) {
-      if (remote.getGlobal('mounted')) checkMount();
+      'scrcpyPath',
+      'tmpdir',
+      'proxyUrl',
+    ];
+    const CHKBOXES = [
+      'autoMount',
+      'allowOtherDevices',
+      'cacheOculusGames',
+      'userHide',
+      'proxyOculus',
+      'proxySteam',
+      'proxySQ',
+    ];
 
-      loadInclude('settings_include.twig');
+    let options = '';
+    for (const section of remote.getGlobal('rcloneSections')) {
+      options += `<option value="${section}">${section}</option>`;
+    }
+    id('cfgSection').innerHTML = options;
+
+    for (const key of OPT_KEYS) {
+      $id(key)
+        .val(remote.getGlobal('currentConfiguration')[key])
+        .on('change', ({ target }) => {
+          $(target).removeClass('is-valid');
+          ipcRenderer.send('change_config', { key, val: target.value });
+        });
     }
 
-    $(`#${key}`).val(val).addClass('is-valid');
-  });
+    for (const key of CHKBOXES) {
+      const el = $id('' + key);
+      if (remote.getGlobal('currentConfiguration')[key]) {
+        el.prop('checked', true);
+      }
 
-  async function setCustomPath(key, title, message, filters, type = 'openFile') {
-    filters = filters || [{
-      name: 'Exe', extensions: ['exe'],
-      name: 'All', extensions: ['*'],
-    }];
-    const res = await dialog.showOpenDialog(null, {
-      properties: [type],
+      el.on('change.bootstrapSwitch', ({ target }) => {
+        ipcRenderer.send('change_config', { key, val: target.checked });
+      });
+    }
+
+    $id('debugTool').on('click', (e) => {
+      remote.getGlobal('win').webContents.openDevTools();
+    });
+
+    $id('adbPathBtn').on('click', (e) =>
+      setCustomPath(
+        'adbPath',
+        'Android Debug Bridge custom path',
+        'Browse to adb binary location',
+      ),
+    );
+    $id('rclonePathBtn').on('click', (e) =>
+      setCustomPath(
+        'rclonePath',
+        'RClone custom path',
+        'Browse to rclone binary location',
+      ),
+    );
+    $id('scrcpyPathBtn').on('click', (e) =>
+      setCustomPath(
+        'scrcpyPath',
+        'SCRCPY custom path',
+        'Browse to scrcpy binary location',
+      ),
+    );
+    $id('rcloneConfBtn').on('click', (e) =>
+      setCustomPath(
+        'rcloneConf',
+        'RClone config location',
+        'Browse to rclone config location',
+        [
+          {
+            name: 'Config',
+            extensions: ['conf', 'cfg', 'ini'],
+            name: 'All',
+            extensions: ['*'],
+          },
+        ],
+      ),
+    );
+    $id('tmpdirBtn').on('click', (e) =>
+      setCustomPath(
+        'tmpdir',
+        'Temp dirrectory custom path',
+        'Browse to new temp dirrectory location',
+        undefined,
+        'openDirectory',
+      ),
+    );
+
+    ipcRenderer.removeAllListeners('change_config');
+    ipcRenderer.on('change_config', (event, { key, val }) => {
+      if (!OPT_KEYS.includes(key)) return;
+      if (['cfgSection', 'rcloneConf', 'mountCmd'].includes(key)) {
+        if (remote.getGlobal('mounted')) checkMount();
+
+        loadInclude('settings_include.twig');
+      }
+
+      $(`#${key}`).val(val).addClass('is-valid');
+    });
+
+    async function setCustomPath(
+      key,
       title,
       message,
       filters,
-    });
-    if (res.canceled) return;
+      type = 'openFile',
+    ) {
+      filters = filters || [
+        {
+          name: 'Exe',
+          extensions: ['exe'],
+          name: 'All',
+          extensions: ['*'],
+        },
+      ];
+      const res = await dialog.showOpenDialog(null, {
+        properties: [type],
+        title,
+        message,
+        filters,
+      });
+      if (res.canceled) return;
 
-    const val = res.filePaths[0];
-    $(`#${key}`).val(val);
-    ipcRenderer.send('change_config', {key, val});
-    return val;
+      const val = res.filePaths[0];
+      $(`#${key}`).val(val);
+      ipcRenderer.send('change_config', { key, val });
+      return val;
+    }
   }
-}</script>
+</script>

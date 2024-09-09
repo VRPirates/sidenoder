@@ -62,10 +62,10 @@ document.addEventListener("keydown", (e) => {
   }
 
   if (
-      e.code == "Backspace" &&
-      !$(".form-control").is(":focus") &&
-      !$(".find-input").is(":focus") &&
-      !$("#bookmarkName").is(":focus")
+    e.code == "Backspace" &&
+    !$(".form-control").is(":focus") &&
+    !$(".find-input").is(":focus") &&
+    !$("#bookmarkName").is(":focus")
   ) {
     return upDir();
   }
@@ -91,7 +91,7 @@ function resizeLoc() {
   const width = window.innerWidth / 10 - 60;
   if (dir_path.title.length > width) {
     dir_path.innerText =
-        dir_path.title.substr(0, 8) + "..." + dir_path.title.slice(-(width - 10));
+      dir_path.title.substr(0, 8) + "..." + dir_path.title.slice(-(width - 10));
   } else {
     dir_path.innerText = dir_path.title;
   }
@@ -121,14 +121,14 @@ function scrollByHistory() {
 
 function fixIcons() {
   $(".browse-folder").hover(
-      (e) => {
-        $(e.target).find("i").removeClass("fa-folder-o");
-        $(e.target).find("i").addClass("fa-folder-open-o");
-      },
-      (e) => {
-        $(e.target).find("i").addClass("fa-folder-o");
-        $(e.target).find("i").removeClass("fa-folder-open-o");
-      },
+    (e) => {
+      $(e.target).find("i").removeClass("fa-folder-o");
+      $(e.target).find("i").addClass("fa-folder-open-o");
+    },
+    (e) => {
+      $(e.target).find("i").addClass("fa-folder-o");
+      $(e.target).find("i").removeClass("fa-folder-open-o");
+    },
   );
 }
 
@@ -198,20 +198,20 @@ function loadDir(list) {
     // console.log(item);
     if (!item.createdAt) {
       cards_first.unshift(
-          `<div class="listitem badge badge-danger"><i class="fa fa-times-circle-o"></i> ${item.name}</div>`,
+        `<div class="listitem badge badge-danger"><i class="fa fa-times-circle-o"></i> ${item.name}</div>`,
       );
       continue;
     }
 
     const modified = item.info.mtime.getTime();
     const fullPath = item.filePath
-        .replace("\\", "/")
-        .replace("", ":")
-        .split("'")
-        .join("\\'");
+      .replace("\\", "/")
+      .replace("", ":")
+      .split("'")
+      .join("\\'");
     const symblink = item.isLink
-        ? `<small style="font-family: FontAwesome" class="text-secondary fa-link"></small> `
-        : "";
+      ? `<small style="font-family: FontAwesome" class="text-secondary fa-link"></small> `
+      : "";
     const name = symblink + item.name;
 
     if (item.isFile) {
@@ -241,11 +241,11 @@ function loadDir(list) {
     }
 
     let newribbon = item.newItem
-        ? `<div class="ribbon-wrapper"><div class="ribbon ribbon-yellow">NEW!</div></div>`
-        : "";
+      ? `<div class="ribbon-wrapper"><div class="ribbon ribbon-yellow">NEW!</div></div>`
+      : "";
     if (item.mp) {
       let color =
-          item.mp.mp == "yes" ? "green" : item.mp.mp == "no" ? "red" : "yellow";
+        item.mp.mp == "yes" ? "green" : item.mp.mp == "no" ? "red" : "yellow";
       newribbon = `<div class="ribbon-wrapper"><div class="ribbon ribbon-${color}" title="${item.mp.note}">MP: ${item.mp.mp}</div></div>`;
     }
 
@@ -275,14 +275,14 @@ function loadDir(list) {
     }
 
     const youtubeUrl =
-        "https://www.youtube.com/results?search_query=oculus+quest+" +
-        escape(item.simpleName);
+      "https://www.youtube.com/results?search_query=oculus+quest+" +
+      escape(item.simpleName);
     selectBtn += `<a onclick="shell.openExternal('${youtubeUrl}')" title="Search at Youtube" class="btn btn-sm btn-danger">
       <i class="fa-brands fa-youtube"></i></a> `;
 
     const size = item.size
-        ? `${item.size} Mb`
-        : `<a onclick="getDirSize(this, '${fullPath}')">
+      ? `${item.size} Mb`
+      : `<a onclick="getDirSize(this, '${fullPath}')">
       <i class="fa fa-calculator" title="Calculate folder size"></i> get size
     </a>`;
 
@@ -301,8 +301,8 @@ function loadDir(list) {
       </div>
       <div style="color:#ccc;" class="card-footer pb-1 pt-1"><small>
         versionCode: ${item.versionCode || "Unknown"} ${
-        (item.versionName && `(v.${item.versionName})`) || ""
-    }
+          (item.versionName && `(v.${item.versionName})`) || ""
+        }
         <br/>
         <span class="package-name">${item.packageName}</span><br/>
         Updated: ${item.info.mtime.toLocaleString()} &nbsp;
@@ -346,31 +346,31 @@ function sortFileElements(el, key, asc) {
   const sortByName = key.startsWith("name");
 
   el.html(
-      el
-          .find(".listitem")
-          .sort((a, b) => {
-            const valA = sortByName
-                ? a.dataset.name.toLowerCase()
-                : a.dataset.modified;
-            const valB = sortByName
-                ? b.dataset.name.toLowerCase()
-                : b.dataset.modified;
-            if (valA < valB) {
-              return asc ? -1 : 1;
-            }
-            if (valA > valB) {
-              return asc ? 1 : -1;
-            }
-            return 0;
-          })
-          .sort((a, b) => {
-            if (a.dataset.isfile === "true" && b.dataset.isfile !== "true") {
-              return 1;
-            }
-            if (a.dataset.isfile !== "true" && b.dataset.isfile === "true") {
-              return -1;
-            }
-            return 0;
-          }),
+    el
+      .find(".listitem")
+      .sort((a, b) => {
+        const valA = sortByName
+          ? a.dataset.name.toLowerCase()
+          : a.dataset.modified;
+        const valB = sortByName
+          ? b.dataset.name.toLowerCase()
+          : b.dataset.modified;
+        if (valA < valB) {
+          return asc ? -1 : 1;
+        }
+        if (valA > valB) {
+          return asc ? 1 : -1;
+        }
+        return 0;
+      })
+      .sort((a, b) => {
+        if (a.dataset.isfile === "true" && b.dataset.isfile !== "true") {
+          return 1;
+        }
+        if (a.dataset.isfile !== "true" && b.dataset.isfile === "true") {
+          return -1;
+        }
+        return 0;
+      }),
   );
 }

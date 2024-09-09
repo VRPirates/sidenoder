@@ -898,6 +898,7 @@ async function trackDevices() {
 async function appInfo(args) {
   const { res, pkg } = args;
   const app = KMETAS[pkg];
+
   let data = {
     res,
     pkg,
@@ -2358,7 +2359,7 @@ async function getInstalledAppsWithUpdates() {
       const remoteversion = pkg.versionCode;
 
       // console.log({ packageName, installedVersion, remoteversion });
-      // console.log({ package });
+      // console.log({ pkg });
 
       if (remoteversion <= installedVersion) continue;
 

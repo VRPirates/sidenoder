@@ -174,17 +174,17 @@ async function getDirSize(el, loc) {
   el.outerText = formatBytes(size);
 }
 
-function sqInfo(package) {
+function sqInfo(pkg) {
   $id("processingModal").modal("show");
-  ipcRenderer.send("app_info", { res: "sq", package });
+  ipcRenderer.send("app_info", { res: "sq", pkg });
 }
-function oculusInfo(package) {
+function oculusInfo(pkg) {
   $id("processingModal").modal("show");
-  ipcRenderer.send("app_info", { res: "oculus", package });
+  ipcRenderer.send("app_info", { res: "oculus", pkg });
 }
-function steamInfo(package) {
+function steamInfo(pkg) {
   $id("processingModal").modal("show");
-  ipcRenderer.send("app_info", { res: "steam", package });
+  ipcRenderer.send("app_info", { res: "steam", pkg });
 }
 
 function install(loc) {

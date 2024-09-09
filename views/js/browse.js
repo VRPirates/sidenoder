@@ -222,11 +222,11 @@ function loadDir(list) {
       if (item.name.endsWith(".apk")) {
         rowItem = `<td class="browse-file" onclick="getDir('${fullPath}')"><b><i class="fa fa-android"></i> &nbsp; ${name}</b></td>`;
         rowItem += `<td>Updated: ${item.info.mtime.toLocaleString()}</td><td>${size} Mb</td>`;
-        rowItem = `<tr class="listitem" data-name="${item.name.toUpperCase()}" data-updatedat="${modified}" data-isfile="true">${rowItem}</tr>`;
+        rowItem = `<tr class="listitem" data-name="${item.name.toUpperCase()}" data-modified="${modified}" data-isfile="true">${rowItem}</tr>`;
       } else {
         rowItem = `<td><i class="fa fa-file-o"></i> &nbsp; ${name}</td>`;
         rowItem += `<td>Updated: ${item.info.mtime.toLocaleString()}</td><td>${size} Mb</td>`;
-        rowItem = `<tr class="listitem text-secondary" data-name="${item.name.toUpperCase()}" data-updatedat="${modified}" data-isfile="true">${rowItem}</tr>`;
+        rowItem = `<tr class="listitem text-secondary" data-name="${item.name.toUpperCase()}" data-modified="${modified}" data-isfile="true">${rowItem}</tr>`;
       }
 
       rows += rowItem;
@@ -238,7 +238,7 @@ function loadDir(list) {
       rowItem += `<td>Updated: ${item.info.mtime.toLocaleString()}</td>`;
       rowItem += `<td><a onclick="getDirSize(this, '${fullPath}')"><i class="fa fa-calculator" ></i> get size</a></td>`;
 
-      rows += `<tr class="listitem" data-name="${item.name.toUpperCase()}" data-updatedat="${modified}">${rowItem}</tr>`;
+      rows += `<tr class="listitem" data-name="${item.name.toUpperCase()}" data-modified="${modified}">${rowItem}</tr>`;
       continue;
     }
 
@@ -288,7 +288,7 @@ function loadDir(list) {
       <i class="fa fa-calculator" title="Calculate folder size"></i> get size
     </a>`;
 
-    const card = `<div class="col mb-3 listitem" style="min-width: 250px;padding-right:5px;max-width: 450px;" data-name="${item.name.toUpperCase()}" data-updatedat="${modified}">
+    const card = `<div class="col mb-3 listitem" style="min-width: 250px;padding-right:5px;max-width: 450px;" data-name="${item.name.toUpperCase()}" data-modified="${modified}">
       <div class="card bg-primary text-center bg-dark">
 
       <div><small><b>${item.simpleName} ${item.note || ""}</b></small></div>
@@ -351,10 +351,10 @@ function sortFileElements(el, key, asc) {
           .sort((a, b) => {
             const valA = sortByName
                 ? a.dataset.name.toLowerCase()
-                : a.dataset.updatedat;
+                : a.dataset.modified;
             const valB = sortByName
                 ? b.dataset.name.toLowerCase()
-                : b.dataset.updatedat;
+                : b.dataset.modified;
             if (valA < valB) {
               return asc ? -1 : 1;
             }

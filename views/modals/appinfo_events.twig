@@ -58,7 +58,7 @@
     let events = '';
     for (const e of data.events) {
       let event = '';
-      if (e.date) event+= `<small class="pull-right">${e.date}</small>`;
+      if (e.date) event+= `<small class="float-right">${e.date}</small>`;
       event+= `<h4>${e.title || ''}</h4>`;
       if (e.contents) event+= `<div>${e.contents}</div>`;
       events+= `${event}<hr/>`;

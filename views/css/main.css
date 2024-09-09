@@ -273,3 +273,92 @@ html {
   border: 1px solid #666;
   border-radius: 4px;
 }
+
+/* Find dialog start */
+.find-box {
+  position: fixed !important;
+  top: 180px;
+  z-index: 3001;
+  max-height: 48px;
+  min-height: 30px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  visibility: visible;
+  background: #272b30;
+  box-shadow: #000 1px 1px 2px 0.5px;
+  box-sizing: border-box !important;
+  width: fit-content;
+}
+
+.find-handle {
+  cursor: move;
+  margin-right: 5px;
+}
+
+.find-input {
+  width: 190px;
+  outline: 0;
+  border: 1px solid #222;
+  background: #222;
+  margin-right: 6px;
+  border-radius: 2px;
+  color: #aaa;
+}
+
+.find-close {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  height: 20px;
+  width: 20px;
+  overflow: hidden;
+  display: inline-block;
+  background: #272b30;
+  border-radius: 2px;
+}
+
+.find-close:hover .find-close-brtl,
+.find-close:hover .find-close-bltr {
+  background: #ccc;
+}
+
+.find-close-brtl {
+  width: 14px;
+  height: 2px;
+  background: #aaa;
+  transform: rotate(45deg);
+  position: absolute;
+  top: 9px;
+  left: 3px;
+}
+
+.find-close-bltr {
+  width: 14px;
+  height: 2px;
+  background: #aaa;
+  transform: rotate(-45deg);
+  position: absolute;
+  top: 9px;
+  left: 3px;
+}
+
+.find-delete {
+  color: #aaa;
+  margin-right: 3px;
+  cursor: pointer;
+}
+
+.find-delete:hover {
+  color: #ccc;
+}
+/* Find dialog end */
+
+.table-striped-rookie tr:nth-child(odd of :not([hidden])) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+#installedmodaldiv .modal-content {
+  min-height: 700px;
+}

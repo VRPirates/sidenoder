@@ -204,7 +204,7 @@ class FindDialog {
       this.#debounce(() => {
         const text = $findInput.val();
         this._handler(text);
-      })
+      }),
     );
 
     const $findDelete = $("<i>", {
@@ -358,4 +358,3 @@ function sortElements($element, key, asc = true) {
   items.sort(sortBy(key, asc));
   $element.html(items);
 }
-

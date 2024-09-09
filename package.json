@@ -34,10 +34,16 @@
     "dist-win": "electron-builder -w",
     "dist-mac": "electron-builder -m",
     "dist-linux": "electron-builder -l",
+    "prettier:check": "prettier --check \"**/*.{css,js,json,md,twig,yml}\"",
+    "prettier:format": "prettier --write \"**/*.{css,js,json,md,twig,yml}\"",
     "postdist": "npm run pack-win && npm run pack-mac",
     "postinstall": "electron-builder install-app-deps",
     "pack-win": "cd out/win-unpacked && cp ../windows-install.bat ./ && 7za a sidenoder-$npm_package_version-win.zip  ./* && mv sidenoder-$npm_package_version-win.zip ../",
-    "pack-mac": "cd out/mac && tar -czf sidenoder-$npm_package_version-mac.tar.gz  ./* && mv sidenoder-$npm_package_version-mac.tar.gz ../"
+    "pack-mac": "cd out/mac && tar -czf sidenoder-$npm_package_version-mac.tar.gz  ./* && mv sidenoder-$npm_package_version-mac.tar.gz ../",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "{**/*,*}.{css,js,json,md,twig,yml}": "prettier --write"
   },
   "build": {
     "appId": "com.sidenoder.app",

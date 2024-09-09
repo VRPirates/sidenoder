@@ -290,8 +290,8 @@ function loadDir(list) {
       <div class="card bg-primary text-center bg-dark">
 
       <div><small><b class="card-simple-name">${item.simpleName} ${
-      item.note || ""
-    }</b></small></div>
+        item.note || ""
+      }</b></small></div>
       <div class="ribbon-img-container">
         ${newribbon}
         <img src="${item.imagePath}" class="bg-secondary" style="width: 100%">

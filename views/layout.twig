@@ -8,25 +8,36 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     >
 
-  <script>window.$ = window.jQuery = require('jquery');</script>
+    <script>
+      window.$ = window.jQuery = require('jquery');
+    </script>
 
-  <!-- A simple hack that makes it possible to use jQueryUI with Electron -->
-  <script src="../node_modules/jquery-ui/dist/jquery-ui.min.js"></script>
+    <!-- A simple hack that makes it possible to use jQueryUI with Electron -->
+    <script src="../node_modules/jquery-ui/dist/jquery-ui.min.js"></script>
 
-  <!-- <script src="https://unpkg.com/@popperjs/core@2" crossorigin="anonymous"></script> -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" crossorigin="anonymous"></script> -->
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/main.js"></script>
+    <!--
+      <script src="https://unpkg.com/@popperjs/core@2" crossorigin="anonymous"></script>
+    -->
+    <!--
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
 
     <!-- Bootstrap CSS -->
     <!--
       <link rel="stylesheet" href="css/bootstrap.min.css" crossorigin="anonymous">
     -->
 
-  <link rel="stylesheet" href="css/bootstrap-slate.min.css">
-  <!-- <link rel="stylesheet" href="https://bootswatch.com/4/sandstone/bootstrap.min.css"> -->
-  <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.min.css">
-  <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/bootstrap-slate.min.css">
+    <!--
+      <link rel="stylesheet" href="https://bootswatch.com/4/sandstone/bootstrap.min.css">
+    -->
+    <link
+      rel="stylesheet"
+      href="../node_modules/@fortawesome/fontawesome-free/css/all.min.css"
+    >
+    <link rel="stylesheet" href="css/main.css">
 
     <title>Quest-Sideloader</title>
 
@@ -37,18 +48,17 @@
       const { ipcRenderer, /*remote, */ shell } = electron;
       const { dialog } = remote;
 
-    function loadInclude(template, id = null, complete = null) {
-      $(document).trigger("newTemplate" );
+      function loadInclude(template, id = null, complete = null) {
+        $(document).trigger('newTemplate');
 
-      if (!id) {
-        $id('mainbody')
-          // .html('')
-          .load(template, complete);
+        if (!id) {
+          $id('mainbody')
+            // .html('')
+            .load(template, complete);
+        } else {
+          $(`#${id}`).load(template, complete);
+        }
       }
-      else {
-        $(`#${id}`).load(template, complete);
-      }
-    }
 
       function formatEta(seconds) {
         if (seconds == null) {
@@ -251,27 +261,34 @@
     ipcRenderer.send('sideload_read_queue', '');
   });*/
 
-  document.addEventListener('dragover', (ev) => ev.preventDefault());
-  document.addEventListener('drop', (ev) => ev.preventDefault());
+      document.addEventListener('dragover', (ev) => ev.preventDefault());
+      document.addEventListener('drop', (ev) => ev.preventDefault());
 
-  document.body.addEventListener('drop', (ev) => {
-    ev.preventDefault();
-    if (!ev.dataTransfer.files || !ev.dataTransfer.files.length) return;
+      document.body.addEventListener(
+        'drop',
+        (ev) => {
+          ev.preventDefault();
+          if (!ev.dataTransfer.files || !ev.dataTransfer.files.length) return;
 
-    if (ev.dataTransfer.files[0].path.endsWith('.apk')) {
-      ipcRenderer.send('filedrop', ev.dataTransfer.files[0].path.replace(/\\/g, '/'));
-    }
-  }, false);
+          if (ev.dataTransfer.files[0].path.endsWith('.apk')) {
+            ipcRenderer.send(
+              'filedrop',
+              ev.dataTransfer.files[0].path.replace(/\\/g, '/'),
+            );
+          }
+        },
+        false,
+      );
 
-  window.addEventListener("resize", () => {
-    const navPanel = document.querySelector("#nav-panel");
-    if (!navPanel) {
-      return;
-    }
+      window.addEventListener('resize', () => {
+        const navPanel = document.querySelector('#nav-panel');
+        if (!navPanel) {
+          return;
+        }
 
-    // fix navbar position
-    navPanel.style.top = $("#topbar").height() + "px";
-  });
+        // fix navbar position
+        navPanel.style.top = $('#topbar').height() + 'px';
+      });
 
       // actions
 

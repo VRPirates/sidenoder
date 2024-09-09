@@ -73,7 +73,7 @@ function drawInstalledApps(apps, updates = false) {
 
     if (!app.update) {
       row += `<a onclick="startApp('${app.packageName}')" class="adbdev btn btn-md btn-info" title="Launch"><i class="fa fa-play"></i></a> `;
-      row += `<a onclick="uninstall(this, '${app.packageName}')" class="adbdev btn btn-md btn-danger" title="Uninstall"><i class="fa fa-trash-o"></i></a> `;
+      row += `<a onclick="uninstall(this, '${app.packageName}')" class="adbdev btn btn-md btn-danger" title="Uninstall"><i class="fa fa-trash-can"></i></a> `;
       row += `<a onclick="appTools('${app.packageName}')" class="adbdev btn btn-md btn-primary"> <i class="fa fa-cog"></i> Tools</a> `;
     }
     else {

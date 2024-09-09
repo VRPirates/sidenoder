@@ -1,4 +1,4 @@
-/* global search,sortElements */
+/* global sortElements */
 /*eslint no-unused-vars: ["error", {
   "varsIgnorePattern": "addBookmark|delBookmark|getDirSize|install|oculusInfo|sortFiles|sqInfo|steamInfo"
 }]*/
@@ -18,7 +18,6 @@ ipcRenderer.on("get_dir", (event, arg) => {
     fixIcons();
   }
   $id("processingModal").modal("hide");
-  search && search.update();
 });
 
 function setLocation(loc) {
@@ -37,7 +36,7 @@ function addBookmark(name, path, write_cfg = true) {
   id("bookmarksdropdown").innerHTML += `<div class="dropdown-item">
     <a class="dir-bookmark" onclick="getDir('${path}');$id('bookmarksdropdown').toggle()">
     <i class="fa fa-star-o"></i> ${name}</a>
-    <a class="pull-right text-danger" data-i="${i}" onclick="delBookmark(this)"> x</a>
+    <a class="float-right text-danger" data-i="${i}" onclick="delBookmark(this)"> x</a>
   </div>`;
   if (write_cfg) {
     const bookmarks = remote.getGlobal("currentConfiguration").dirBookmarks;
@@ -62,7 +61,6 @@ document.addEventListener("keydown", (e) => {
     return;
   }
 
-  console.log(e);
   if (
       e.code == "Backspace" &&
       !$(".form-control").is(":focus") &&
@@ -273,14 +271,14 @@ function loadDir(list) {
 
     if (item.steamId) {
       selectBtn += `<a onclick="steamInfo('${item.packageName}');" title="Steam information" class="btn btn-sm btn-info">
-        <i class="fa fa fa-steam-square "></i></a> `;
+        <i class="fa-brands fa-square-steam"></i></a> `;
     }
 
     const youtubeUrl =
         "https://www.youtube.com/results?search_query=oculus+quest+" +
         escape(item.simpleName);
     selectBtn += `<a onclick="shell.openExternal('${youtubeUrl}')" title="Search at Youtube" class="btn btn-sm btn-danger">
-      <i class="fa fa-youtube-play"></i></a> `;
+      <i class="fa-brands fa-youtube"></i></a> `;
 
     const size = item.size
         ? `${item.size} Mb`
@@ -291,7 +289,9 @@ function loadDir(list) {
     const card = `<div class="col mb-3 listitem" style="min-width: 250px;padding-right:5px;max-width: 450px;" data-name="${item.name.toUpperCase()}" data-modified="${modified}">
       <div class="card bg-primary text-center bg-dark">
 
-      <div><small><b>${item.simpleName} ${item.note || ""}</b></small></div>
+      <div><small><b class="card-simple-name">${item.simpleName} ${
+      item.note || ""
+    }</b></small></div>
       <div class="ribbon-img-container">
         ${newribbon}
         <img src="${item.imagePath}" class="bg-secondary" style="width: 100%">
@@ -304,7 +304,7 @@ function loadDir(list) {
         (item.versionName && `(v.${item.versionName})`) || ""
     }
         <br/>
-        ${item.packageName}<br/>
+        <span class="package-name">${item.packageName}</span><br/>
         Updated: ${item.info.mtime.toLocaleString()} &nbsp;
         ${size}
       </small></div>

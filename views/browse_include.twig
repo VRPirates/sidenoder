@@ -1,6 +1,6 @@
 <div class="card text-light bg-primary">
   <div class="card-header sticky" id="nav-panel">
-    <h4 class="float-left mb-0">
+    <h4 class="float-start mb-0">
       <a
         class="btn btn-md btn-primary"
         onclick="upDir()"
@@ -20,32 +20,33 @@
       </a>
       <span id="path"></span>
     </h4>
-    <h4 class="float-right mb-0">
+    <h4 class="float-end mb-0">
       <button
         class="btn btn-md btn-primary dropdown-toggle"
         type="button"
-        onclick="$id('bookmarksdropdown').toggle()"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
       >
         <i class="fa fa-star" title="Bookmarks"></i>
       </button>
-      <div
+      <ul
         id="bookmarksdropdown"
         class="dropdown-menu"
         style="left: auto; top: auto"
       >
-        <div class="input-group">
+        <li class="input-group">
           <input
             id="bookmarkName"
-            class="ml-3"
+            class="ms-3"
             value=""
             placeholder="Bookmark name"
           >
-          <a class="btn btn-warning btn-sm mr-3" id="addBookmark">
+          <a class="btn btn-warning btn-sm me-3" id="addBookmark">
             <i class="fa fa-plus" title="Add current location"></i
           ></a>
-        </div>
+        </li>
         <hr>
-      </div>
+      </ul>
       <a
         class="btn btn-md btn-primary"
         onclick="refreshDir()"
@@ -63,28 +64,37 @@
       <button
         class="btn btn-md btn-primary dropdown-toggle"
         type="button"
-        onclick="$id('searchdropdownmenu').toggle()"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
       >
         <i class="fa fa-sort"></i> Sort By
       </button>
-      <div
-        id="searchdropdownmenu"
+      <ul
+        id="sortdropdownmenu"
         class="dropdown-menu"
         style="right: 0; left: auto; top: auto"
       >
-        <a class="dropdown-item" onclick="sortFiles('name', 1)">
-          <i class="fa fa-sort-alpha-asc"></i> Name</a
-        >
-        <a class="dropdown-item" onclick="sortFiles('name', 0)">
-          <i class="fa fa-sort-alpha-desc"></i> Name (decending)</a
-        >
-        <a class="dropdown-item" onclick="sortFiles('modified', 1)">
-          <i class="fa fa-sort-amount-asc"></i> Last modified</a
-        >
-        <a class="dropdown-item" onclick="sortFiles('modified', 0)">
-          <i class="fa fa-sort-amount-desc"></i> Last modified (decending)</a
-        >
-      </div>
+        <li>
+          <a class="dropdown-item" onclick="sortFiles('name', 1)">
+            <i class="fa fa-sort-alpha-asc"></i> Name</a
+          >
+        </li>
+        <li>
+          <a class="dropdown-item" onclick="sortFiles('name', 0)">
+            <i class="fa fa-sort-alpha-desc"></i> Name (decending)</a
+          >
+        </li>
+        <li>
+          <a class="dropdown-item" onclick="sortFiles('modified', 1)">
+            <i class="fa fa-sort-amount-asc"></i> Last modified</a
+          >
+        </li>
+        <li>
+          <a class="dropdown-item" onclick="sortFiles('modified', 0)">
+            <i class="fa fa-sort-amount-desc"></i> Last modified (decending)</a
+          >
+        </li>
+      </ul>
     </h4>
   </div>
   <div class="card-body">

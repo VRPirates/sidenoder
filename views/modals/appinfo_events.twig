@@ -1,21 +1,19 @@
 <!-- Modal -->
 <div class="modal" id="appinfoEventsModal">
   <div
+    class="modal-dialog"
     role="document"
-    style="margin: 1.75rem auto; min-width: 790px; max-width: 44%"
+    style="margin: 1.75rem auto; min-width:790px; max-width:44%"
   >
-    <!-- class="modal-dialog" -->
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" data-bs-theme="dark">
         <h5 class="modal-title" id="appinfoEventsModalLabel">Events:</h5>
         <button
           type="button"
-          class="close"
-          data-dismiss="modal"
+          class="btn-close"
           aria-label="Close"
-        >
-          <span>&times;</span>
-        </button>
+          data-bs-dismiss="modal"
+        ></button>
       </div>
       <div class="modal-body">
         <div class="alert alert-warning">
@@ -33,7 +31,11 @@
         <hr>
         <div id="appinfoEventsBody"></div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
             Close
           </button>
         </div>
@@ -72,7 +74,7 @@
       let events = '';
       for (const e of data.events) {
         let event = '';
-        if (e.date) event += `<small class="float-right">${e.date}</small>`;
+        if (e.date) event += `<small class="float-end">${e.date}</small>`;
         event += `<h4>${e.title || ''}</h4>`;
         if (e.contents) event += `<div>${e.contents}</div>`;
         events += `${event}<hr/>`;

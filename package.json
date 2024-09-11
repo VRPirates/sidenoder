@@ -35,6 +35,7 @@
     "dist-win": "electron-builder -w",
     "dist-mac": "electron-builder -m",
     "dist-linux": "electron-builder -l",
+    "pre-commit": "lint-staged --concurrent false",
     "prettier:check": "prettier --check \"**/*.{css,js,json,md,twig,yml}\"",
     "prettier:format": "prettier --write \"**/*.{css,js,json,md,twig,yml}\"",
     "postdist": "npm run pack-win && npm run pack-mac",
@@ -44,7 +45,7 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "{**/*,*}.{css,js,json,md,twig,yml}": "prettier --write"
+    "*.{css,html,js,json,md,twig,yml}": "prettier --write"
   },
   "build": {
     "appId": "com.sidenoder.app",

@@ -15,7 +15,6 @@
     "fix-path": "4.0.0",
     "jquery": "3.7.1",
     "jquery-ui": "^1.14.0",
-    "node-fetch": "3.3.2",
     "socks-proxy-agent": "8.0.4",
     "web-auto-extractor": "1.0.17"
   },

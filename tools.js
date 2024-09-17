@@ -16,8 +16,6 @@ const commandExists = require("command-exists");
 const ApkReader = require("adbkit-apkreader");
 const adbkit = require("@devicefarmer/adbkit").default;
 const adb = adbkit.createClient();
-const fetch = (...args) =>
-  import("node-fetch").then(({ default: fetch }) => fetch(...args));
 const WAE = require("web-auto-extractor").default;
 // const HttpProxyAgent = require('https-proxy-agent'); // TODO add https proxy support
 const { SocksProxyAgent } = require("socks-proxy-agent");

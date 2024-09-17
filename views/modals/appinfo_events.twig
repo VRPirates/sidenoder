@@ -62,9 +62,13 @@
       $id('processingModal').modal('hide');
       console.log('app_events_info received');
       // console.log(arg);
-      if (!arg || !arg.success) return console.log(arg);
+      if (!arg || !arg.success) {
+        return console.log(arg);
+      }
       const data = arg.data;
-      if (!data) return;
+      if (!data) {
+        return;
+      }
 
       if (data.url) {
         id('appinfoEventsUrl').onclick = () => shell.openExternal(data.url);
@@ -74,9 +78,13 @@
       let events = '';
       for (const e of data.events) {
         let event = '';
-        if (e.date) event += `<small class="float-end">${e.date}</small>`;
+        if (e.date) {
+          event += `<small class="float-end">${e.date}</small>`;
+        }
         event += `<h4>${e.title || ''}</h4>`;
-        if (e.contents) event += `<div>${e.contents}</div>`;
+        if (e.contents) {
+          event += `<div>${e.contents}</div>`;
+        }
         events += `${event}<hr/>`;
       }
 

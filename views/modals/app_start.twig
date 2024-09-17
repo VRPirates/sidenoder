@@ -43,7 +43,9 @@
   ipcRenderer.on('get_activities', (event, arg) => {
     console.log('get_activities msg came: ', arg); // prints "ping"
     $id('processingModal').modal('hide');
-    if (!arg.activities) return;
+    if (!arg.activities) {
+      return;
+    }
 
     let options = '';
     for (const activity of arg.activities) {

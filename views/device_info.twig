@@ -36,11 +36,18 @@
     let bat_level = 'XX';
     if (battery) {
       bat_level = battery.level;
-      if (battery.temperature)
+      if (battery.temperature) {
         bat_note = `Temperature: ${battery.temperature / 10}°C`;
-      if (battery.ACpowered) bat_charge = 'AC';
-      if (battery.USBpowered) bat_charge = 'USB';
-      if (battery.Wirelesspowered) bat_charge = 'AIR';
+      }
+      if (battery.ACpowered) {
+        bat_charge = 'AC';
+      }
+      if (battery.USBpowered) {
+        bat_charge = 'USB';
+      }
+      if (battery.Wirelesspowered) {
+        bat_charge = 'AIR';
+      }
       if (battery.Maxchargingcurrent && battery.Maxchargingvoltage) {
         const current = battery.Maxchargingcurrent / 1000000;
         const voltage = battery.Maxchargingvoltage / 1000000;

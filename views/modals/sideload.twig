@@ -130,10 +130,13 @@
   </div>
 </div>
 <script>
+  /* global getUpdates */
   ipcRenderer.removeAllListeners('process_data');
   ipcRenderer.on('process_data', (event, data) => {
     console.log('process_data received', data);
-    if (!data) return (id('sideload_transfer_state').innerHTML = '');
+    if (!data) {
+      return (id('sideload_transfer_state').innerHTML = '');
+    }
 
     let line = `${data.cmd}: ${formatBytes(data.bytes)}`;
     if (data.size) {
@@ -153,13 +156,15 @@
     console.log('start_sideload msg came ! ');
     console.log(arg);
     const { success, path } = arg;
-    if (!success) return;
+    if (!success) {
+      return;
+    }
 
     const lastslashindex = path.lastIndexOf('/');
     const file = path.substring(lastslashindex + 1);
 
     $id('sideloadModal').modal('show');
-    id('sideloadText').innerHTML = 'pending: <br/><b>' + file + '</b>';
+    id('sideloadText').innerHTML = `pending: <br/><b>${file}</b>`;
   });
 
   ipcRenderer.removeAllListeners('sideload_process');
@@ -227,12 +232,13 @@
         .removeClass('fa-spin')
         .addClass('fa-check-circle-o');
 
-      if (!arg.error)
+      if (!arg.error) {
         remote.getGlobal('notify')(
           'Sucesfully sideloaded',
           arg.location,
           'low',
         );
+      }
     }
 
     if (arg.update) {
@@ -248,19 +254,29 @@
 
   function badgeState(badge, text) {
     badge.text(text);
-    if (!badge.hasClass('bg-warning')) return;
+    if (!badge.hasClass('bg-warning')) {
+      return;
+    }
 
     let state = '';
-    if (text === 'done') state = 'success';
-    else if (text === 'skip') state = 'secondary';
-    else if (text === 'fail') state = 'danger';
-    else if (text.includes('/')) {
+    if (text === 'done') {
+      state = 'success';
+    } else if (text === 'skip') {
+      state = 'secondary';
+    } else if (text === 'fail') {
+      state = 'danger';
+    } else if (text.includes('/')) {
       const parts = text.split('/');
-      if (parts[0] == parts[1]) state = 'success';
-      else return;
-    } else return;
+      if (parts[0] === parts[1]) {
+        state = 'success';
+      } else {
+        return;
+      }
+    } else {
+      return;
+    }
 
-    badge.removeClass('bg-warning').addClass('bg-' + state);
+    badge.removeClass('bg-warning').addClass(`bg-${state}`);
   }
 
   $id('sideloadDoneBtn').on('click', function () {

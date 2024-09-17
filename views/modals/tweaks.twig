@@ -338,20 +338,25 @@
     ipcRenderer.removeAllListeners('device_tweaks');
     ipcRenderer.on('device_tweaks', (event, arg) => {
       // console.log('device_tweaks ! ', arg);
-      if (arg.cmd == 'get') {
+      if (arg.cmd === 'get') {
         for (const key of TWEAKS_KEYS) {
-          if (arg[key]) $id('' + key).val(arg[key]);
+          if (arg[key]) {
+            $id(`${key}`).val(arg[key]);
+          }
         }
 
         for (const key of TWEAKS_CHECKBOXES) {
-          if (arg[key]) $id('' + key).prop('checked', arg[key] == '1');
+          if (arg[key]) {
+            $id(`${key}`).prop('checked', arg[key] === '1');
+          }
         }
       }
 
-      if (arg.cmd == 'set') {
+      if (arg.cmd === 'set') {
         for (const key of TWEAKS_KEYS) {
-          if (typeof arg[key] != 'undefined')
-            $id('' + key).addClass('is-valid');
+          if (typeof arg[key] !== 'undefined') {
+            $id(`${key}`).addClass('is-valid');
+          }
         }
       }
     });
@@ -382,22 +387,22 @@
       });
     });
 
-    $id('enableMTP').on('click', function (e) {
+    $id('enableMTP').on('click', function (_e) {
       ipcRenderer.send('enable_mtp', '');
     });
-    $id('scrcpyCfg').on('click', function (e) {
+    $id('scrcpyCfg').on('click', function (_e) {
       $id('scrcpyModal').modal('show');
     });
-    $id('rebootDevice').on('click', function (e) {
+    $id('rebootDevice').on('click', function (_e) {
       ipcRenderer.send('reboot_device', '');
     });
-    $id('rebootRecovery').on('click', function (e) {
+    $id('rebootRecovery').on('click', function (_e) {
       ipcRenderer.send('reboot_recovery', '');
     });
-    $id('rebootBootloader').on('click', function (e) {
+    $id('rebootBootloader').on('click', function (_e) {
       ipcRenderer.send('reboot_bootloader', '');
     });
-    $id('sideloadeFw').on('click', function (e) {
+    $id('sideloadeFw').on('click', function (_e) {
       ipcRenderer.send('sideload_update', $id('updateFwPath').val());
     });
 
@@ -416,7 +421,9 @@
           },
         ],
       });
-      if (file.canceled) return;
+      if (file.canceled) {
+        return;
+      }
 
       const val = file.filePaths[0];
       $id('updateFwPath').val(val).addClass('is-valid');

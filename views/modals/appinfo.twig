@@ -87,11 +87,15 @@
     $id('processingModal').modal('hide');
     console.log('app_info received');
     // console.log('app_info received', arg);
-    if (!arg || !arg.success) return console.log(arg);
+    if (!arg || !arg.success) {
+      return console.log(arg);
+    }
     const data = arg.data;
-    if (!data) return;
+    if (!data) {
+      return;
+    }
 
-    if (data.res == 'steam') {
+    if (data.res === 'steam') {
       $id('appinfoText').addClass('text-center');
     }
 
@@ -122,7 +126,7 @@
     if (data.url) {
       id('appinfoUrl').onclick = () => shell.openExternal(data.url);
       $id('appinfoUrl').show();
-      if (data.res != 'steam') {
+      if (data.res !== 'steam') {
         id('appinfoUrlDev').onclick = () =>
           ipcRenderer.send('dev_open_url', data.url);
         $id('appinfoUrlDev').show();
@@ -132,7 +136,9 @@
     if (data.genres) {
       for (const genre of data.genres) {
         const genre_text = genre.description || genre;
-        if (['Бесплатно', 'Free'].includes(genre_text)) continue;
+        if (['Бесплатно', 'Free'].includes(genre_text)) {
+          continue;
+        }
         $id('appinfoGenres').append(
           `<span class="badge bg-secondary">${genre_text}</span> `,
         );
@@ -146,7 +152,9 @@
 
     if (data.movies) {
       for (const movie of data.movies) {
-        if (!movie.mp4) continue;
+        if (!movie.mp4) {
+          continue;
+        }
         slides += `<li><video width="800" style="max-height: 405px;" controls><source src="${movie.mp4['480']}" type="video/mp4"></video></li>`;
       }
     }

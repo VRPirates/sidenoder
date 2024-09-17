@@ -1,13 +1,18 @@
+/* eslint
+  no-unused-vars: [
+    "error", {
+      "varsIgnorePattern": "dialog",
+      "argsIgnorePattern": "^_"
+    }
+  ]
+*/
 const {
   app,
   BrowserWindow,
   Notification,
-  powerSaveBlocker,
   ipcMain,
   dialog,
 } = require("electron");
-// const { BrowserWindow } = require('@electron/remote')
-const fs = require("fs");
 const path = require("path");
 global.twig = require("electron-twig");
 
@@ -35,20 +40,18 @@ global.hash_alg = "sha256";
 global.locale = "en-US";
 
 global.platform = global.platform.replace("32", "").replace("64", "");
-if (global.platform == "darwin") global.platform = "mac";
+if (global.platform === "darwin") {
+  global.platform = "mac";
+}
 
 app.on("ready", () => {
   global.locale = app.getLocale();
 });
 
-eval(fs.readFileSync(path.join(__dirname, "versioncheck.js"), "utf8"));
-
+const checkVersion = require("./versioncheck");
 const tools = require("./tools");
 
-// const id = powerSaveBlocker.start('prevent-display-sleep');
-// console.log(powerSaveBlocker.isStarted(id));
-
-ipcMain.on("get_installed", async (event, arg) => {
+ipcMain.on("get_installed", async (event, _arg) => {
   console.log("get_installed received");
   const apps = await tools.getInstalledApps();
 
@@ -58,7 +61,7 @@ ipcMain.on("get_installed", async (event, arg) => {
   return;
 });
 
-ipcMain.on("get_installed_with_updates", async (event, arg) => {
+ipcMain.on("get_installed_with_updates", async (event, _arg) => {
   console.log("get_installed_with_updates received");
   const apps = await tools.getInstalledAppsWithUpdates();
 
@@ -67,7 +70,7 @@ ipcMain.on("get_installed_with_updates", async (event, arg) => {
   event.reply("get_installed_with_updates", { success: true, apps });
 });
 
-ipcMain.on("get_device_info", async (event, arg) => {
+ipcMain.on("get_device_info", async (event, _arg) => {
   getDeviceInfo(event);
 });
 
@@ -78,7 +81,7 @@ async function getDeviceInfo(event) {
   event.reply("get_device_info", res);
 }
 
-ipcMain.on("connect_wireless", async (event, arg) => {
+ipcMain.on("connect_wireless", async (event, _arg) => {
   console.log("connect_wireless received");
   if (!global.adbDevice && !global.currentConfiguration.lastIp) {
     console.log("Missing device, sending ask_device");
@@ -92,7 +95,7 @@ ipcMain.on("connect_wireless", async (event, arg) => {
   return;
 });
 
-ipcMain.on("disconnect_wireless", async (event, arg) => {
+ipcMain.on("disconnect_wireless", async (event, _arg) => {
   console.log("disconnect_wireless received");
   const res = await tools.disconnectWireless();
   event.reply("connect_wireless", { success: !res });
@@ -106,14 +109,14 @@ ipcMain.on("check_deps", async (event, arg) => {
   event.reply("check_deps", res);
 });
 
-ipcMain.on("mount", async (event, arg) => {
+ipcMain.on("mount", async (event, _arg) => {
   await tools.mount();
   setTimeout(() => checkMount(event), 1000);
 
   return;
 });
 
-ipcMain.on("check_mount", async (event, arg) => {
+ipcMain.on("check_mount", async (event, _arg) => {
   checkMount(event);
 });
 
@@ -179,6 +182,7 @@ ipcMain.on("reset_cache", async (event, arg) => {
 
 ipcMain.on("get_dir", async (event, arg) => {
   console.log("get_dir received", arg);
+
   if (typeof arg === "string" && arg.endsWith(".apk")) {
     const install = {
       path: arg,
@@ -199,11 +203,12 @@ ipcMain.on("get_dir", async (event, arg) => {
 
   const list = await tools.getDir(folder);
 
-  dirList = [];
-  incList = [];
-  notSupported = [];
-  if (!list) incList = [{ name: "ERROR: Browse failed" }];
-  else
+  const notSupported = [];
+  const dirList = [];
+  let incList = [];
+  if (!list) {
+    incList = [{ name: "ERROR: Browse failed" }];
+  } else {
     for (const item of list) {
       if (!item.isFile) {
         dirList.push(item);
@@ -217,8 +222,9 @@ ipcMain.on("get_dir", async (event, arg) => {
 
       notSupported.push(item);
     }
+  }
 
-  response = {};
+  const response = {};
   response.success = true;
   response.list = dirList.concat(incList, notSupported);
   response.path = folder;
@@ -227,7 +233,7 @@ ipcMain.on("get_dir", async (event, arg) => {
   //event.reply('get_dir', response)
 });
 
-ipcMain.on("enable_mtp", async (event, arg) => {
+ipcMain.on("enable_mtp", async (event, _arg) => {
   console.log("enable_mtp received");
   if (!global.adbDevice) {
     console.log("Missing device, sending ask_device");
@@ -245,7 +251,7 @@ ipcMain.on("enable_mtp", async (event, arg) => {
   return;
 });
 
-ipcMain.on("scrcpy_start", async (event, arg) => {
+ipcMain.on("scrcpy_start", async (event, _arg) => {
   console.log("scrcpy_start received");
   if (!global.adbDevice) {
     console.log("Missing device, sending ask_device");
@@ -259,7 +265,7 @@ ipcMain.on("scrcpy_start", async (event, arg) => {
   return;
 });
 
-ipcMain.on("reboot_device", async (event, arg) => {
+ipcMain.on("reboot_device", async (event, _arg) => {
   console.log("reboot_device received");
   if (!global.adbDevice) {
     console.log("Missing device, sending ask_device");
@@ -277,7 +283,7 @@ ipcMain.on("reboot_device", async (event, arg) => {
   return;
 });
 
-ipcMain.on("reboot_recovery", async (event, arg) => {
+ipcMain.on("reboot_recovery", async (event, _arg) => {
   console.log("reboot_recovery received");
   if (!global.adbDevice) {
     console.log("Missing device, sending ask_device");
@@ -295,7 +301,7 @@ ipcMain.on("reboot_recovery", async (event, arg) => {
   return;
 });
 
-ipcMain.on("reboot_bootloader", async (event, arg) => {
+ipcMain.on("reboot_bootloader", async (event, _arg) => {
   console.log("reboot_bootloader received");
   if (!global.adbDevice) {
     console.log("Missing device, sending ask_device");
@@ -339,12 +345,12 @@ ipcMain.on("sideload_update", async (event, arg) => {
 ipcMain.on("device_tweaks", async (event, arg) => {
   console.log("device_tweaks received", arg);
 
-  if (arg.cmd == "get") {
+  if (arg.cmd === "get") {
     const res = await tools.deviceTweaksGet(arg);
     event.reply("device_tweaks", res);
   }
 
-  if (arg.cmd == "set") {
+  if (arg.cmd === "set") {
     if (!global.adbDevice) {
       console.log("Missing device, sending ask_device");
       event.reply("ask_device", "");
@@ -352,7 +358,7 @@ ipcMain.on("device_tweaks", async (event, arg) => {
     }
 
     const res = await tools.deviceTweaksSet(arg);
-    event.reply("device_tweaks", arg);
+    event.reply("device_tweaks", res);
   }
 
   return;
@@ -360,7 +366,7 @@ ipcMain.on("device_tweaks", async (event, arg) => {
 
 ipcMain.on("uninstall", async (event, arg) => {
   console.log("uninstall received");
-  resp = await tools.uninstall(arg);
+  await tools.uninstall(arg);
   event.reply("uninstall", { success: true });
   getDeviceInfo(event);
   return;
@@ -480,7 +486,7 @@ function createWindow() {
   };
   win.loadURL(`file://${__dirname}/views/index.twig`);
 
-  if (process.argv[2] == "--dev") {
+  if (process.argv[2] === "--dev") {
     win.webContents.openDevTools();
   }
 
@@ -528,11 +534,12 @@ async function startApp() {
 
   createWindow();
   app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length != 0) return;
+    if (BrowserWindow.getAllWindows().length !== 0) {
+      return;
+    }
     createWindow();
   });
-  app.on("window-all-closed", (e) => {
-    // powerSaveBlocker.stop(id)
+  app.on("window-all-closed", () => {
     console.log("quit");
     if (global.platform !== "mac") {
       app.quit();

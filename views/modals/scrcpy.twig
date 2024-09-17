@@ -132,7 +132,7 @@
     }
 
     for (const key of CHKBOXES) {
-      const el = $id('' + key);
+      const el = $id(`${key}`);
       if (remote.getGlobal('currentConfiguration')[key]) {
         el.prop('checked', true);
       }

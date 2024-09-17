@@ -1,3 +1,10 @@
+/* eslint
+  no-unused-vars: [
+    "error", {
+      "varsIgnorePattern": "copyInput|backToTop"
+    }
+  ]
+*/
 function id(el_id) {
   return document.getElementById(el_id);
 }

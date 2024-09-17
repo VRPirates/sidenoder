@@ -28,16 +28,20 @@
     "web-auto-extractor": "1.0.17"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
     "@destination/prettier-plugin-twig": "^1.5.0",
     "electron": "32.0.2",
     "electron-builder": "25.0.5",
     "husky": "^9.1.5",
+    "inquirer": "^9.3.6",
     "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
     "stylelint": "^16.9.0",
     "stylelint-config-standard": "^36.0.1"
   },
   "scripts": {
+    "commitlint": "commitlint --edit",
     "start": "electron ./ --dev",
     "pack": "electron-builder --dir",
     "dist": "electron-builder -mwl",

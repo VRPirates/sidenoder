@@ -42,6 +42,7 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder -mwl",
     "dist-win": "electron-builder -w",
+    "dist-win-linux": "electron-builder -wl",
     "dist-mac": "electron-builder -m",
     "dist-linux": "electron-builder -l",
     "eslint:check": "eslint .",
@@ -75,12 +76,23 @@
     "appId": "com.sidenoder.app",
     "asar": true,
     "directories": {
-      "output": "out"
+      "output": "/tmp/out"
     },
     "afterPack": "./removeLocales.js",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "VRPirates"
+      }
+    ],
     "mac": {
       "target": [
-        "dir"
+        {
+          "target": "dmg",
+          "arch": [
+            "universal"
+          ]
+        }
       ]
     },
     "win": {
@@ -103,6 +115,12 @@
         },
         {
           "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "rpm",
           "arch": [
             "x64"
           ]

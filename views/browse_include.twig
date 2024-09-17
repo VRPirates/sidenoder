@@ -10,12 +10,12 @@
       </a>
       <a
         class="btn btn-md btn-primary"
-        id="shellOpenDirPath"
+        id="shell-open-dir-path"
         title="Open by filebrowser"
       >
         <i class="fa fa-folder-open"></i>
       </a>
-      <a class="btn btn-md btn-primary" id="editDirPath" title="Edit path">
+      <a class="btn btn-md btn-primary" id="edit-dir-path" title="Edit path">
         <i class="fa fa-edit"></i>
       </a>
       <span id="path"></span>
@@ -104,7 +104,7 @@
         class="row row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5"
       ></div>
       <table class="table table-striped-rookie table-hover">
-        <tbody id="listTable"></tbody>
+        <tbody id="list-table"></tbody>
       </table>
     </div>
   </div>
@@ -124,10 +124,10 @@
     id('addBookmark').onclick = () => {
       addBookmark(id('bookmarkName').value, id('path').title);
     };
-    id('shellOpenDirPath').onclick = () => {
+    id('shell-open-dir-path').onclick = () => {
       shell.openPath(id('path').title);
     };
-    id('editDirPath').onclick = () => {
+    id('edit-dir-path').onclick = () => {
       promptDialog(
         'Change directory location',
         '',

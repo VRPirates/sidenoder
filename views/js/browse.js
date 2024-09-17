@@ -324,7 +324,7 @@ function loadDir(list) {
   }
 
   id("browseCardBody").innerHTML = cards_first.join("\n");
-  id("listTable").innerHTML = rows;
+  id("list-table").innerHTML = rows;
   // scrollByHistory();
 
   if (cards) {
@@ -339,7 +339,7 @@ function sortFiles(key, asc) {
   const suffix = asc ? "" : "-desc";
 
   sortElements($id("browseCardBody"), key, asc);
-  sortFileElements($id("listTable"), key, asc);
+  sortFileElements($id("list-table"), key, asc);
 
   ipcRenderer.send("change_config", { key: "sortFiles", val: key + suffix });
 }

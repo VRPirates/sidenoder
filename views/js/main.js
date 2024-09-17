@@ -23,9 +23,9 @@ window.addEventListener("scroll", () => {
   // console.log(document.body.scrollTop, document.documentElement.scrollTop);
   const scroll = document.documentElement.scrollTop;
   if (scroll > 100) {
-    $id("backToTop").fadeIn();
+    $id("back-to-top").fadeIn();
   } else {
-    $id("backToTop").fadeOut();
+    $id("back-to-top").fadeOut();
   }
 });
 

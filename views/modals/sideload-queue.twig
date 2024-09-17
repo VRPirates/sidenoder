@@ -1,10 +1,10 @@
 <!-- Modal -->
 <div
   class="modal fade modal-right"
-  id="sideloadQueueModal"
+  id="sideload-queue-modal"
   tabindex="-1"
   role="dialog"
-  aria-labelledby="sideloadQueueModalLabel"
+  aria-labelledby="sideloadModalLabel"
   data-bs-backdrop="static"
   data-keyboard="false"
 >
@@ -441,7 +441,10 @@
   </div>
 </div>
 
-<a class="btn btn-info btn-floating btn-lg" id="showQueue" onclick="showQueue()"
+<a
+  class="btn btn-info btn-floating btn-lg"
+  id="show-queue"
+  onclick="showQueue()"
   >1</a
 >
 <script>
@@ -454,10 +457,10 @@
       }
     ]
   */
-  $id('showQueue').show(100);
+  $id('show-queue').show(100);
 
   function showQueue() {
-    $id('sideloadQueueModal').modal('show');
+    $id('sideload-queue-modal').modal('show');
   }
 
   function hash(s) {
@@ -477,8 +480,8 @@
 
     const sideloadQueue = $('#sideloadQueue tr').length;
     if (data.length) {
-      $id('showQueue').text($('#sideloadQueue tr').length);
-      $id('showQueue').show();
+      $id('show-queue').text($('#sideloadQueue tr').length);
+      $id('show-queue').show();
     }
   });
 

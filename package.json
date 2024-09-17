@@ -33,7 +33,9 @@
     "electron-builder": "25.0.5",
     "husky": "^9.1.5",
     "lint-staged": "^15.2.10",
-    "prettier": "^3.3.3"
+    "prettier": "^3.3.3",
+    "stylelint": "^16.9.0",
+    "stylelint-config-standard": "^36.0.1"
   },
   "scripts": {
     "start": "electron ./ --dev",
@@ -51,9 +53,12 @@
     "postinstall": "electron-builder install-app-deps",
     "pack-win": "cd out/win-unpacked && cp ../windows-install.bat ./ && 7za a sidenoder-$npm_package_version-win.zip  ./* && mv sidenoder-$npm_package_version-win.zip ../",
     "pack-mac": "cd out/mac && tar -czf sidenoder-$npm_package_version-mac.tar.gz  ./* && mv sidenoder-$npm_package_version-mac.tar.gz ../",
-    "prepare": "husky"
+    "prepare": "husky",
+    "stylelint:check": "stylelint \"**/*.css\"",
+    "stylelint:fix": "stylelint --fix \"**/*.css\""
   },
   "lint-staged": {
+    "**/*.css": "stylelint --fix",
     "*.{js,html,twig}": "eslint --fix",
     "*.{css,html,js,json,md,twig,yml}": "prettier --write"
   },

@@ -538,6 +538,11 @@ async function startApp() {
       app.quit();
     }
   });
+
+  app.on("will-quit", async () => {
+    console.log("will-quit");
+    await tools.destroy();
+  });
 }
 
 startApp();

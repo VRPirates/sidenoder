@@ -4,36 +4,38 @@
   tabindex="-1"
   role="dialog"
   aria-labelledby="promptModalLabel"
-  data-backdrop="static"
+  data-bs-backdrop="static"
   data-keyboard="false"
 >
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="promptModalLabel"></h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
-          <span>&times;</span>
-        </button>
       </div>
       <div class="modal-body">
         <div id="promptModalMessage"></div>
         <div class="input-group">
-          <input class="form-control ml-3" id="promptModalInput">
-          <a class="btn btn-info mr-3" id="promptModalBrowse">
+          <input class="form-control ms-3" id="promptModalInput">
+          <a class="btn btn-info me-3" id="promptModalBrowse">
             <i class="fa fa-folder-open" title="Browse.."></i
           ></a>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+        <button
+          type="button"
+          id="promptModalNo"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >
           No
         </button>
-        <button type="button" id="promptModalButton" class="btn btn-primary">
+        <button
+          type="button"
+          id="promptModalYes"
+          class="btn btn-primary"
+          data-bs-dismiss="modal"
+        >
           Yes
         </button>
       </div>
@@ -73,7 +75,10 @@
     modal.modal('show');
 
     return new Promise((res, rej) => {
-      id('promptModalButton').onclick = () => {
+      id('promptModalNo').onclick = () => {
+        modal.modal('hide');
+      };
+      id('promptModalYes').onclick = () => {
         res(input.value);
         modal.modal('hide');
       };

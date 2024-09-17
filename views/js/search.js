@@ -360,7 +360,6 @@ function sortBy(key, asc) {
 function sortItems(key, asc) {
   sortElements($("#browseCardBody"), key, asc);
   sortElements($("#listTable"), key, asc);
-  $("#searchdropdownmenu").hide();
 }
 
 /**

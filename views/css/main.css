@@ -40,7 +40,7 @@ a {
 .badge {
   text-shadow: none;
 }
-.badge-success {
+.bg-success {
   background: #5a4;
 }
 .alert-warning {
@@ -248,6 +248,16 @@ pre {
 
 html {
   overflow-y: scroll;
+}
+
+.small,
+small {
+  font-size: 0.75em;
+}
+
+.form-check-input:checked {
+  background-color: #bfbfbf;
+  border-color: #bfbfbf;
 }
 
 /* width */

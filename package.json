@@ -36,6 +36,8 @@
     "husky": "^9.1.5",
     "inquirer": "^9.3.6",
     "lint-staged": "^15.2.10",
+    "markdownlint": "^0.35.0",
+    "markdownlint-cli": "^0.41.0",
     "prettier": "^3.3.3",
     "stylelint": "^16.9.0",
     "stylelint-config-standard": "^36.0.1"
@@ -49,6 +51,8 @@
     "dist-linux": "electron-builder -l",
     "eslint:check": "eslint .",
     "eslint:fix": "eslint . --fix",
+    "markdownlint": "markdownlint \"**/*.md\"",
+    "markdownlint:fix": "markdownlint --fix \"**/*.md\"",
     "pre-commit": "lint-staged --concurrent false",
     "prettier:check": "prettier --check \"**/*.{css,js,json,md,twig,yml}\"",
     "prettier:format": "prettier --write \"**/*.{css,js,json,md,twig,yml}\"",
@@ -63,7 +67,8 @@
     "stylelint:fix": "stylelint --fix \"**/*.css\""
   },
   "lint-staged": {
-    "**/*.css": "stylelint --fix",
+    "*.md": "markdownlint --fix",
+    "*.css": "stylelint --fix",
     "*.{js,html,twig}": "eslint --fix",
     "*.{css,html,js,json,md,twig,yml}": "prettier --write"
   },

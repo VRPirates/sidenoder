@@ -1,8 +1,13 @@
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+<h1>
+  <a href="http://commitizen.github.io/cz-cli/">
+    <img src="https://img.shields.io/badge/commitizen-friendly-brightgreen.svg"
+         alt="Commitizen friendly" />
+  </a>
+</h1>
 
 **SideNoder** - A **cross platform sideloader** for Quest(1&2&3) standalone vr headset.
 
-# Quest 3 compatibility fix added in v 0.8.0
+## Quest 3 compatibility fix added in v 0.8.0
 
 <details>
 <summary>
@@ -24,29 +29,31 @@ What makes sidenoder better than other sideloaders ?
 
 ## Running the compiled version
 
-#### Run precompiled release on windows:
+### Run precompiled release on windows:
 
 1. Install latest [winfsp](https://github.com/billziss-gh/winfsp/releases/latest)
 2. Download and unpack(or run Setup.exe) the latest [windows release](https://github.com/VRPirates/sidenoder/releases/latest)
 3. Run the `sidenoder.exe` application
 
-#### Run precompiled release on linux:
+### Run precompiled release on linux:
 
 1. Download and unpack the latest [AppImage/deb](https://github.com/VRPirates/sidenoder/releases/latest)
 2. Make the AppImage executable. Or install deb package
 3. Run the AppImage
 
-#### Run precompiled release on mac:
+### Run precompiled release on mac:
 
 1. Install latest [osxfuse](https://github.com/osxfuse/osxfuse/releases) (4.2.0+)
-2. Download and unpack the latest [mac release](https://github.com/VRPirates/sidenoder/releases/latest) (.App)
+2. Download and unpack the latest
+   [mac release](https://github.com/VRPirates/sidenoder/releases/latest) (.App)
 3. Run the .App
 
 ---
 
 ## MacOS compatibility
 
-To install on mac one has to manually install latest rclone in Terminal using following command:
+To install on mac one has to manually install latest rclone in Terminal using
+following command:
 
 ```bash
 sudo -v ; curl https://rclone.org/install.sh | sudo bash

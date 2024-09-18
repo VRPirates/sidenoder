@@ -64,12 +64,15 @@
   </div>
 </div>
 <script>
+  /* global startApp, uninstall */
   console.log('ONLOAD APPTOOL MODAL');
 
   ipcRenderer.removeAllListeners('process_data');
   ipcRenderer.on('process_data', (event, data) => {
     console.log('process_data received', data);
-    if (!data) return (id('tools_transfer_state').innerHTML = '');
+    if (!data) {
+      return (id('tools_transfer_state').innerHTML = '');
+    }
 
     let line = `${data.cmd}: ${formatBytes(data.bytes)}`;
     if (data.size) {
@@ -133,11 +136,11 @@
     console.log('app_tools msg came: ', arg);
     $id('processingModal').modal('hide');
 
-    const { pkg, backupPath, availableRestore, availableConfig } = arg;
+    const { pkg, availableRestore, availableConfig } = arg;
 
     $id('packageName').text(pkg);
 
-    $id('startAppBtn').click(({ target }) => {
+    $id('startAppBtn').click(() => {
       startApp(pkg);
       return true;
     });
@@ -160,7 +163,7 @@
       ipcRenderer.send('data_restore', pkg);
       return true;
     });
-    $id('backupAppPath').click((e) => {
+    $id('backupAppPath').click(() => {
       shell.openPath(
         path.join(remote.getGlobal('sidenoderHome'), 'backup_data', pkg),
       );
@@ -198,7 +201,9 @@
       message: 'Browse location for new backup',
       properties: ['openDirectory'],
     });
-    if (file.canceled) return $id('backupAppBtn').removeClass('disabled');
+    if (file.canceled) {
+      return $id('backupAppBtn').removeClass('disabled');
+    }
 
     console.log('setAppBackupPath', pkg, file);
     const location = file.filePaths[0];

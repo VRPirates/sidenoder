@@ -82,6 +82,13 @@
 </div>
 
 <script>
+  /* eslint
+    no-unused-vars: [
+      "error", {
+        "varsIgnorePattern": "sortApps",
+      }
+    ]
+  */
   console.log('ONLOAD installed');
   $id('processingModal').modal('show');
   ipcRenderer.send('get_installed', '');

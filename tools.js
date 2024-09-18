@@ -1,29 +1,30 @@
+/* eslint
+  no-unused-vars: [
+    "error", {
+      "caughtErrorsIgnorePattern": "^_",
+      "argsIgnorePattern": "^_"
+    }
+  ]
+*/
 const exec = require("child_process").exec;
-// const fs = require('fs');
 const fs = require("fs");
 const fsp = fs.promises;
 const util = require("util");
 const path = require("path");
 const crypto = require("crypto");
 const commandExists = require("command-exists");
-const { dialog } = require("electron");
 const ApkReader = require("adbkit-apkreader");
 const adbkit = require("@devicefarmer/adbkit").default;
 const adb = adbkit.createClient();
 const WAE = require("web-auto-extractor").default;
 // const HttpProxyAgent = require('https-proxy-agent'); // TODO add https proxy support
 const { SocksProxyAgent } = require("socks-proxy-agent");
-const url = require("url");
-// const ApkReader = require('node-apk-parser');
-const fixPath = (...args) =>
-  import("fix-path").then(({ default: fixPath }) => fixPath(...args));
-// adb.kill();
 
 const pkg = require("./package.json");
 const _sec = 1000;
 const _min = 60 * _sec;
 
-let CHECK_META_PERIOD = 2 * _min;
+const CHECK_META_PERIOD = 2 * _min;
 const l = 32;
 const configLocationOld = path.join(global.homedir, "sidenoder-config.json");
 const configLocation = path.join(global.sidenoderHome, "config.json");
@@ -43,11 +44,11 @@ let META_VERSION = [];
 let QUEST_ICONS = [];
 let cacheOculusGames = false;
 let KMETAS = {};
-let KMETAS2 = {};
+const KMETAS2 = {};
 
 let adbCmd = "adb";
 let grep_cmd = "| grep ";
-if (platform == "win") {
+if (platform === "win") {
   grep_cmd = "| findstr ";
 }
 
@@ -144,7 +145,9 @@ async function getDeviceInfo() {
 async function getFwInfo() {
   console.log("getFwInfo()");
   const res = await adbShell("getprop ro.build.branch");
-  if (!res) return false;
+  if (!res) {
+    return false;
+  }
 
   return {
     version: res.replace("releases-oculus-", ""),
@@ -154,20 +157,44 @@ async function getFwInfo() {
 async function getBatteryInfo() {
   console.log("getBatteryInfo()");
   const res = await adbShell("dumpsys battery");
-  if (!res) return false;
+  if (!res) {
+    return false;
+  }
 
-  return parceOutOptions(res);
+  const opts = {};
+  for (const line of res.replace(/ /g, "").split("\n")) {
+    const splitLine = line.split(":");
+    const key = splitLine[0];
+    let value = splitLine[1];
+
+    if (value === "true") {
+      value = true;
+    }
+    if (value === "false") {
+      value = false;
+    }
+    if (isFinite(+value)) {
+      value = +value;
+    }
+
+    opts[key] = value;
+  }
+
+  return opts;
 }
 
 async function getUserInfo() {
-  if (global.currentConfiguration.userHide)
+  if (global.currentConfiguration.userHide) {
     return {
       name: "<i>hidden</i>",
     };
+  }
 
   console.log("getUserInfo()");
   const res = await adbShell("dumpsys user | grep UserInfo");
-  if (!res) return false;
+  if (!res) {
+    return false;
+  }
 
   return {
     name: res.split(":")[1],
@@ -176,7 +203,7 @@ async function getUserInfo() {
 
 async function deviceTweaksGet(arg) {
   console.log("deviceTweaksGet()", arg);
-  let res = {
+  const res = {
     cmd: "get",
     // mp_name: '',
     // guardian_pause: '0',
@@ -191,29 +218,37 @@ async function deviceTweaksGet(arg) {
     // gSSO: '1440x1584',
   };
 
-  if (arg.key === "mp_name")
+  if (arg.key === "mp_name") {
     res.mp_name = await adbShell("settings get global username");
-  if (arg.key === "guardian_pause")
+  }
+  if (arg.key === "guardian_pause") {
     res.guardian_pause = await adbShell("getprop debug.oculus.guardian_pause");
-  if (arg.key === "frc")
+  }
+  if (arg.key === "frc") {
     res.frc = await adbShell("getprop debug.oculus.fullRateCapture");
-  if (arg.key === "gRR")
+  }
+  if (arg.key === "gRR") {
     res.gRR = await adbShell("getprop debug.oculus.refreshRate");
-  if (arg.key === "gCA")
+  }
+  if (arg.key === "gCA") {
     res.gCA = await adbShell("getprop debug.oculus.forceChroma");
-  if (arg.key === "gFFR")
+  }
+  if (arg.key === "gFFR") {
     res.gFFR = await adbShell("getprop debug.oculus.foveation.level");
-  if (arg.key === "CPU")
+  }
+  if (arg.key === "CPU") {
     res.CPU = await adbShell("getprop debug.oculus.cpuLevel");
-  if (arg.key === "GPU")
+  }
+  if (arg.key === "GPU") {
     res.GPU = await adbShell("getprop debug.oculus.gpuLevel");
-  if (arg.key === "vres")
+  }
+  if (arg.key === "vres") {
     res.vres = await adbShell("getprop debug.oculus.videoResolution");
+  }
   if (arg.key === "cres") {
-    let captureDims =
-      (await adbShell("getprop debug.oculus.capture.width")) +
-      "x" +
-      (await adbShell("getprop debug.oculus.capture.height"));
+    let captureDims = `${await adbShell(
+      "getprop debug.oculus.capture.width",
+    )}x${await adbShell("getprop debug.oculus.capture.height")}`;
 
     // Default when not set
     if (captureDims === "x") {
@@ -221,11 +256,11 @@ async function deviceTweaksGet(arg) {
     }
     res.cres = captureDims;
   }
-  if (arg.key === "gSSO")
-    res.gSSO =
-      (await adbShell("getprop debug.oculus.textureWidth")) +
-      "x" +
-      (await adbShell("getprop debug.oculus.textureHeight"));
+  if (arg.key === "gSSO") {
+    res.gSSO = `${await adbShell(
+      "getprop debug.oculus.textureWidth",
+    )}x${await adbShell("getprop debug.oculus.textureHeight")}`;
+  }
   //oculus.capture.bitrate
 
   return res;
@@ -233,60 +268,60 @@ async function deviceTweaksGet(arg) {
 
 async function deviceTweaksSet(arg) {
   console.log("deviceTweaksSet()", arg);
-  let res = { cmd: "set" };
-  if (typeof arg.mp_name != "undefined") {
-    res.mp_name = await adbShell("settings put global username " + arg.mp_name);
+  const res = { cmd: "set" };
+  if (typeof arg.mp_name !== "undefined") {
+    res.mp_name = await adbShell(`settings put global username ${arg.mp_name}`);
   }
 
-  if (typeof arg.guardian_pause != "undefined") {
+  if (typeof arg.guardian_pause !== "undefined") {
     res.guardian_pause = await adbShell(
-      "setprop debug.oculus.guardian_pause " + (arg.guardian_pause ? "1" : "0"),
+      `setprop debug.oculus.guardian_pause ${arg.guardian_pause ? "1" : "0"}`,
     );
   }
-  if (typeof arg.frc != "undefined") {
+  if (typeof arg.frc !== "undefined") {
     res.frc = await adbShell(
-      "setprop debug.oculus.fullRateCapture " + (arg.frc ? "1" : "0"),
+      `setprop debug.oculus.fullRateCapture ${arg.frc ? "1" : "0"}`,
     );
   }
 
-  if (typeof arg.gRR != "undefined") {
-    res.gRR = await adbShell("setprop debug.oculus.refreshRate " + arg.gRR);
+  if (typeof arg.gRR !== "undefined") {
+    res.gRR = await adbShell(`setprop debug.oculus.refreshRate ${arg.gRR}`);
   }
 
-  if (typeof arg.gCA != "undefined") {
-    res.gCA = await adbShell("setprop debug.oculus.forceChroma " + arg.gCA);
+  if (typeof arg.gCA !== "undefined") {
+    res.gCA = await adbShell(`setprop debug.oculus.forceChroma ${arg.gCA}`);
   }
 
-  if (typeof arg.gFFR != "undefined") {
+  if (typeof arg.gFFR !== "undefined") {
     res.gFFR = await adbShell(
-      "setprop debug.oculus.foveation.level " + arg.gFFR,
+      `setprop debug.oculus.foveation.level ${arg.gFFR}`,
     );
   }
 
-  if (typeof arg.CPU != "undefined") {
-    res.CPU = await adbShell("setprop debug.oculus.cpuLevel " + arg.CPU);
+  if (typeof arg.CPU !== "undefined") {
+    res.CPU = await adbShell(`setprop debug.oculus.cpuLevel ${arg.CPU}`);
   }
 
-  if (typeof arg.GPU != "undefined") {
-    res.GPU = await adbShell("setprop debug.oculus.gpuLevel " + arg.GPU);
+  if (typeof arg.GPU !== "undefined") {
+    res.GPU = await adbShell(`setprop debug.oculus.gpuLevel ${arg.GPU}`);
   }
 
-  if (typeof arg.vres != "undefined") {
+  if (typeof arg.vres !== "undefined") {
     res.vres = await adbShell(
-      "setprop debug.oculus.videoResolution " + arg.vres,
+      `setprop debug.oculus.videoResolution ${arg.vres}`,
     );
   }
 
-  if (typeof arg.cres != "undefined") {
+  if (typeof arg.cres !== "undefined") {
     const [width, height] = arg.cres.split("x");
-    await adbShell("setprop debug.oculus.capture.width " + width);
-    res.cres = await adbShell("setprop debug.oculus.capture.height " + height);
+    await adbShell(`setprop debug.oculus.capture.width ${width}`);
+    res.cres = await adbShell(`setprop debug.oculus.capture.height ${height}`);
   }
 
-  if (typeof arg.gSSO != "undefined") {
+  if (typeof arg.gSSO !== "undefined") {
     const [width, height] = arg.gSSO.split("x");
-    await adbShell("setprop debug.oculus.textureWidth " + width);
-    await adbShell("setprop debug.oculus.textureHeight " + height);
+    await adbShell(`setprop debug.oculus.textureWidth ${width}`);
+    await adbShell(`setprop debug.oculus.textureHeight ${height}`);
     res.gSSO = await adbShell(
       "settings put system font_scale 0.85 && settings put system font_scale 1.0",
     );
@@ -299,13 +334,15 @@ async function getStorageInfo() {
   console.log("getStorageInfo()");
 
   const linematch = await adbShell('df -h | grep "/storage/emulated"');
-  if (!linematch) return false;
+  if (!linematch) {
+    return false;
+  }
 
-  const refree = new RegExp("([0-9(.{1})]+[a-zA-Z%])", "g");
+  const refree = /([0-9(.{1})]+[a-zA-Z%])/g;
   const storage = linematch.match(refree);
   console.log(storage);
 
-  if (storage.length == 3) {
+  if (storage.length === 3) {
     return {
       size: storage[0],
       used: storage[1],
@@ -330,13 +367,15 @@ async function getLaunchActivity(pkg) {
   return startActivity(activity);
 }
 
-async function getActivities(pkg, activity = false) {
+async function getActivities(pkg) {
   console.log("getActivities()", pkg);
 
   let activities = await adbShell(
     `dumpsys package | grep -Eo '^[[:space:]]+[0-9a-f]+[[:space:]]+${pkg}/[^[:space:]]+' | grep -oE '[^[:space:]]+$'`,
   );
-  if (!activities) return false;
+  if (!activities) {
+    return false;
+  }
 
   activities = activities.split("\n");
   // activities.pop();
@@ -388,7 +427,7 @@ async function checkAppTools(pkg) {
   if (await fsp.exists(backupPath)) {
     try {
       availableRestore = await fsp.readFile(`${backupPath}/time.txt`, "utf8");
-    } catch (err) {
+    } catch (_err) {
       availableRestore = 1;
     }
   }
@@ -443,13 +482,17 @@ async function getDeviceIp() {
     `ip -o route get to 8.8.8.8 | sed -n 's/.*src \\([0-9.]\\+\\).*/\\1/p'`,
   );
   console.log({ ip });
-  if (ip) return ip;
+  if (ip) {
+    return ip;
+  }
 
   ip = await adbShell(
     `ip addr show wlan0  | grep 'inet ' | cut -d ' ' -f 6 | cut -d / -f 1`,
   );
   console.log({ ip });
-  if (ip) return ip;
+  if (ip) {
+    return ip;
+  }
   return false;
 }
 
@@ -463,7 +506,6 @@ async function wifiEnable(enable) {
 }
 
 async function connectWireless() {
-  const on = await adbShell("settings get global wifi_on");
   if (!(await wifiGetStat())) {
     console.error("connectWireless", "wifi disabled");
     await wifiEnable(true);
@@ -474,7 +516,9 @@ async function connectWireless() {
   // TODO: save ip & try use it
   const ip = await getDeviceIp();
   console.log({ ip });
-  if (!ip) return false;
+  if (!ip) {
+    return false;
+  }
 
   try {
     if (global.adbDevice) {
@@ -499,7 +543,9 @@ async function connectWireless() {
 
 async function disconnectWireless() {
   const ip = await getDeviceIp();
-  if (!ip) return false;
+  if (!ip) {
+    return false;
+  }
 
   try {
     const res = await adb.disconnect(ip, 5555);
@@ -518,8 +564,12 @@ async function isWireless() {
   try {
     const devices = await adb.listDevices();
     for (const device of devices) {
-      if (!device.id.includes(":5555")) continue;
-      if (["offline", "authorizing"].includes(device.type)) continue;
+      if (!device.id.includes(":5555")) {
+        continue;
+      }
+      if (["offline", "authorizing"].includes(device.type)) {
+        continue;
+      }
       if (["unauthorized"].includes(device.type)) {
         win.webContents.send(
           "alert",
@@ -552,7 +602,9 @@ async function isIdle() {
 }
 
 async function wakeUp() {
-  if (!(await isIdle())) return;
+  if (!(await isIdle())) {
+    return;
+  }
   return adbShell(`input keyevent KEYCODE_POWER`);
 }
 
@@ -567,22 +619,23 @@ async function startSCRCPY() {
   }
 
   const scrcpyCmd =
-    `"${global.currentConfiguration.scrcpyPath || "scrcpy"}" ` +
-    (global.currentConfiguration.scrcpyCrop
-      ? `--crop ${global.currentConfiguration.scrcpyCrop} `
-      : "") +
-    `-b ${global.currentConfiguration.scrcpyBitrate || 1}M ` +
-    (global.currentConfiguration.scrcpyFps
-      ? `--max-fps ${global.currentConfiguration.scrcpyFps} `
-      : "") +
-    (global.currentConfiguration.scrcpySize
-      ? `--max-size ${global.currentConfiguration.scrcpySize} `
-      : "") +
-    (!global.currentConfiguration.scrcpyWindow ? "-f " : "") +
-    (global.currentConfiguration.scrcpyOnTop ? "--always-on-top " : "") +
-    (!global.currentConfiguration.scrcpyControl ? "-n " : "") +
-    '--window-title "SideNoder Stream" ' +
-    `-s ${global.adbDevice} `;
+    `"${global.currentConfiguration.scrcpyPath || "scrcpy"}" ${
+      global.currentConfiguration.scrcpyCrop
+        ? `--crop ${global.currentConfiguration.scrcpyCrop} `
+        : ""
+    }-b ${global.currentConfiguration.scrcpyBitrate || 1}M ${
+      global.currentConfiguration.scrcpyFps
+        ? `--max-fps ${global.currentConfiguration.scrcpyFps} `
+        : ""
+    }${
+      global.currentConfiguration.scrcpySize
+        ? `--max-size ${global.currentConfiguration.scrcpySize} `
+        : ""
+    }${!global.currentConfiguration.scrcpyWindow ? "-f " : ""}${
+      global.currentConfiguration.scrcpyOnTop ? "--always-on-top " : ""
+    }${
+      !global.currentConfiguration.scrcpyControl ? "-n " : ""
+    }--window-title "SideNoder Stream" ` + `-s ${global.adbDevice} `;
   console.log({ scrcpyCmd });
   wakeUp();
   exec(scrcpyCmd, (error, stdout, stderr) => {
@@ -625,14 +678,16 @@ async function sideloadFile(path) {
   return res;
 }
 
-async function getDeviceSync(attempt = 0) {
+async function getDeviceSync() {
   try {
     // const lastDevice = global.adbDevice;
     const devices = await adb.listDevices();
     console.log({ devices });
     global.adbDevice = false;
     for (const device of devices) {
-      if (["offline", "authorizing"].includes(device.type)) continue;
+      if (["offline", "authorizing"].includes(device.type)) {
+        continue;
+      }
       if (["unauthorized"].includes(device.type)) {
         win.webContents.send(
           "alert",
@@ -643,17 +698,13 @@ async function getDeviceSync(attempt = 0) {
 
       if (
         !global.currentConfiguration.allowOtherDevices &&
-        (await adbShell("getprop ro.product.brand", device.id)) != "oculus"
-      )
+        (await adbShell("getprop ro.product.brand", device.id)) !== "oculus"
+      ) {
         continue;
+      }
 
       global.adbDevice = device.id;
     }
-
-    /*if (!global.adbDevice && devices.length > 0 && attempt < 1) {
-      return setTimeout(()=> getDeviceSync(attempt + 1), 1000);
-    }*/
-    // if (lastDevice == global.adbDevice) return;
 
     win.webContents.send("check_device", { success: global.adbDevice });
 
@@ -686,35 +737,21 @@ async function adbShell(cmd, deviceId = global.adbDevice, skipRead = false) {
     output = await output.toString();
     // output = output.split('\n');
     // const end = output.pop();
-    // if (end != '') output.push();
+    // if (end !== '') output.push();
     console.log(`adbShell[${deviceId}]`, { cmd, output });
-    if (output.substr(-1) == "\n") return output.slice(0, -1);
+    if (output.substr(-1) === "\n") {
+      return output.slice(0, -1);
+    }
     return output;
   } catch (err) {
     console.error(`adbShell[${deviceId}]: err`, { cmd }, err);
     global.adbError = err;
-    if (err.toString() == `FailError: Failure: 'device offline'`) {
+    if (err.toString() === `FailError: Failure: 'device offline'`) {
       getDeviceSync();
     }
 
     return false;
   }
-}
-
-function parceOutOptions(line) {
-  let opts = {};
-  for (let l of line.split("\n")) {
-    l = l.split(" ").join("");
-    let [k, v] = l.split(":");
-
-    if (v == "true") v = true;
-    if (v == "false") v = false;
-    if (!isNaN(+v)) v = +v;
-
-    opts[k] = v;
-  }
-
-  return opts;
 }
 
 // on empty dirrectory return false
@@ -732,7 +769,9 @@ async function adbPull(orig, dest, sync = false) {
     let c = 0;
     transfer.on("progress", (stats) => {
       c++;
-      if (c % 40 != 1) return; // skip 20 events
+      if (c % 40 !== 1) {
+        return;
+      } // skip 20 events
 
       // console.log(orig + ' pulled', stats);
       const res = {
@@ -768,7 +807,7 @@ async function adbPullFolder(orig, dest, sync = false) {
     sync = await adb.getDevice(global.adbDevice).syncService();
   }*/
 
-  let actions = [];
+  const actions = [];
   await fsp.mkdir(dest, { recursive: true });
   const files = sync
     ? await sync.readdir(orig)
@@ -804,7 +843,9 @@ async function adbPush(orig, dest, sync = false) {
     let c = 0;
     transfer.on("progress", (stats) => {
       c++;
-      if (c % 40 != 1) return; // skip 20 events
+      if (c % 40 !== 1) {
+        return;
+      } // skip 20 events
 
       // console.log(orig + ' pushed', stats);
       const res = {
@@ -836,7 +877,9 @@ async function adbPushFolder(orig, dest, sync = false) {
 
   const stat = await fsp.lstat(orig);
   console.log({ orig, stat }, stat.isFile());
-  if (stat.isFile()) return adbPush(orig, dest);
+  if (stat.isFile()) {
+    return adbPush(orig, dest);
+  }
 
   /*let need_close = false;
   if (!sync) {
@@ -844,7 +887,7 @@ async function adbPushFolder(orig, dest, sync = false) {
     sync = await adb.getDevice(global.adbDevice).syncService();
   }*/
 
-  let actions = [];
+  const actions = [];
   await adbShell(`mkdir -p ${dest}`, global.adbDevice, true);
   const files = await fsp.readdir(orig, { withFileTypes: true });
   for (const file of files) {
@@ -885,7 +928,9 @@ function execShellCommand(cmd, ignoreError = false, buffer = 100) {
   return new Promise((resolve, reject) => {
     exec(cmd, { maxBuffer: 1024 * buffer }, (error, stdout, stderr) => {
       if (error) {
-        if (ignoreError) return resolve(false);
+        if (ignoreError) {
+          return resolve(false);
+        }
         console.error("exec_error", cmd, error);
         return reject(error);
       }
@@ -893,11 +938,12 @@ function execShellCommand(cmd, ignoreError = false, buffer = 100) {
       if (stdout || !stderr) {
         console.log("exec_stdout", cmd, stdout);
         return resolve(stdout);
-      } else {
-        if (ignoreError) return resolve(false);
-        console.error("exec_stderr", cmd, stderr);
-        return reject(stderr);
       }
+      if (ignoreError) {
+        return resolve(false);
+      }
+      console.error("exec_stderr", cmd, stderr);
+      return reject(stderr);
     });
   });
 }
@@ -948,7 +994,7 @@ async function appInfo(args) {
   const { res, pkg } = args;
   const app = KMETAS[pkg];
 
-  let data = {
+  const data = {
     res,
     pkg,
     id: 0,
@@ -964,9 +1010,11 @@ async function appInfo(args) {
   };
 
   try {
-    if (res == "steam") {
+    if (res === "steam") {
       const steam = app && app.steam;
-      if (!steam || !steam.id) throw "incorrect args";
+      if (!steam || !steam.id) {
+        throw "incorrect args";
+      }
 
       data.id = steam.id;
       data.url = `https://store.steampowered.com/app/${data.id}/`;
@@ -975,7 +1023,7 @@ async function appInfo(args) {
         `https://store.steampowered.com/api/appdetails?appids=${data.id}`,
         {
           headers: {
-            "Accept-Language": global.locale + ",en-US;q=0.5,en;q=0.3",
+            "Accept-Language": `${global.locale},en-US;q=0.5,en;q=0.3`,
           },
           agent: agentSteam,
         },
@@ -986,9 +1034,11 @@ async function appInfo(args) {
       Object.assign(data, json[data.id].data);
     }
 
-    if (res == "oculus") {
+    if (res === "oculus") {
       const oculus = app && app.oculus;
-      if (!oculus || !oculus.id) throw "incorrect args";
+      if (!oculus || !oculus.id) {
+        throw "incorrect args";
+      }
       // console.log({ oculus });
 
       data.id = oculus.id;
@@ -1002,7 +1052,7 @@ async function appInfo(args) {
           method: "POST",
           body: `access_token=OC|1317831034909742|&variables={"itemId":"${oculus.id}","first":1}&doc_id=5373392672732392`,
           headers: {
-            "Accept-Language": global.locale + ",en-US;q=0.5,en;q=0.3",
+            "Accept-Language": `${global.locale},en-US;q=0.5,en;q=0.3`,
             "Content-Type": "application/x-www-form-urlencoded",
             Origin: "https://www.oculus.com",
           },
@@ -1010,12 +1060,16 @@ async function appInfo(args) {
         },
       );
       try {
-        let json = await resp.json();
+        const json = await resp.json();
         // console.log('json', json);
-        if (json.error) throw json.error;
+        if (json.error) {
+          throw json.error;
+        }
 
         const meta = json.data.node;
-        if (!meta) throw "empty json.data.node";
+        if (!meta) {
+          throw "empty json.data.node";
+        }
 
         data.name = meta.appName;
         data.detailed_description =
@@ -1075,13 +1129,17 @@ async function appInfo(args) {
         // console.log(jsonld);
 
         if (jsonld) {
-          if (jsonld.name) data.name = jsonld.name;
+          if (jsonld.name) {
+            data.name = jsonld.name;
+          }
           data.detailed_description =
             jsonld.description && jsonld.description.split("\n").join("<br/>");
 
           if (jsonld.image) {
             for (const id in jsonld.image) {
-              if (["0", "1", "2"].includes(id)) continue; // skip resizes of header
+              if (["0", "1", "2"].includes(id)) {
+                continue;
+              } // skip resizes of header
 
               data.screenshots.push({
                 id,
@@ -1093,9 +1151,11 @@ async function appInfo(args) {
       }
     }
 
-    if (res == "sq") {
+    if (res === "sq") {
       const sq = app && app.sq;
-      if (!sq || !sq.id) throw "incorrect args";
+      if (!sq || !sq.id) {
+        throw "incorrect args";
+      }
       // console.log({ sq });
 
       data.id = sq.id;
@@ -1105,7 +1165,7 @@ async function appInfo(args) {
         method: "POST",
         body: JSON.stringify({ apps_id: data.id }),
         headers: {
-          "Accept-Language": global.locale + ",en-US;q=0.5,en;q=0.3",
+          "Accept-Language": `${global.locale},en-US;q=0.5,en;q=0.3`,
           "Content-Type": "application/json",
           Origin: "https://sidequestvr.com",
           Cookie:
@@ -1121,7 +1181,7 @@ async function appInfo(args) {
       data.header_image = meta.image_url;
       data.short_description = meta.summary;
       data.detailed_description = meta.description.split("\n").join("<br/>");
-      if (meta.video_url)
+      if (meta.video_url) {
         data.youtube = [
           meta.video_url
             .replace("youtube.com", "youtube.com/embed")
@@ -1129,6 +1189,7 @@ async function appInfo(args) {
             .replace("/embed/embed", "/embed")
             .replace("/watch?v=", "/"),
         ];
+      }
 
       const resp_img = await fetchTimeout(
         `https://api.sidequestvr.com/get-app-screenshots`,
@@ -1164,16 +1225,18 @@ async function appInfo(args) {
 async function appInfoEvents(args) {
   const { res, pkg } = args;
   const app = KMETAS[pkg];
-  let data = {
+  const data = {
     res,
     pkg,
     events: [],
   };
 
   try {
-    if (res == "steam") {
+    if (res === "steam") {
       const steam = app && app.steam;
-      if (!steam || !steam.id) throw "incorrect args";
+      if (!steam || !steam.id) {
+        throw "incorrect args";
+      }
 
       data.url = `https://store.steampowered.com/news/app/${steam.id}/`;
 
@@ -1181,7 +1244,7 @@ async function appInfoEvents(args) {
         `http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002?appid=${steam.id}`,
         {
           headers: {
-            "Accept-Language": global.locale + ",en-US;q=0.5,en;q=0.3",
+            "Accept-Language": `${global.locale},en-US;q=0.5,en;q=0.3`,
           },
           agent: agentSteam,
         },
@@ -1227,9 +1290,11 @@ async function appInfoEvents(args) {
       }
     }
 
-    if (res == "oculus") {
+    if (res === "oculus") {
       const oculus = app && app.oculus;
-      if (!oculus || !oculus.id) throw "incorrect args";
+      if (!oculus || !oculus.id) {
+        throw "incorrect args";
+      }
 
       // data.url = `https://store.steampowered.com/news/app/${steam.id}/`;
 
@@ -1239,7 +1304,7 @@ async function appInfoEvents(args) {
           method: "POST",
           body: `access_token=OC|1317831034909742|&variables={"id":"${oculus.id}"}&doc_id=1586217024733717`,
           headers: {
-            "Accept-Language": global.locale + ",en-US;q=0.5,en;q=0.3",
+            "Accept-Language": `${global.locale},en-US;q=0.5,en;q=0.3`,
             "Content-Type": "application/x-www-form-urlencoded",
             Origin: "https://www.oculus.com",
           },
@@ -1247,8 +1312,10 @@ async function appInfoEvents(args) {
         },
       );
       try {
-        let json = await resp.json();
-        if (json.error) throw json.error;
+        const json = await resp.json();
+        if (json.error) {
+          throw json.error;
+        }
 
         // console.log({ json });
         const events = json.data.node.supportedBinaries.edges;
@@ -1264,7 +1331,9 @@ async function appInfoEvents(args) {
             // author: '',
           };
 
-          if (e.richChangeLog) console.log("RICHCHANGELOG", e.richChangeLog);
+          if (e.richChangeLog) {
+            console.log("RICHCHANGELOG", e.richChangeLog);
+          }
 
           data.events.push(event);
         }
@@ -1275,14 +1344,16 @@ async function appInfoEvents(args) {
       resp = await fetch(
         `https://computerelite.github.io/tools/Oculus/OlderAppVersions/${oculus.id}.json`,
       );
-      json = await resp.json();
+      const json = await resp.json();
       // console.log({ json });
       const events = json.data.node.binaries.edges;
       for (const { node } of events) {
         const e = node;
         let found = false;
         for (const i in data.events) {
-          if (data.events[i].id != e.id) continue;
+          if (data.events[i].id !== e.id) {
+            continue;
+          }
 
           data.events[i].date = new Date(
             e.created_date * _sec,
@@ -1290,7 +1361,9 @@ async function appInfoEvents(args) {
           found = true;
           break;
         }
-        if (found) continue;
+        if (found) {
+          continue;
+        }
 
         const event = {
           id: e.id,
@@ -1305,9 +1378,11 @@ async function appInfoEvents(args) {
       }
     }
 
-    if (res == "sq") {
+    if (res === "sq") {
       const sq = app && app.sq;
-      if (!sq || !sq.id) throw "incorrect args";
+      if (!sq || !sq.id) {
+        throw "incorrect args";
+      }
       // console.log({ sq });
 
       for (const is_news of [true, false]) {
@@ -1317,7 +1392,7 @@ async function appInfoEvents(args) {
             method: "POST",
             body: JSON.stringify({ apps_id: sq.id, is_news }),
             headers: {
-              "Accept-Language": global.locale + ",en-US;q=0.5,en;q=0.3",
+              "Accept-Language": `${global.locale},en-US;q=0.5,en;q=0.3`,
               "Content-Type": "application/json",
               Origin: "https://sidequestvr.com",
               Cookie:
@@ -1341,7 +1416,7 @@ async function appInfoEvents(args) {
           };
 
           if (e.event_image) {
-            event.contents += `<center><img src="${e.event_image[0] == "/" ? "https://sidequestvr.com" : ""}${e.event_image}" /></center>`;
+            event.contents += `<center><img src="${e.event_image[0] === "/" ? "https://sidequestvr.com" : ""}${e.event_image}" /></center>`;
           }
 
           if (e.event_description) {
@@ -1389,7 +1464,7 @@ async function checkMount(attempt = 0) {
 
 async function checkDeps(arg) {
   console.log("checkDeps()", arg);
-  let res = {
+  const res = {
     [arg]: {
       version: false,
       cmd: false,
@@ -1398,36 +1473,39 @@ async function checkDeps(arg) {
   };
 
   try {
-    if (arg == "adb") {
+    if (arg === "adb") {
       let globalAdb = false;
       try {
         globalAdb = await commandExists("adb");
-      } catch (e) {}
+      } catch (_e) {
+        // Do nothing
+      }
 
       res[arg].cmd = adbCmd = globalAdb ? "adb" : await fetchBinary("adb");
       try {
         await execShellCommand(`"${res[arg].cmd}" start-server`);
       } catch (err) {
-        if (!err.toString().includes("daemon started successfully")) throw err;
+        if (!err.toString().includes("daemon started successfully")) {
+          throw err;
+        }
       }
 
       res[arg].version =
-        "adbkit v." +
-        (await adb.version()) +
-        "\n" +
-        (await execShellCommand(`"${res[arg].cmd}" version`));
+        `adbkit v.${await adb.version()}\n${await execShellCommand(
+          `"${res[arg].cmd}" version`,
+        )}`;
 
       await trackDevices();
     }
 
-    if (arg == "rclone") {
+    if (arg === "rclone") {
       // module with autodownload https://github.com/sntran/rclone.js/blob/main/index.js
       // res.rclone.cmd = global.currentConfiguration.rclonePath || await commandExists('rclone');
       res[arg].cmd = await fetchBinary("rclone");
       res[arg].version = await execShellCommand(`"${res[arg].cmd}" --version`);
     }
 
-    if (arg == "zip") {
+    if (arg === "zip") {
       res[arg].cmd = await fetchBinary("7za");
       res[arg].version = await execShellCommand(
         `"${res[arg].cmd}" --help ${grep_cmd} "7-Zip"`,
@@ -1435,7 +1513,7 @@ async function checkDeps(arg) {
       console.log(res[arg].version);
     }
 
-    if (arg == "scrcpy") {
+    if (arg === "scrcpy") {
       res[arg].cmd =
         global.currentConfiguration.scrcpyPath ||
         (await commandExists("scrcpy"));
@@ -1459,16 +1537,18 @@ async function checkDeps(arg) {
 async function fetchBinary(bin) {
   const cfgKey = `${bin}Path`;
   const cmd = global.currentConfiguration[cfgKey];
-  if (cmd) return cmd;
+  if (cmd) {
+    return cmd;
+  }
 
-  const file = global.platform == "win" ? `${bin}.exe` : bin;
+  const file = global.platform === "win" ? `${bin}.exe` : bin;
 
   const binPath = path.join(sidenoderHome, file);
-  const branch = /*bin == 'rclone' ? 'new' :*/ "master";
+  const branch = /*bin === 'rclone' ? 'new' :*/ "master";
   const binUrl = `https://raw.githubusercontent.com/vKolerts/${bin}-bin/${branch}/${global.platform}/${global.arch}/${file}`;
   await fetchFile(binUrl, binPath);
 
-  if (bin == "adb" && global.platform == "win") {
+  if (bin === "adb" && global.platform === "win") {
     const libFile = "AdbWinApi.dll";
     const libUrl = `https://raw.githubusercontent.com/vKolerts/${bin}-bin/master/${global.platform}/${global.arch}/${libFile}`;
     await fetchFile(libUrl, path.join(sidenoderHome, libFile));
@@ -1484,9 +1564,13 @@ async function fetchBinary(bin) {
 async function fetchFile(url, dest) {
   console.log("fetchFile", { url, dest });
   const resp = await fetch(url);
-  if (!resp.ok) throw new Error(`Can't download '${url}': ${resp.statusText}`);
+  if (!resp.ok) {
+    throw new Error(`Can't download '${url}': ${resp.statusText}`);
+  }
 
-  if (await fsp.exists(dest)) await fsp.unlink(dest);
+  if (await fsp.exists(dest)) {
+    await fsp.unlink(dest);
+  }
   return fsp.writeFile(dest, await resp.buffer(), { mode: 0o755 });
 }
 
@@ -1501,7 +1585,7 @@ function returnError(message) {
 async function killRClone() {
   RCLONE_ID++;
   const killCmd =
-    platform == "win"
+    platform === "win"
       ? `taskkill.exe /F /T /IM rclone.exe`
       : `killall -9 rclone`;
   console.log("killing rclone");
@@ -1549,7 +1633,9 @@ async function parseRcloneSections(newCfg = false) {
     const sections = out
       .split("\n")
       .map((section) => section.replace(/:$/, ""));
-    if (sections.length) sections.pop();
+    if (sections.length) {
+      sections.pop();
+    }
     if (!sections.length) {
       return console.error(
         "rclone config sections not found",
@@ -1559,22 +1645,25 @@ async function parseRcloneSections(newCfg = false) {
     }
 
     global.rcloneSections = sections;
-  } catch (err) {
+  } catch (_err) {
     const cfg = await fsp.readFile(
       global.currentConfiguration.rcloneConf,
       "utf8",
     );
 
-    if (!cfg)
+    if (!cfg) {
       return console.error(
         "rclone config is empty",
         global.currentConfiguration.rcloneConf,
       );
+    }
 
     const lines = cfg.split("\n");
-    let sections = [];
+    const sections = [];
     for (const line of lines) {
-      if (line[0] != "[") continue;
+      if (line[0] !== "[") {
+        continue;
+      }
       const section = line.match(/\[(.*?)\]/)[1];
       sections.push(section);
     }
@@ -1591,8 +1680,10 @@ async function parseRcloneSections(newCfg = false) {
 }
 
 async function umount() {
-  if (platform == "win") {
-    if (!(await fsp.exists(global.mountFolder))) return;
+  if (platform === "win") {
+    if (!(await fsp.exists(global.mountFolder))) {
+      return;
+    }
 
     await fsp.rmdir(global.mountFolder, { recursive: true });
     return;
@@ -1615,7 +1706,7 @@ async function mount() {
   // return;
   try {
     await killRClone();
-  } catch (err) {
+  } catch (_err) {
     console.log("rclone not started");
   }
   // }
@@ -1642,13 +1733,15 @@ async function mount() {
             return;
           }
           console.error("rclone error:", error);
-          if (RCLONE_ID != myId) error = false;
+          if (RCLONE_ID !== myId) {
+            error = false;
+          }
           console.log({ RCLONE_ID, myId });
           win.webContents.send("check_mount", { success: false, error });
 
           return;
         }
-      } catch (e) {
+      } catch (_e) {
         // Do nothing
       }
 
@@ -1668,7 +1761,7 @@ function resetCache(folder) {
     .join(global.mountFolder, global.currentConfiguration.mntGamePath)
     .replace(/\\/g, "/");
 
-  if (folder == oculusGamesDir) {
+  if (folder === oculusGamesDir) {
     cacheOculusGames = false;
     return true;
   }
@@ -1682,7 +1775,7 @@ async function getDir(folder) {
     .replace(/\\/g, "/");
   //console.log(folder, oculusGamesDir);
   if (
-    folder == oculusGamesDir &&
+    folder === oculusGamesDir &&
     global.currentConfiguration.cacheOculusGames &&
     cacheOculusGames
   ) {
@@ -1692,14 +1785,15 @@ async function getDir(folder) {
 
   try {
     const files = await fsp.readdir(folder /*, { withFileTypes: true }*/);
-    let gameList = {};
-    let gameListName2Package = {};
+    const gameList = {};
     let installedApps = {};
     let gameListName = false;
     try {
       // throw 'test';
       for (const name of GAME_LIST_NAMES) {
-        if (!fs.existsSync(path.join(folder, name))) continue;
+        if (!fs.existsSync(path.join(folder, name))) {
+          continue;
+        }
         // if (!files.includes(name)) continue;
         gameListName = name;
         break;
@@ -1710,17 +1804,19 @@ async function getDir(folder) {
           await fsp.readFile(path.join(folder, gameListName), "utf8")
         ).split("\n");
         let listVer;
-        if (!list.length) throw gameListName + " is empty";
+        if (!list.length) {
+          throw `${gameListName} is empty`;
+        }
 
         for (const line of list) {
           const meta = line.split(";");
           if (!listVer) {
-            listVer = meta[2] == "Release APK Path" ? 1 : 2;
+            listVer = meta[2] === "Release APK Path" ? 1 : 2;
             console.log({ gameListName, listVer });
             continue;
           }
 
-          if (listVer == 1) {
+          if (listVer === 1) {
             gameList[meta[1]] = {
               simpleName: meta[0],
               releaseName: meta[1],
@@ -1729,7 +1825,7 @@ async function getDir(folder) {
               versionName: meta[5],
               imagePath: `file://${global.tmpdir}/mnt/${global.currentConfiguration.mntGamePath}/.meta/thumbnails/${meta[3]}.jpg`,
             };
-          } else if (listVer == 2) {
+          } else if (listVer === 2) {
             gameList[meta[1]] = {
               simpleName: meta[0],
               releaseName: meta[1],
@@ -1760,7 +1856,7 @@ async function getDir(folder) {
       console.error("Can`t get installed apps", err);
     }
 
-    let fileNames = await Promise.all(
+    const fileNames = await Promise.all(
       files.map(async (fileName) => {
         // console.log(fileName);
 
@@ -1800,7 +1896,7 @@ async function getDir(folder) {
             // If gameMeta is still not defined then there is no game with a
             // matching version number. We now query gameList using the game name
             // without the version number.
-            let regex = /^([\w -.,!?&+™®'"]+) v\d+\+/;
+            const regex = /^([\w -.,!?&+™®'"]+) v\d+\+/;
             if (regex.test(fileName)) {
               // Only do this if this is a folder containing an apk file.
               if (info.isDirectory()) {
@@ -1828,7 +1924,7 @@ async function getDir(folder) {
           size = gameMeta.size;
           imagePath = gameMeta.imagePath;
 
-          let regex = /\((.*?)\)/;
+          const regex = /\((.*?)\)/;
           if (regex.test(gameMeta.releaseName)) {
             const match = gameMeta.releaseName.match(regex)[0];
             note += match.replace(", only autoinstalls with Rookie", "");
@@ -1864,11 +1960,11 @@ async function getDir(folder) {
           versionName = fileName.match(regex)[1];
         }
 
-        if (!versionCode && new RegExp(".* -versionCode-").test(fileName)) {
+        if (!versionCode && /.* -versionCode-/.test(fileName)) {
           versionCode = fileName.match(/-versionCode-([0-9]*)/)[1];
         }
 
-        if (!packageName && new RegExp(".* -packageName-").test(fileName)) {
+        if (!packageName && /.* -packageName-/.test(fileName)) {
           packageName = fileName.match(/-packageName-([a-zA-Z0-9.]*)/)[1];
         }
 
@@ -1879,7 +1975,7 @@ async function getDir(folder) {
 
         if (packageName) {
           if (!imagePath) {
-            if (QUEST_ICONS.includes(packageName + ".jpg")) {
+            if (QUEST_ICONS.includes(`${packageName}.jpg`)) {
               imagePath = `https://raw.githubusercontent.com/vKolerts/quest_icons/master/250/${packageName}.jpg`;
             } else if (!imagePath) {
               imagePath = "unknown.png";
@@ -1887,7 +1983,7 @@ async function getDir(folder) {
           }
 
           kmeta = KMETAS[packageName];
-          installedApp = installedApps[packageName];
+          const installedApp = installedApps[packageName];
           if (installedApp) {
             installed = 1;
             if (versionCode && versionCode > installedApp.versionCode) {
@@ -1968,7 +2064,7 @@ async function getDir(folder) {
     // console.log(fileNames)
 
     if (
-      folder == oculusGamesDir &&
+      folder === oculusGamesDir &&
       global.currentConfiguration.cacheOculusGames
     ) {
       console.log("getDir cached", folder);
@@ -1981,7 +2077,7 @@ async function getDir(folder) {
 
     return fileNames;
   } catch (error) {
-    console.error("Can`t open folder " + folder, error);
+    console.error(`Can\`t open folder ${folder}`, error);
     //returnError(e.message)
     return false;
   }
@@ -1996,7 +2092,7 @@ async function cleanUpFoldername(simpleName) {
 
 async function getDirListing(folder) {
   const files = await fsp.readdir(folder);
-  let fileNames = await Promise.all(
+  const fileNames = await Promise.all(
     files.map(async (file) => {
       return path.join(folder, file).replace(/\\/g, "/");
     }),
@@ -2013,7 +2109,9 @@ async function backupApp({ location, pkg }) {
   let folderName = pkg;
 
   for (const app of global.installedApps) {
-    if (app["packageName"] != pkg) continue;
+    if (app["packageName"] !== pkg) {
+      continue;
+    }
     folderName = `${app["simpleName"]} -versionCode-${app["versionCode"]} -packageName-${pkg}`;
     break;
   }
@@ -2024,7 +2122,9 @@ async function backupApp({ location, pkg }) {
   await fsp.mkdir(location, { recursive: true });
   await adbPull(apk, path.join(location, "base.apk"));
   const obbsPath = `/sdcard/Android/obb/${pkg}`;
-  if (!(await adbFileExists(obbsPath))) return true;
+  if (!(await adbFileExists(obbsPath))) {
+    return true;
+  }
 
   await adbPullFolder(obbsPath, path.join(location, pkg));
 
@@ -2064,7 +2164,9 @@ async function restoreAppData(
 ) {
   console.log("restoreAppData()", packageName);
   backupPath = path.join(backupPath, packageName);
-  if (!(await fsp.exists(backupPath))) throw `Backup not found ${backupPath}`;
+  if (!(await fsp.exists(backupPath))) {
+    throw `Backup not found ${backupPath}`;
+  }
 
   await adbPushFolder(
     path.join(backupPath, "Android", packageName),
@@ -2089,7 +2191,9 @@ async function copyAppPrefs(packageName, removeAfter = false) {
 async function restoreAppPrefs(packageName, removeAfter = true) {
   const cmd = removeAfter ? "mv -f" : "cp -rf";
   const backup_path = `${backupPrefsPath}/${packageName}`;
-  if (!(await adbFileExists(backup_path))) return;
+  if (!(await adbFileExists(backup_path))) {
+    return;
+  }
 
   return adbShell(
     `run-as ${packageName} ${cmd} "${backup_path}" "/data/data/"`,
@@ -2099,7 +2203,7 @@ async function restoreAppPrefs(packageName, removeAfter = true) {
 async function sideloadFolder(arg) {
   location = arg.path;
   console.log("sideloadFolder()", arg);
-  let res = {
+  const res = {
     device: "done",
     aapt: false,
     check: false,
@@ -2118,6 +2222,7 @@ async function sideloadFolder(arg) {
 
   win.webContents.send("sideload_process", res);
 
+  let apkfile = "";
   if (location.endsWith(".apk")) {
     apkfile = location;
     location = path.dirname(location);
@@ -2126,16 +2231,16 @@ async function sideloadFolder(arg) {
     return;
   }
 
-  console.log("start sideload: " + apkfile);
+  console.log(`start sideload: ${apkfile}`);
 
-  fromremote = false;
+  let fromremote = false;
   if (location.includes(global.mountFolder)) {
     fromremote = true;
   }
 
   console.log("fromremote:", fromremote);
 
-  packageName = "";
+  let packageName = "";
   let apktmp = "";
   try {
     if (!fromremote) {
@@ -2145,14 +2250,16 @@ async function sideloadFolder(arg) {
       win.webContents.send("sideload_process", res);
 
       apktmp = path.join(global.tmpdir, path.basename(apkfile));
-      console.log("is remote, copying to " + apktmp);
+      console.log(`is remote, copying to ${apktmp}`);
 
       if (await fsp.exists(apktmp)) {
-        console.log("is remote, " + apktmp + "already exists, using");
+        console.log(`is remote, ${apktmp}already exists, using`);
         res.download = "skip";
       } else {
         const tmpname = `${apktmp}.part`;
-        if (await fsp.exists(tmpname)) await fsp.unlink(tmpname);
+        if (await fsp.exists(tmpname)) {
+          await fsp.unlink(tmpname);
+        }
         await fsp.copyFile(apkfile, tmpname);
         await fsp.rename(tmpname, apktmp);
         res.download = "done";
@@ -2173,7 +2280,7 @@ async function sideloadFolder(arg) {
   win.webContents.send("sideload_process", res);
 
   try {
-    packageinfo = await getPackageInfo(apkfile);
+    const packageinfo = await getPackageInfo(apkfile);
 
     packageName = packageinfo.packageName;
     console.log({ apkfile, packageinfo, packageName });
@@ -2205,7 +2312,7 @@ async function sideloadFolder(arg) {
   try {
     installed = await adb.getDevice(global.adbDevice).isInstalled(packageName);
     res.check = "done";
-  } catch (err) {
+  } catch (e) {
     console.error("check", e);
     res.check = "fail";
     res.error = e;
@@ -2301,13 +2408,16 @@ async function sideloadFolder(arg) {
 
   const obbFolderOrig = path.join(location, packageName);
   console.log({ obbFolderOrig });
+
+  let obbFolderDest = "";
   try {
-    if (!(await fsp.exists(obbFolderOrig))) throw "Can`t find obbs folder";
+    if (!(await fsp.exists(obbFolderOrig))) {
+      throw "Can`t find obbs folder";
+    }
     obbFolderDest = `/sdcard/Android/obb/${packageName}`;
-    console.log("DATAFOLDER to copy:" + obbFolderDest);
+    console.log(`DATAFOLDER to copy:${obbFolderDest}`);
   } catch (error) {
     console.log(error);
-    obbFolderDest = false;
     res.remove_obb = "skip";
     res.download_obb = "skip";
     res.push_obb = "skip";
@@ -2337,9 +2447,8 @@ async function sideloadFolder(arg) {
       obbFiles = await fsp.readdir(obbFolderOrig);
       console.log("obbFiles: ", obbFiles.length);
 
-      res.download_obb =
-        (fromremote ? "0" : obbFiles.length) + "/" + obbFiles.length;
-      res.push_obb = "0/" + obbFiles.length;
+      res.download_obb = `${fromremote ? "0" : obbFiles.length}/${obbFiles.length}`;
+      res.push_obb = `0/${obbFiles.length}`;
       win.webContents.send("sideload_process", res);
 
       const tmpFolder = path.join(global.tmpdir, packageName);
@@ -2349,25 +2458,26 @@ async function sideloadFolder(arg) {
 
       for (const obbName of obbFiles) {
         const obb = path.join(obbFolderOrig, obbName);
-        console.log("obb File: " + obbName);
+        console.log(`obb File: ${obbName}`);
         console.log("doing obb push");
         const destFile = `${obbFolderDest}/${obbName}`;
 
         if (fromremote) {
           const obbtmp = path.join(tmpFolder, obbName);
-          console.log("obb is remote, copying to " + obbtmp);
+          console.log(`obb is remote, copying to ${obbtmp}`);
 
           if (await fsp.exists(obbtmp)) {
             console.log(`obb is remote, ${obbtmp} already exists, using`);
           } else {
             const tmpname = `${obbtmp}.part`;
-            if (await fsp.exists(tmpname)) await fsp.unlink(tmpname);
+            if (await fsp.exists(tmpname)) {
+              await fsp.unlink(tmpname);
+            }
             await fsp.copyFile(obb, tmpname);
             await fsp.rename(tmpname, obbtmp);
           }
 
-          res.download_obb =
-            +res.download_obb.split("/")[0] + 1 + "/" + obbFiles.length;
+          res.download_obb = `${+res.download_obb.split("/")[0] + 1}/${obbFiles.length}`;
           win.webContents.send("sideload_process", res);
           await adbPush(obbtmp, `${destFile}`, false);
         } else {
@@ -2375,7 +2485,7 @@ async function sideloadFolder(arg) {
           await adbPush(obb, `${destFile}`, false);
         }
 
-        res.push_obb = +res.push_obb.split("/")[0] + 1 + "/" + obbFiles.length;
+        res.push_obb = `${+res.push_obb.split("/")[0] + 1}/${obbFiles.length}`;
         win.webContents.send("sideload_process", res);
       }
 
@@ -2412,7 +2522,7 @@ async function getPackageInfo(apkPath) {
   const reader = await ApkReader.open(apkPath);
   const manifest = await reader.readManifest();
 
-  info = {
+  const info = {
     packageName: manifest.package,
     versionCode: manifest.versionCode,
     versionName: manifest.versionName,
@@ -2425,7 +2535,7 @@ async function getInstalledApps(obj = false) {
   let apps = await adbShell(`pm list packages -3 --show-versioncode`);
   apps = apps.split("\n");
   // apps.pop();
-  appinfo = {};
+  const appinfo = {};
 
   for (const appLine of apps) {
     const [packageName, versionCode] = appLine.slice(8).split(" versionCode:");
@@ -2435,7 +2545,7 @@ async function getInstalledApps(obj = false) {
       (KMETAS[packageName] && KMETAS[packageName].simpleName) || packageName;
     info["packageName"] = packageName;
     info["versionCode"] = versionCode;
-    info["imagePath"] = QUEST_ICONS.includes(packageName + ".jpg")
+    info["imagePath"] = QUEST_ICONS.includes(`${packageName}.jpg`)
       ? `https://raw.githubusercontent.com/vKolerts/quest_icons/master/250/${packageName}.jpg`
       : `http://cdn.apk-cloud.com/detail/image/${packageName}-w130.png`; //'unknown.png';
 
@@ -2466,16 +2576,20 @@ async function getInstalledAppsWithUpdates() {
     global.currentConfiguration.mntGamePath,
   ); // TODO: folder path to config
   const list = await getDir(remotePath);
-  let remotePackages = {};
-  let remoteList = {};
+  const remotePackages = {};
+  const remoteList = {};
 
-  if (list)
+  if (list) {
     for (const app of list) {
       const { name, packageName, versionCode, simpleName, filePath, size } =
         app;
-      if (!packageName) continue;
+      if (!packageName) {
+        continue;
+      }
 
-      if (!remotePackages[packageName]) remotePackages[packageName] = [];
+      if (!remotePackages[packageName]) {
+        remotePackages[packageName] = [];
+      }
       remotePackages[packageName].push(name);
 
       remoteList[name] = {
@@ -2485,26 +2599,31 @@ async function getInstalledAppsWithUpdates() {
         size,
       };
     }
+  }
 
   const remoteKeys = Object.keys(remotePackages);
 
   const apps = global.installedApps || (await getInstalledApps());
-  let updates = [];
+  const updates = [];
   for (const app of apps) {
     const packageName = app["packageName"];
     // console.log(packageName, 'checking');
 
-    if (!remoteKeys.includes(packageName)) continue;
+    if (!remoteKeys.includes(packageName)) {
+      continue;
+    }
 
-    for (name of remotePackages[packageName]) {
-      const pkg = remoteList[name];
+    for (const pkgName of remotePackages[packageName]) {
+      const pkg = remoteList[pkgName];
       const installedVersion = app["versionCode"];
       const remoteversion = pkg.versionCode;
 
       // console.log({ packageName, installedVersion, remoteversion });
       // console.log({ pkg });
 
-      if (remoteversion <= installedVersion) continue;
+      if (remoteversion <= installedVersion) {
+        continue;
+      }
 
       app["simpleName"] = pkg.simpleName;
       app["update"] = [];
@@ -2524,7 +2643,7 @@ async function getInstalledAppsWithUpdates() {
 async function detectNoteTxt(files, folder) {
   // TODO: check .meta/notes
 
-  if (typeof files == "string") {
+  if (typeof files === "string") {
     folder = files;
     files = false;
   }
@@ -2541,7 +2660,7 @@ async function detectNoteTxt(files, folder) {
 }
 
 async function detectInstallTxt(files, folder) {
-  if (typeof files == "string") {
+  if (typeof files === "string") {
     folder = files;
     files = false;
   }
@@ -2562,7 +2681,7 @@ async function detectInstallTxt(files, folder) {
 }
 
 async function getApkFromFolder(folder) {
-  let res = {
+  const res = {
     path: false,
     install_desc: false,
   };
@@ -2572,19 +2691,19 @@ async function getApkFromFolder(folder) {
   res.notes = await detectNoteTxt(files, folder);
   console.log({ files });
 
-  for (file of files) {
+  for (const file of files) {
     if (file.endsWith(".apk")) {
       res.path = path.join(folder, file).replace(/\\/g, "/");
       return res;
     }
   }
 
-  returnError("No apk found in " + folder);
+  returnError(`No apk found in ${folder}`);
   return res;
 }
 
 async function uninstall(packageName) {
-  resp = await adb.getDevice(global.adbDevice).uninstall(packageName);
+  await adb.getDevice(global.adbDevice).uninstall(packageName);
 }
 
 let rcloneProgress = false;
@@ -2594,7 +2713,9 @@ async function updateRcloneProgress() {
       method: "POST",
     });
     const data = await response.json();
-    if (!data.transferring || !data.transferring[0]) throw "no data";
+    if (!data.transferring || !data.transferring[0]) {
+      throw "no data";
+    }
     const transferring = data.transferring[0];
     rcloneProgress = {
       cmd: "download",
@@ -2607,8 +2728,8 @@ async function updateRcloneProgress() {
     };
     //console.log('sending rclone data');
     win.webContents.send("process_data", rcloneProgress);
-  } catch (error) {
-    //console.error('Fetch-Error:', error);
+  } catch (_e) {
+    //console.error('Fetch-Error:', _e);
     if (rcloneProgress) {
       rcloneProgress = false;
       win.webContents.send("process_data", rcloneProgress);
@@ -2623,7 +2744,7 @@ async function init() {
     fsp
       .access(p)
       .then(() => true)
-      .catch((e) => false);
+      .catch((_e) => false);
 
   await initLogs();
 
@@ -2640,22 +2761,22 @@ async function init() {
 async function loadMeta() {
   try {
     const res = await fetch(
-      "https://raw.githubusercontent.com/vKolerts/quest_icons/master/version?" +
-        Date.now(),
+      `https://raw.githubusercontent.com/vKolerts/quest_icons/master/version?${Date.now()}`,
     );
-    version = await res.text();
-    if (version == META_VERSION) return setTimeout(loadMeta, CHECK_META_PERIOD);
+    const metaVersion = await res.text();
+    if (metaVersion === META_VERSION) {
+      return setTimeout(loadMeta, CHECK_META_PERIOD);
+    }
 
-    META_VERSION = version;
+    META_VERSION = metaVersion;
     console.log("Meta version", META_VERSION);
   } catch (err) {
-    console.error("can`t get meta version", err);
+    console.error("Can`t get meta version", err);
   }
 
   try {
     const res = await fetch(
-      "https://raw.githubusercontent.com/vKolerts/quest_icons/master/list.json?" +
-        Date.now(),
+      `https://raw.githubusercontent.com/vKolerts/quest_icons/master/list.json?${Date.now()}`,
     );
     QUEST_ICONS = await res.json();
     console.log("icons list loaded");
@@ -2665,8 +2786,7 @@ async function loadMeta() {
 
   try {
     const res = await fetch(
-      "https://raw.githubusercontent.com/vKolerts/quest_icons/master/.e?" +
-        Date.now(),
+      `https://raw.githubusercontent.com/vKolerts/quest_icons/master/.e?${Date.now()}`,
     );
     const text = await res.text();
     const iv = Buffer.from(text.substring(0, l), "hex");
@@ -2694,7 +2814,7 @@ async function loadMeta() {
 
 function escString(val) {
   let res = val.toLowerCase();
-  res = res.replace(/[-\_:.,!?\"'&™®| ]/g, "");
+  res = res.replace(/[-_:.,!?"'&™®| ]/g, "");
   return res;
 }
 
@@ -2718,39 +2838,39 @@ async function initLogs() {
     let line = "";
     let line_color = "";
     for (const l of d) {
-      if (typeof l == "string") {
-        line += l + " ";
-        line_color += l + " ";
+      if (typeof l === "string") {
+        line += `${l} `;
+        line_color += `${l} `;
         continue;
       }
 
       const formated = util.format(l);
-      line += formated + " ";
-      line_color += "\x1b[32m" + formated + "\x1b[0m ";
+      line += `${formated} `;
+      line_color += `\x1b[32m${formated}\x1b[0m `;
     }
 
-    log_stdout.write(dateF() + line_color + "\n");
-    log_file.write(dateF() + line + "\n");
+    log_stdout.write(`${dateF() + line_color}\n`);
+    log_file.write(`${dateF() + line}\n`);
   };
 
   console.error = function (...d) {
     let line = "";
     for (const l of d) {
-      line += util.format(l) + " ";
+      line += `${util.format(l)} `;
     }
 
-    log_stdout.write(`\x1b[31m${dateF()}ERROR: ` + line + "\x1b[0m\n");
-    log_file.write(dateF() + "ERROR: " + line + "\n");
+    log_stdout.write(`\x1b[31m${dateF()}ERROR: ${line}\x1b[0m\n`);
+    log_file.write(`${dateF()}ERROR: ${line}\n`);
   };
 
   console.warning = function (...d) {
     let line = "";
     for (const l of d) {
-      line += util.format(l) + " ";
+      line += `${util.format(l)} `;
     }
 
-    log_stdout.write(`\x1b[33m${dateF()}WARN: ` + line + "\x1b[0m\n");
-    log_file.write(dateF() + "WARN: " + line + "\n");
+    log_stdout.write(`\x1b[33m${dateF()}WARN: ${line}\x1b[0m\n`);
+    log_file.write(`${dateF()}WARN: ${line}\n`);
   };
 }
 
@@ -2797,7 +2917,7 @@ async function reloadConfig() {
   }
 
   if (await fsp.exists(configLocation)) {
-    console.log("Config exist, using " + configLocation);
+    console.log(`Config exist, using ${configLocation}`);
     global.currentConfiguration = Object.assign(
       defaultConfig,
       require(configLocation),
@@ -2833,15 +2953,22 @@ function proxySettings(proxyUrl = global.currentConfiguration.proxyUrl) {
 
 async function changeConfig(key, value) {
   console.log("cfg.update", key, value);
-  if (key == "proxyUrl") proxySettings(value);
-  if (["proxyOculus", "proxySteam", "proxySQ"].includes(key)) proxySettings();
+  if (key === "proxyUrl") {
+    proxySettings(value);
+  }
+  if (["proxyOculus", "proxySteam", "proxySQ"].includes(key)) {
+    proxySettings();
+  }
 
   global.currentConfiguration[key] = value;
   await saveConfig();
 
-  if (key == "rcloneConf") await parseRcloneSections(true);
-  if (key == "tmpdir")
+  if (key === "rcloneConf") {
+    await parseRcloneSections(true);
+  }
+  if (key === "tmpdir") {
     global.tmpdir = value || require("os").tmpdir().replace(/\\/g, "/");
+  }
 
   return value;
 }

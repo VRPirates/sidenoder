@@ -111,10 +111,10 @@
 </div>
 
 <script>
-  /* global promptDialog, addBookmark */
+  /* global promptDialog, addBookmark, getDir */
   (() => {
     $id('processingModal').modal('show');
-    id('nav-panel').style.top = $id('topbar').height() + 'px'; // fix navbar position
+    id('nav-panel').style.top = `${$id('topbar').height()}px`; // fix navbar position
 
     const { dirBookmarks } = remote.getGlobal('currentConfiguration');
     for (const { name, path } of dirBookmarks) {

@@ -1,13 +1,17 @@
 /* global sortElements */
-/*eslint no-unused-vars: ["error", {
-  "varsIgnorePattern": "addBookmark|delBookmark|getDirSize|install|oculusInfo|sortFiles|sqInfo|steamInfo"
-}]*/
+/* eslint
+  no-unused-vars: [
+    "error", {
+      "varsIgnorePattern": "addBookmark|delBookmark|getDirSize|install|oculusInfo|sortFiles|sqInfo|steamInfo"
+    }
+  ]
+*/
 const fs = require("fs").promises;
 const path = require("path");
 
 console.log("ONLOAD BROWSE");
 
-let BROWSE_HISTORY = {};
+const BROWSE_HISTORY = {};
 let upDir = () => getDir();
 
 ipcRenderer.on("get_dir", (event, arg) => {
@@ -62,7 +66,7 @@ document.addEventListener("keydown", (e) => {
   }
 
   if (
-    e.code == "Backspace" &&
+    e.code === "Backspace" &&
     !$(".form-control").is(":focus") &&
     !$(".find-input").is(":focus") &&
     !$("#bookmarkName").is(":focus")
@@ -70,11 +74,11 @@ document.addEventListener("keydown", (e) => {
     return upDir();
   }
 
-  if (e.ctrlKey && e.code == "KeyR") {
+  if (e.ctrlKey && e.code === "KeyR") {
     return refreshDir();
   }
 
-  if (e.ctrlKey && e.altKey && e.code == "KeyD") {
+  if (e.ctrlKey && e.altKey && e.code === "KeyD") {
     return remote.getGlobal("win").webContents.openDevTools();
   }
 });
@@ -90,8 +94,7 @@ function resizeLoc() {
 
   const width = window.innerWidth / 10 - 60;
   if (dir_path.title.length > width) {
-    dir_path.innerText =
-      dir_path.title.substr(0, 8) + "..." + dir_path.title.slice(-(width - 10));
+    dir_path.innerText = `${dir_path.title.substr(0, 8)}...${dir_path.title.slice(-(width - 10))}`;
   } else {
     dir_path.innerText = dir_path.title;
   }
@@ -193,7 +196,7 @@ function install(loc) {
 function loadDir(list) {
   let rows = "";
   let cards = "";
-  let cards_first = [];
+  const cards_first = [];
   for (const item of list) {
     // console.log(item);
     if (!item.createdAt) {
@@ -244,8 +247,8 @@ function loadDir(list) {
       ? `<div class="ribbon-wrapper"><div class="ribbon ribbon-yellow">NEW!</div></div>`
       : "";
     if (item.mp) {
-      let color =
-        item.mp.mp == "yes" ? "green" : item.mp.mp == "no" ? "red" : "yellow";
+      const color =
+        item.mp.mp === "yes" ? "green" : item.mp.mp === "no" ? "red" : "yellow";
       newribbon = `<div class="ribbon-wrapper"><div class="ribbon ribbon-${color}" title="${item.mp.note}">MP: ${item.mp.mp}</div></div>`;
     }
 
@@ -274,9 +277,9 @@ function loadDir(list) {
         <i class="fa-brands fa-square-steam"></i></a> `;
     }
 
-    const youtubeUrl =
-      "https://www.youtube.com/results?search_query=oculus+quest+" +
-      escape(item.simpleName);
+    const youtubeUrl = `https://www.youtube.com/results?search_query=oculus+quest+${escape(
+      item.simpleName,
+    )}`;
     selectBtn += `<a onclick="shell.openExternal('${youtubeUrl}')" title="Search at Youtube" class="btn btn-sm btn-danger">
       <i class="fa-brands fa-youtube"></i></a> `;
 

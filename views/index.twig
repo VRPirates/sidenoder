@@ -70,10 +70,11 @@
             .html(
               `<i class="fa fa-times-circle"></i> ADB Failed. Maybe global installation will be fixed this issue`,
             );
-          if (adb.error)
+          if (adb.error) {
             el.append(
               `<br/><pre style="font-size: x-small;">error: \n${adb.error}</pre>`,
             );
+          }
         }
       }
 
@@ -83,15 +84,18 @@
           el.removeClass('bg-warning').addClass('bg-success')
             .html(`<i class="fa fa-check-circle-o"></i> RCLONE Installed (${rclone.cmd})
             <br/><pre style="font-size: x-small;">${rclone.version}</pre>`);
-          if (remote.getGlobal('currentConfiguration').autoMount) checkMount();
+          if (remote.getGlobal('currentConfiguration').autoMount) {
+            checkMount();
+          }
         } else {
           el.removeClass('bg-warning').addClass('bg-danger')
             .html(`<i class="fa fa-times-circle-o"></i>
           Can't find RCLONE - try to manualy download latest <a class="btn btn-sm btn-info" onclick="shell.openExternal('https://downloads.rclone.org/')">RClone</a> and set custom location at settings`);
-          if (rclone.error)
+          if (rclone.error) {
             el.append(
               `<br/><pre style="font-size: x-small;">error: \n${rclone.error}</pre>`,
             );
+          }
         }
       }
 
@@ -105,10 +109,11 @@
           el.removeClass('bg-warning').addClass('bg-danger')
             .html(`<i class="fa fa-times-circle-o"></i>
           Can't find 7zip Archiver - try to manualy download latest <a class="btn btn-sm btn-info" onclick="shell.openExternal('https://www.7-zip.org/download.html')">7ZIP</a> and set custom location at settings`);
-          if (zip.error)
+          if (zip.error) {
             el.append(
               `<br/><pre style="font-size: x-small;">error: \n${zip.error}</pre>`,
             );
+          }
         }
       }
 
@@ -128,10 +133,11 @@
           el.removeClass('bg-warning').addClass('bg-danger')
             .html(`<i class="fa fa-times-circle-o"></i>
           SCRCPY global installation not found, please read the <a class="btn btn-sm btn-info" onclick="shell.openExternal('https://github.com/Genymobile/scrcpy#${tag}')">MANUAL</a>`);
-          if (scrcpy.error)
+          if (scrcpy.error) {
             el.append(
               `<br/><pre style="font-size: x-small;">error: \n${scrcpy.error}</pre>`,
             );
+          }
         }
       }
     });

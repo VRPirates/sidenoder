@@ -1,6 +1,10 @@
-/*eslint no-unused-vars: ["error", {
-  "varsIgnorePattern": "toggleSearch|sortItems"
-}]*/
+/* eslint
+  no-unused-vars: [
+    "error", {
+      "varsIgnorePattern": "openSearch|sortItems"
+    }
+  ]
+*/
 
 /**
  * A class that manages a search functionality with keyboard events.
@@ -336,8 +340,8 @@ document.addEventListener("keydown", (event) => {
  */
 function sortBy(key, asc) {
   return (a, b) => {
-    var valA = $(a).data(key);
-    var valB = $(b).data(key);
+    const valA = $(a).data(key);
+    const valB = $(b).data(key);
     if (valA < valB) {
       return asc ? -1 : 1;
     }

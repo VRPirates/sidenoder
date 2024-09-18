@@ -218,7 +218,7 @@
     }
 
     for (const key of CHKBOXES) {
-      const el = $id('' + key);
+      const el = $id(`${key}`);
       if (remote.getGlobal('currentConfiguration')[key]) {
         el.prop('checked', true);
       }
@@ -228,32 +228,32 @@
       });
     }
 
-    $id('debugTool').on('click', (e) => {
+    $id('debugTool').on('click', (_e) => {
       remote.getGlobal('win').webContents.openDevTools();
     });
 
-    $id('adbPathBtn').on('click', (e) =>
+    $id('adbPathBtn').on('click', (_e) =>
       setCustomPath(
         'adbPath',
         'Android Debug Bridge custom path',
         'Browse to adb binary location',
       ),
     );
-    $id('rclonePathBtn').on('click', (e) =>
+    $id('rclonePathBtn').on('click', (_e) =>
       setCustomPath(
         'rclonePath',
         'RClone custom path',
         'Browse to rclone binary location',
       ),
     );
-    $id('scrcpyPathBtn').on('click', (e) =>
+    $id('scrcpyPathBtn').on('click', (_e) =>
       setCustomPath(
         'scrcpyPath',
         'SCRCPY custom path',
         'Browse to scrcpy binary location',
       ),
     );
-    $id('rcloneConfBtn').on('click', (e) =>
+    $id('rcloneConfBtn').on('click', (_e) =>
       setCustomPath(
         'rcloneConf',
         'RClone config location',
@@ -262,13 +262,15 @@
           {
             name: 'Config',
             extensions: ['conf', 'cfg', 'ini'],
+          },
+          {
             name: 'All',
             extensions: ['*'],
           },
         ],
       ),
     );
-    $id('tmpdirBtn').on('click', (e) =>
+    $id('tmpdirBtn').on('click', (_e) =>
       setCustomPath(
         'tmpdir',
         'Temp dirrectory custom path',
@@ -280,9 +282,13 @@
 
     ipcRenderer.removeAllListeners('change_config');
     ipcRenderer.on('change_config', (event, { key, val }) => {
-      if (!OPT_KEYS.includes(key)) return;
+      if (!OPT_KEYS.includes(key)) {
+        return;
+      }
       if (['cfgSection', 'rcloneConf', 'mountCmd'].includes(key)) {
-        if (remote.getGlobal('mounted')) checkMount();
+        if (remote.getGlobal('mounted')) {
+          checkMount();
+        }
 
         loadInclude('settings_include.twig');
       }
@@ -301,6 +307,8 @@
         {
           name: 'Exe',
           extensions: ['exe'],
+        },
+        {
           name: 'All',
           extensions: ['*'],
         },
@@ -311,7 +319,9 @@
         message,
         filters,
       });
-      if (res.canceled) return;
+      if (res.canceled) {
+        return;
+      }
 
       const val = res.filePaths[0];
       $(`#${key}`).val(val);

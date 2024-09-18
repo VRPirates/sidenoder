@@ -6,7 +6,9 @@
   "dependencies": {
     "@devicefarmer/adbkit": "3.2.6",
     "@electron/remote": "2.1.2",
+    "@eslint/js": "^9.10.0",
     "@fortawesome/fontawesome-free": "^6.6.0",
+    "@stylistic/eslint-plugin-js": "^2.7.2",
     "adbkit-apkreader": "3.2.0",
     "bootstrap": "^5.3.3",
     "bootswatch": "^5.3.3",
@@ -14,7 +16,12 @@
     "compare-versions": "6.1.1",
     "electron-find": "1.0.7",
     "electron-twig": "1.1.1",
+    "eslint": "^9.10.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-html": "^8.1.1",
+    "eslint-plugin-json": "^4.0.1",
     "fix-path": "4.0.0",
+    "globals": "^15.9.0",
     "jquery": "3.7.1",
     "jquery-ui": "^1.14.0",
     "socks-proxy-agent": "8.0.4",
@@ -35,6 +42,8 @@
     "dist-win": "electron-builder -w",
     "dist-mac": "electron-builder -m",
     "dist-linux": "electron-builder -l",
+    "eslint:check": "eslint .",
+    "eslint:fix": "eslint . --fix",
     "pre-commit": "lint-staged --concurrent false",
     "prettier:check": "prettier --check \"**/*.{css,js,json,md,twig,yml}\"",
     "prettier:format": "prettier --write \"**/*.{css,js,json,md,twig,yml}\"",
@@ -45,6 +54,7 @@
     "prepare": "husky"
   },
   "lint-staged": {
+    "*.{js,html,twig}": "eslint --fix",
     "*.{css,html,js,json,md,twig,yml}": "prettier --write"
   },
   "build": {

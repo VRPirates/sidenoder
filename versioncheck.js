@@ -1,3 +1,11 @@
+/* eslint
+  no-unused-vars: [
+    "error", {
+      "varsIgnorePattern": "checkVersion",
+      "argsIgnorePattern": "^_"
+    }
+  ]
+*/
 const pkg = require("./package.json");
 const compareVersions = require("compare-versions");
 global.version = pkg.version;
@@ -10,9 +18,11 @@ async function checkVersion() {
     const content = JSON.parse(await res.text());
     const remoteversion = content.name;
 
-    console.log("Current version: " + pkg.version);
-    console.log("Github version: " + remoteversion);
-    if (!remoteversion) return;
+    console.log(`Current version: ${pkg.version}`);
+    console.log(`Github version: ${remoteversion}`);
+    if (!remoteversion) {
+      return;
+    }
 
     if (compareVersions.compare(remoteversion, pkg.version, "<=")) {
       console.log("Using latest version");
@@ -30,3 +40,5 @@ async function checkVersion() {
     console.error("checkVersion.Fail", err);
   }
 }
+
+module.exports = checkVersion;

@@ -5,106 +5,96 @@
   tabindex="-1"
   role="dialog"
   aria-labelledby="sideloadModalLabel"
-  data-backdrop="static"
+  data-bs-backdrop="static"
   data-keyboard="false"
 >
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header justify-content-between">
         <h5 class="modal-title" id="sideloadModalLabel">
           <i id="sideloadRefresh" class="fa fa-refresh fa-spin"></i> Sideloading
         </h5>
-        <small id="sideload_transfer_state" class="text-right"></small>
+        <small id="sideload_transfer_state"></small>
       </div>
       <div class="modal-body">
         <span id="sideloadText"></span>
         <br>
-        <div class="row">
+        <div class="row flex-nowrap">
           <div class="col-4">Check device:</div>
           <div>
-            <span id="deviceBadge" class="badge badge-warning">pending</span>
+            <span id="deviceBadge" class="badge bg-warning">pending</span>
           </div>
         </div>
-        <div class="row">
+        <div class="row flex-nowrap">
           <div class="col-4">Download APK:</div>
           <div>
-            <span id="downloadDoneBadge" class="badge badge-warning"
-              >pending</span
-            >
+            <span id="downloadDoneBadge" class="badge bg-warning">pending</span>
           </div>
         </div>
-        <div class="row">
+        <div class="row flex-nowrap">
           <div class="col-4">Read Packageinfo:</div>
           <div>
-            <span id="aaptDoneBadge" class="badge badge-warning">pending</span>
+            <span id="aaptDoneBadge" class="badge bg-warning">pending</span>
           </div>
         </div>
-        <div class="row">
+        <div class="row flex-nowrap">
           <div class="col-4">Check if installed:</div>
           <div>
-            <span id="checkDoneBadge" class="badge badge-warning">pending</span>
+            <span id="checkDoneBadge" class="badge bg-warning">pending</span>
           </div>
         </div>
-        <div class="row">
+        <div class="row flex-nowrap">
           <div class="col-4">Backup Appdata:</div>
           <div>
-            <span id="backupDoneBadge" class="badge badge-warning"
-              >pending</span
-            >
+            <span id="backupDoneBadge" class="badge bg-warning">pending</span>
           </div>
         </div>
-        <div class="row">
+        <div class="row flex-nowrap">
           <div class="col-4">Uninstall APK:</div>
           <div>
-            <span id="uninstallDoneBadge" class="badge badge-warning"
+            <span id="uninstallDoneBadge" class="badge bg-warning"
               >pending</span
             >
           </div>
         </div>
-        <div class="row">
+        <div class="row flex-nowrap">
           <div class="col-4">Install APK:</div>
           <div>
-            <span id="apkDoneBadge" class="badge badge-warning">pending</span>
+            <span id="apkDoneBadge" class="badge bg-warning">pending</span>
           </div>
         </div>
-        <div class="row">
+        <div class="row flex-nowrap">
           <div class="col-4">Restore Appdata:</div>
           <div>
-            <span id="restoreDoneBadge" class="badge badge-warning"
-              >pending</span
-            >
+            <span id="restoreDoneBadge" class="badge bg-warning">pending</span>
           </div>
         </div>
-        <div class="row">
+        <div class="row flex-nowrap">
           <div class="col-4">Remove OBB's:</div>
           <div>
-            <span id="removeObbDoneBadge" class="badge badge-warning"
+            <span id="removeObbDoneBadge" class="badge bg-warning"
               >pending</span
             >
           </div>
         </div>
-        <div class="row">
+        <div class="row flex-nowrap">
           <div class="col-4">Download OBB's:</div>
           <div>
-            <span id="downloadObbDoneBadge" class="badge badge-warning"
+            <span id="downloadObbDoneBadge" class="badge bg-warning"
               >pending</span
             >
           </div>
         </div>
-        <div class="row">
+        <div class="row flex-nowrap">
           <div class="col-4">Copy OBB's:</div>
           <div>
-            <span id="copyObbDoneBadge" class="badge badge-warning"
-              >pending</span
-            >
+            <span id="copyObbDoneBadge" class="badge bg-warning">pending</span>
           </div>
         </div>
-        <div class="row">
+        <div class="row flex-nowrap">
           <div class="col-4">Sideload finished:</div>
           <div>
-            <span id="sideloadDoneBadge" class="badge badge-warning"
-              >pending</span
-            >
+            <span id="sideloadDoneBadge" class="badge bg-warning">pending</span>
           </div>
         </div>
         <div id="sideloadErrorArea" style="display: none">
@@ -128,7 +118,6 @@
         </div>
       </div>
       <div class="modal-footer">
-        {# <button type="button" class="btn btn-secondary disabled" data-dismiss="modal">Close</button> #}
         <button
           type="button"
           id="sideloadDoneBtn"
@@ -223,7 +212,7 @@
 
     remote
       .getGlobal('win')
-      .setProgressBar($('.badge-warning').length / $('.badge').length);
+      .setProgressBar($('.bg-warning').length / $('.badge').length);
 
     if (arg.done) {
       badgeState($id('sideloadDoneBadge'), arg.done);
@@ -259,7 +248,7 @@
 
   function badgeState(badge, text) {
     badge.text(text);
-    if (!badge.hasClass('badge-warning')) return;
+    if (!badge.hasClass('bg-warning')) return;
 
     let state = '';
     if (text === 'done') state = 'success';
@@ -271,7 +260,7 @@
       else return;
     } else return;
 
-    badge.removeClass('badge-warning').addClass('badge-' + state);
+    badge.removeClass('bg-warning').addClass('bg-' + state);
   }
 
   $id('sideloadDoneBtn').on('click', function () {

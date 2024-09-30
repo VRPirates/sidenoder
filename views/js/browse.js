@@ -33,11 +33,11 @@ function addBookmark(name, path, write_cfg = true) {
     return alert("Bookmark name can`t be empty");
   }
   const i = $(".dir-bookmark").length;
-  id("bookmarksdropdown").innerHTML += `<div class="dropdown-item">
-    <a class="dir-bookmark" onclick="getDir('${path}');$id('bookmarksdropdown').toggle()">
+  id("bookmarksdropdown").innerHTML += `<li class="dropdown-item">
+    <a class="dir-bookmark link-underline link-underline-opacity-0 link-underline-opacity-100-hover" onclick="getDir('${path}');">
     <i class="fa fa-star-o"></i> ${name}</a>
-    <a class="float-right text-danger" data-i="${i}" onclick="delBookmark(this)"> x</a>
-  </div>`;
+    <a class="float-end text-danger link-underline link-underline-opacity-0" data-i="${i}" onclick="delBookmark(this)"> x</a>
+  </li>`;
   if (write_cfg) {
     const bookmarks = remote.getGlobal("currentConfiguration").dirBookmarks;
     bookmarks.push({ name, path });
@@ -198,7 +198,7 @@ function loadDir(list) {
     // console.log(item);
     if (!item.createdAt) {
       cards_first.unshift(
-        `<div class="listitem badge badge-danger"><i class="fa fa-times-circle-o"></i> ${item.name}</div>`,
+        `<div class="listitem badge bg-danger"><i class="fa fa-times-circle-o"></i> ${item.name}</div>`,
       );
       continue;
     }
@@ -337,7 +337,6 @@ function sortFiles(key, asc) {
 
   sortElements($id("browseCardBody"), key, asc);
   sortFileElements($id("listTable"), key, asc);
-  $id("searchdropdownmenu").hide();
 
   ipcRenderer.send("change_config", { key: "sortFiles", val: key + suffix });
 }

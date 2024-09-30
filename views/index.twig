@@ -22,22 +22,22 @@
           Sidenoder Dir: {{ sidenoderHome }}
         </h4>
         <h4>
-          <div class="badge badge-warning text-left" id="adbCheckIndicator">
+          <div class="badge bg-warning text-start" id="adbCheckIndicator">
             Android Debug Bridge - checking..
           </div>
         </h4>
         <h4>
-          <div class="badge badge-warning text-left" id="rcloneCheckIndicator">
+          <div class="badge bg-warning text-start" id="rcloneCheckIndicator">
             RCLONE - checking..
           </div>
         </h4>
         <h4>
-          <div class="badge badge-warning text-left" id="zipCheckIndicator">
+          <div class="badge bg-warning text-start" id="zipCheckIndicator">
             7zip Archiver - checking..
           </div>
         </h4>
         <h4>
-          <div class="badge badge-warning text-left" id="scrcpyCheckIndicator">
+          <div class="badge bg-warning text-start" id="scrcpyCheckIndicator">
             SCRCPY - checking..
           </div>
         </h4>
@@ -61,12 +61,12 @@
       if (adb) {
         const el = $id('adbCheckIndicator');
         if (adb.version) {
-          el.removeClass('badge-warning').addClass('badge-success')
+          el.removeClass('bg-warning').addClass('bg-success')
             .html(`<i class="fa fa-check-circle-o"></i> ADB Instaled (${adb.cmd})
             <br/><pre style="font-size: x-small;">${adb.version}</pre>`);
         } else {
-          el.removeClass('badge-warning')
-            .addClass('badge-danger')
+          el.removeClass('bg-warning')
+            .addClass('bg-danger')
             .html(
               `<i class="fa fa-times-circle"></i> ADB Failed. Maybe global installation will be fixed this issue`,
             );
@@ -80,12 +80,12 @@
       if (rclone) {
         const el = $id('rcloneCheckIndicator');
         if (rclone.version) {
-          el.removeClass('badge-warning').addClass('badge-success')
+          el.removeClass('bg-warning').addClass('bg-success')
             .html(`<i class="fa fa-check-circle-o"></i> RCLONE Installed (${rclone.cmd})
             <br/><pre style="font-size: x-small;">${rclone.version}</pre>`);
           if (remote.getGlobal('currentConfiguration').autoMount) checkMount();
         } else {
-          el.removeClass('badge-warning').addClass('badge-danger')
+          el.removeClass('bg-warning').addClass('bg-danger')
             .html(`<i class="fa fa-times-circle-o"></i>
           Can't find RCLONE - try to manualy download latest <a class="btn btn-sm btn-info" onclick="shell.openExternal('https://downloads.rclone.org/')">RClone</a> and set custom location at settings`);
           if (rclone.error)
@@ -98,11 +98,11 @@
       if (zip) {
         const el = $id('zipCheckIndicator');
         if (zip.version) {
-          el.removeClass('badge-warning').addClass('badge-success')
+          el.removeClass('bg-warning').addClass('bg-success')
             .html(`<i class="fa fa-check-circle-o"></i> 7zip Archiver installed (${zip.cmd})
             <br/><pre style="font-size: x-small;">${zip.version}</pre>`);
         } else {
-          el.removeClass('badge-warning').addClass('badge-danger')
+          el.removeClass('bg-warning').addClass('bg-danger')
             .html(`<i class="fa fa-times-circle-o"></i>
           Can't find 7zip Archiver - try to manualy download latest <a class="btn btn-sm btn-info" onclick="shell.openExternal('https://www.7-zip.org/download.html')">7ZIP</a> and set custom location at settings`);
           if (zip.error)
@@ -115,8 +115,8 @@
       if (scrcpy) {
         const el = $id('scrcpyCheckIndicator');
         if (scrcpy.version) {
-          el.removeClass('badge-warning')
-            .addClass('badge-success')
+          el.removeClass('bg-warning')
+            .addClass('bg-success')
             .html(
               `<i class="fa fa-check-circle-o"></i> SCRCPY Installed (${scrcpy.cmd})<br/><pre style="font-size: x-small;">${scrcpy.version}</pre>`,
             );
@@ -125,7 +125,7 @@
             .getGlobal('platform')
             .replace('win', 'windows')
             .replace('mac', 'macos');
-          el.removeClass('badge-warning').addClass('badge-danger')
+          el.removeClass('bg-warning').addClass('bg-danger')
             .html(`<i class="fa fa-times-circle-o"></i>
           SCRCPY global installation not found, please read the <a class="btn btn-sm btn-info" onclick="shell.openExternal('https://github.com/Genymobile/scrcpy#${tag}')">MANUAL</a>`);
           if (scrcpy.error)

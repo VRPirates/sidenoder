@@ -15,24 +15,23 @@
     <!-- A simple hack that makes it possible to use jQueryUI with Electron -->
     <script src="../node_modules/jquery-ui/dist/jquery-ui.min.js"></script>
 
-    <!--
-      <script src="https://unpkg.com/@popperjs/core@2" crossorigin="anonymous"></script>
-    -->
-    <!--
-      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" crossorigin="anonymous"></script>
-    -->
-    <script src="js/bootstrap.min.js"></script>
+    <!-- Bootstrap JS with Popper -->
+    <script
+      src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+    ></script>
     <script src="js/main.js"></script>
 
     <!-- Bootstrap CSS -->
-    <!--
-      <link rel="stylesheet" href="css/bootstrap.min.css" crossorigin="anonymous">
-    -->
+    <link
+      rel="stylesheet"
+      href="../node_modules/bootstrap/dist/css/bootstrap.min.css"
+    >
 
-    <link rel="stylesheet" href="css/bootstrap-slate.min.css">
-    <!--
-      <link rel="stylesheet" href="https://bootswatch.com/4/sandstone/bootstrap.min.css">
-    -->
+    <!-- Bootswatch CSS (slate theme) -->
+    <link
+      rel="stylesheet"
+      href="../node_modules/bootswatch/dist/slate/bootstrap.min.css"
+    >
     <link
       rel="stylesheet"
       href="../node_modules/@fortawesome/fontawesome-free/css/all.min.css"
@@ -117,14 +116,14 @@
             src="img/quest-sidenoder-light.svg"
             width="60"
             height="50"
-            class="mr-2"
+            class="me-2"
           >
           {% block navbar %}
             <div class="navbar-collapse">
-              <ul class="navbar-nav mr-auto">
+              <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                   <a
-                    class="btn btn-primary mr-1"
+                    class="btn btn-primary me-1"
                     onclick="loadInclude('browse_include.twig', null, () => ipcRenderer.send('get_dir', ''));"
                   >
                     <i class="fa fa-folder-open-o"></i>
@@ -134,7 +133,7 @@
                 <li class="nav-item">
                   <a
                     id="remotebtn"
-                    class="disabled btn btn-info mr-1"
+                    class="disabled btn btn-info me-1"
                     onclick="loadInclude('browse_include.twig', null, () => ipcRenderer.send('get_dir', remote.getGlobal('mountFolder')));"
                   >
                     <i class="fa fa-folder-open-o"></i>
@@ -143,7 +142,7 @@
                 </li>
                 <li class="nav-item">
                   <a
-                    class="adbdev disabled btn btn-primary mr-1"
+                    class="adbdev disabled btn btn-primary me-1"
                     onclick="loadInclude('modals/installed.twig', 'installedmodaldiv')"
                     title="Installed APP's"
                   >
@@ -153,7 +152,7 @@
                 </li>
                 <li class="nav-item">
                   <a
-                    class="adbdev btn btn-primary mr-1"
+                    class="adbdev btn btn-primary me-1"
                     onclick="loadInclude('modals/tweaks.twig', 'tweaksmodaldiv')"
                     title="Device tweaks"
                   >
@@ -162,7 +161,7 @@
                 </li>
                 <li class="nav-item">
                   <a
-                    class="btn btn-primary mr-1"
+                    class="btn btn-primary me-1"
                     onclick="loadInclude('settings_include.twig')"
                     title="Settings"
                   >

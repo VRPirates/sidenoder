@@ -20,8 +20,8 @@
       const danger = Math.min(5, Math.max(0, percent - 95));
 
       id('storageDiv').innerHTML = `
-      <small class="pull-left">Used: ${storage.used} of ${storage.size}(${storage.percent})</small>
-      <small class="pull-right">Free: ${storage.free}</small><br/>
+      <small class="float-start">Used: ${storage.used} of ${storage.size}(${storage.percent})</small>
+      <small class="float-end">Free: ${storage.free}</small><br/>
       <div class="progress">
         <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: ${success}%" aria-valuenow="${success}" aria-valuemin="0" aria-valuemax="100"></div>
         <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: ${warning}%" aria-valuenow="${warning}" aria-valuemin="0" aria-valuemax="100"></div>

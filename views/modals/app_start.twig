@@ -4,37 +4,31 @@
   tabindex="-1"
   role="dialog"
   aria-labelledby="appStartModalLabel"
-  data-backdrop="static"
+  data-bs-backdrop="static"
   data-keyboard="false"
 >
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" data-bs-theme="dark">
         <h5 class="modal-title" id="appStartModalLabel">Launch application</h5>
         <button
           type="button"
-          class="close"
-          data-dismiss="modal"
+          class="btn-close"
           aria-label="Close"
-        >
-          <span>&times;</span>
-        </button>
+          data-bs-dismiss="modal"
+        ></button>
       </div>
       <div class="modal-body">
-        <div class="form-group">
+        <div>
           <label for="appActivities">List of activities</label>
-          <select class="custom-select" id="appActivities"></select>
+          <select class="form-select" id="appActivities"></select>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Cancel
         </button>
-        <button
-          type="button"
-          id="startActivityButton"
-          class="btn btn-primary disabled"
-        >
+        <button type="button" id="startActivityButton" class="btn btn-primary">
           Start
         </button>
       </div>

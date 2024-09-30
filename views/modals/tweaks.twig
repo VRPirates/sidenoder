@@ -1,20 +1,18 @@
 <div class="modal" id="tweaksModal">
   <div
+    class="modal-dialog"
     role="document"
-    style="margin: 1.75rem auto; min-width: 800px; max-width: 50%"
+    style="margin: 1.75rem auto; min-width:850px; max-width:50%"
   >
-    <!-- class="modal-dialog" -->
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" data-bs-theme="dark">
         <h5 class="modal-title" id="tweaksModalLabel">Device Tweaks</h5>
         <button
           type="button"
-          class="close"
-          data-dismiss="modal"
+          class="btn-close"
           aria-label="Close"
-        >
-          <span>&times;</span>
-        </button>
+          data-bs-dismiss="modal"
+        ></button>
       </div>
       <div class="modal-body">
         <div class="alert alert-warning">
@@ -27,7 +25,7 @@
         <div class="card bg-primary mb-2">
           <div class="card-header">Tools:</div>
           <div class="card-body">
-            <div class="form-group">
+            <div class="mb-3">
               <a id="scrcpyCfg" class="adbdev btn btn-primary">
                 <i class="fa fa-share-square"></i> Screen share
               </a>
@@ -47,7 +45,7 @@
             </div>
 
             <!--
-              <div class="form-group mb-3">
+              <div class="mb-3">
                 <h6 class="card-title">
                   Proximity sensor
                   <a id="proximityOn" class="btn btn-sm btn-info" />Enable</a>
@@ -56,7 +54,7 @@
               </div>
             -->
 
-            <div class="form-check mb-3">
+            <div class="form-check form-switch mb-3">
               <label for="guardian_pause" class="form-check-label">
                 <input
                   class="adbdev form-check-input"
@@ -67,7 +65,7 @@
               </label>
             </div>
 
-            <div class="form-group mb-0">
+            <div class="mb-0">
               <label for="mp_name" class="mb-0">
                 <h6 class="card-title mb-0">Global multiplayer name</h6>
                 <small class="card-text">
@@ -96,7 +94,7 @@
                 </ol>
               </small>
             </div>
-            <div class="form-group mb-0">
+            <div class="mb-0">
               <label for="updateFwPath" class="mb-0">Path to update.zip:</label>
               <div class="input-group mb-2">
                 <input id="updateFwPath" class="form-control" value="">
@@ -116,7 +114,7 @@
           <div class="card-header">Snapshots:</div>
           <div class="card-body">
             <!--
-              <div class="form-group">
+              <div>
                 <a id="pullScreenshots" class="adbdev btn btn-primary">
                   <i class="fa fa-download"></i> Grub the Screenshots
                 </a>
@@ -124,7 +122,7 @@
                   <i class="fa fa-download"></i> Grub the Videoshots
                 </a>
               </div>
-              <div class="form-check mb-3">
+              <div class="form-check form-switch mb-3">
                 <label for="snapshotsDelete" class="form-check-label">
                   <input class="adbdev form-check-input" type="checkbox" id="snapshotsDelete">
                   Clear from device after pulling
@@ -132,14 +130,14 @@
               </div>
               <hr/>
             -->
-            <div class="form-group mb-3">
+            <div class="mb-3">
               <label class="mb-0" for="cres">
                 <h6 class="card-title mb-0">Set Screenshots Size</h6>
                 <small class="card-text"
                   >This changes the resolution of screenshots on the Quest
                 </small>
               </label>
-              <select class="adbdev custom-select" id="cres">
+              <select class="adbdev form-select" id="cres">
                 <option value="640x480">640x480</option>
                 <option value="1024x1024">1024x1024 (Quest2)</option>
                 <option value="1280x720">1280x720</option>
@@ -147,33 +145,33 @@
                 <option value="3840x1920">3840x1920 (default - Quest3)</option>
               </select>
             </div>
-            <div class="form-group mb-3">
+            <div class="mb-3">
               <label class="mb-0" for="vres">
                 <h6 class="card-title mb-0">Set Video Capture Size</h6>
                 <small class="card-text"
                   >This changes the resolution of captured videos on the Quest</small
                 >
               </label>
-              <select class="adbdev custom-select" id="vres">
+              <select class="adbdev form-select" id="vres">
                 <option value="1024">1024</option>
                 <option value="1536">1536</option>
               </select>
             </div>
             <!--
-              <div class="form-group mb-3">
+              <div class="mb-3">
                 <label class="mb-1" for="svb">
                   <h6 class="card-title mb-0">Capture Video Bitrate ( Go Only )</h6>
                   <small class="card-text">This will increase the quality of captured videos on Oculus Go.
                   </small>
                 </label>
-                <select class="adbdev custom-select" id="svb">
+                <select class="adbdev form-select" id="svb">
                   <option value="5000000">5Mbps</option>
                   <option value="15000000">15Mbps</option>
                   <option value="25000000">25Mbps</option>
                 </select>
               </div>
             -->
-            <div class="form-check mb-0">
+            <div class="form-check form-switch mb-0">
               <label for="frc" class="form-check-label">
                 <input
                   class="adbdev form-check-input"
@@ -190,7 +188,7 @@
         <div class="card bg-primary mb-2">
           <div class="card-header">Graficaly tweaks:</div>
           <div class="card-body">
-            <div class="form-group mb-3">
+            <div class="mb-3">
               <label class="mb-0" for="gRR">
                 <h6 class="card-title mb-0">Refresh Rate</h6>
                 <small class="card-text"
@@ -204,7 +202,7 @@
                   setting for apps that dont have it natively enabled.
                 </small>
               </label>
-              <select class="adbdev custom-select" id="gRR">
+              <select class="adbdev form-select" id="gRR">
                 <option value="72">default(72 Hz)</option>
                 <option value="60">60 Hz</option>
                 <option value="72">72 Hz</option>
@@ -212,17 +210,17 @@
                 <option value="120">120 Hz</option>
               </select>
             </div>
-            <div class="form-group mb-3">
+            <div class="mb-3">
               <label class="mb-0" for="gCA">
                 <h6 class="card-title mb-0">Chromatic Aberration</h6>
               </label>
-              <select class="adbdev custom-select" id="gCA">
+              <select class="adbdev form-select" id="gCA">
                 <option value="-1">by app</option>
                 <option value="1">on</option>
                 <option value="0">off</option>
               </select>
             </div>
-            <div class="form-group mb-3">
+            <div class="mb-3">
               <label class="mb-0" for="gFFR">
                 <h6 class="card-title mb-0">
                   FFR(Fixed Foveated Rendering) level
@@ -234,7 +232,7 @@
                   device.
                 </small>
               </label>
-              <select class="adbdev custom-select" id="gFFR">
+              <select class="adbdev form-select" id="gFFR">
                 <option value="2">default(medium)</option>
                 <option value="0">off</option>
                 <option value="1">low</option>
@@ -243,7 +241,7 @@
                 <option value="4">high top</option>
               </select>
             </div>
-            <div class="form-group mb-3">
+            <div class="mb-3">
               <label class="mb-0" for="gSSO">
                 <h6 class="card-title mb-0">Default Texture Size</h6>
                 <small class="card-text">
@@ -251,7 +249,7 @@
                   are rendered at.
                 </small>
               </label>
-              <select class="adbdev custom-select" id="gSSO">
+              <select class="adbdev form-select" id="gSSO">
                 <option value="1440x1584">default - Quest2 (1440x1584)</option>
                 <option value="1216x1344">default - Quest1 (1216x1344)</option>
                 <option value="1024x1024">default - Go (1024x1024)</option>
@@ -264,14 +262,14 @@
               </select>
             </div>
             <div class="row mb-0">
-              <div class="form-group col-6">
+              <div class="col-6">
                 <label class="mb-0" for="CPU">
                   <h6 class="card-title mb-0">Set CPU level</h6>
                   <small class="card-text">
                     This can improve performance for 2D apps & games.
                   </small>
                 </label>
-                <select class="adbdev custom-select" id="CPU">
+                <select class="adbdev form-select" id="CPU">
                   <option value="-1">dynamic</option>
                   <option value="0">level 0 (slowest)</option>
                   <option value="1">level 1</option>
@@ -280,14 +278,14 @@
                   <option value="4">level 4 (fastest)</option>
                 </select>
               </div>
-              <div class="form-group col-6">
+              <div class="col-6">
                 <label class="mb-0" for="GPU">
                   <h6 class="card-title mb-0">Set GPU level</h6>
                   <small class="card-text">
                     This can improve performance for 2D apps & games.
                   </small>
                 </label>
-                <select class="adbdev custom-select" id="GPU">
+                <select class="adbdev form-select" id="GPU">
                   <option value="-1">dynamic</option>
                   <option value="0">level 0 (slowest)</option>
                   <option value="1">level 1</option>
@@ -301,7 +299,12 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          aria-label="Close"
+          data-bs-dismiss="modal"
+        >
           Close
         </button>
       </div>

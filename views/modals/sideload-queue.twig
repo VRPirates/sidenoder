@@ -1,29 +1,27 @@
 <!-- Modal -->
 <div
   class="modal fade modal-right"
-  id="sideloadQueueModal"
+  id="sideload-queue-modal"
   tabindex="-1"
   role="dialog"
-  aria-labelledby="sideloadQueueModalLabel"
-  data-backdrop="static"
+  aria-labelledby="sideloadModalLabel"
+  data-bs-backdrop="static"
   data-keyboard="false"
 >
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" data-bs-theme="dark">
         <h5 class="modal-title" id="sideloadModalLabel">
           <i id="sideloadRefresh" class="fa fa-refresh"></i> Sideload queue
         </h5>
         <!-- fa-spin -->
-        <small id="sideload_transfer_state" class="text-right"></small>
+        <small id="sideload_transfer_state" class="text-end"></small>
         <button
           type="button"
-          class="close"
-          data-dismiss="modal"
+          class="btn-close"
           aria-label="Close"
-        >
-          <span>&times;</span>
-        </button>
+          data-bs-dismiss="modal"
+        ></button>
       </div>
       <div class="modal-body">
         <table
@@ -48,7 +46,7 @@
                 <span class="processText">Check device</span>
               </td>
               <td>
-                <span class="processBadge badge badge-warning">pending</span>
+                <span class="processBadge badge bg-warning">pending</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-primary" title="remove">x</a>
@@ -66,7 +64,7 @@
                 <span class="processText">Download APK</span>
               </td>
               <td>
-                <span class="processBadge badge badge-success">success</span>
+                <span class="processBadge badge bg-success">success</span>
               </td>
               <td></td>
             </tr>
@@ -81,7 +79,7 @@
                 <span class="processText">Package info</span>
               </td>
               <td>
-                <span class="processBadge badge badge-danger">fail</span>
+                <span class="processBadge badge bg-danger">fail</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-danger" title="retry"
@@ -98,7 +96,7 @@
                 <span class="processText">Check if installed</span>
               </td>
               <td>
-                <span class="processBadge badge badge-warning">pending</span>
+                <span class="processBadge badge bg-warning">pending</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-primary" title="remove">x</a>
@@ -115,7 +113,7 @@
                 <span class="processText">Restore Appdata</span>
               </td>
               <td>
-                <span class="processBadge badge badge-warning">pending</span>
+                <span class="processBadge badge bg-warning">pending</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-primary" title="remove">x</a>
@@ -132,7 +130,7 @@
                 <span class="processText">Copy OBB's</span>
               </td>
               <td>
-                <span class="processBadge badge badge-warning">pending</span>
+                <span class="processBadge badge bg-warning">pending</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-primary" title="remove">x</a>
@@ -149,7 +147,7 @@
                 <span class="processText">Check device</span>
               </td>
               <td>
-                <span class="processBadge badge badge-warning">pending</span>
+                <span class="processBadge badge bg-warning">pending</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-primary" title="remove">x</a>
@@ -166,7 +164,7 @@
                 <span class="processText">Check device</span>
               </td>
               <td>
-                <span class="processBadge badge badge-warning">pending</span>
+                <span class="processBadge badge bg-warning">pending</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-primary" title="remove">x</a>
@@ -183,7 +181,7 @@
                 <span class="processText">Check device</span>
               </td>
               <td>
-                <span class="processBadge badge badge-warning">pending</span>
+                <span class="processBadge badge bg-warning">pending</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-primary" title="remove">x</a>
@@ -200,7 +198,7 @@
                 <span class="processText">Check device</span>
               </td>
               <td>
-                <span class="processBadge badge badge-warning">pending</span>
+                <span class="processBadge badge bg-warning">pending</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-primary" title="remove">x</a>
@@ -217,7 +215,7 @@
                 <span class="processText">Check device</span>
               </td>
               <td>
-                <span class="processBadge badge badge-warning">pending</span>
+                <span class="processBadge badge bg-warning">pending</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-primary" title="remove">x</a>
@@ -234,7 +232,7 @@
                 <span class="processText">Check device</span>
               </td>
               <td>
-                <span class="processBadge badge badge-warning">pending</span>
+                <span class="processBadge badge bg-warning">pending</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-primary" title="remove">x</a>
@@ -251,7 +249,7 @@
                 <span class="processText">Check device</span>
               </td>
               <td>
-                <span class="processBadge badge badge-warning">pending</span>
+                <span class="processBadge badge bg-warning">pending</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-primary" title="remove">x</a>
@@ -268,7 +266,7 @@
                 <span class="processText">Check device</span>
               </td>
               <td>
-                <span class="processBadge badge badge-warning">pending</span>
+                <span class="processBadge badge bg-warning">pending</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-primary" title="remove">x</a>
@@ -285,7 +283,7 @@
                 <span class="processText">Check device</span>
               </td>
               <td>
-                <span class="processBadge badge badge-warning">pending</span>
+                <span class="processBadge badge bg-warning">pending</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-primary" title="remove">x</a>
@@ -302,7 +300,7 @@
                 <span class="processText">Check device</span>
               </td>
               <td>
-                <span class="processBadge badge badge-warning">pending</span>
+                <span class="processBadge badge bg-warning">pending</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-primary" title="remove">x</a>
@@ -319,7 +317,7 @@
                 <span class="processText">Check device</span>
               </td>
               <td>
-                <span class="processBadge badge badge-warning">pending</span>
+                <span class="processBadge badge bg-warning">pending</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-primary" title="remove">x</a>
@@ -336,7 +334,7 @@
                 <span class="processText">Check device</span>
               </td>
               <td>
-                <span class="processBadge badge badge-warning">pending</span>
+                <span class="processBadge badge bg-warning">pending</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-primary" title="remove">x</a>
@@ -353,7 +351,7 @@
                 <span class="processText">Check device</span>
               </td>
               <td>
-                <span class="processBadge badge badge-warning">pending</span>
+                <span class="processBadge badge bg-warning">pending</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-primary" title="remove">x</a>
@@ -370,7 +368,7 @@
                 <span class="processText">Check device</span>
               </td>
               <td>
-                <span class="processBadge badge badge-warning">pending</span>
+                <span class="processBadge badge bg-warning">pending</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-primary" title="remove">x</a>
@@ -387,7 +385,7 @@
                 <span class="processText">Check device</span>
               </td>
               <td>
-                <span class="processBadge badge badge-warning">pending</span>
+                <span class="processBadge badge bg-warning">pending</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-primary" title="remove">x</a>
@@ -404,7 +402,7 @@
                 <span class="processText">Check device</span>
               </td>
               <td>
-                <span class="processBadge badge badge-warning">pending</span>
+                <span class="processBadge badge bg-warning">pending</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-primary" title="remove">x</a>
@@ -421,7 +419,7 @@
                 <span class="processText">Check device</span>
               </td>
               <td>
-                <span class="processBadge badge badge-warning">pending</span>
+                <span class="processBadge badge bg-warning">pending</span>
               </td>
               <td>
                 <a class="actionBadge btn-sm btn-primary" title="remove">x</a>
@@ -443,14 +441,26 @@
   </div>
 </div>
 
-<a class="btn btn-info btn-floating btn-lg" id="showQueue" onclick="showQueue()"
+<a
+  class="btn btn-info btn-floating btn-lg"
+  id="show-queue"
+  onclick="showQueue()"
   >1</a
 >
 <script>
-  $id('showQueue').show(100);
+  /* global getUpdates */
+  /* eslint
+    no-unused-vars: [
+      "error", {
+        "varsIgnorePattern": "showQueue|sideloadQueue",
+        "argsIgnorePattern": "^_"
+      }
+    ]
+  */
+  $id('show-queue').show(100);
 
   function showQueue() {
-    $id('sideloadQueueModal').modal('show');
+    $id('sideload-queue-modal').modal('show');
   }
 
   function hash(s) {
@@ -458,7 +468,7 @@
       .split('')
       .reduce((a, b) => ((a << 5) - a + b.charCodeAt(0)) | 0, 0)
       .toString(18);
-    return r < 0 ? 'm' + Math.abs(r) : r;
+    return r < 0 ? `m${Math.abs(r)}` : r;
   }
 
   ipcRenderer.removeAllListeners('sideload_add_queue');
@@ -470,15 +480,17 @@
 
     const sideloadQueue = $('#sideloadQueue tr').length;
     if (data.length) {
-      $id('showQueue').text($('#sideloadQueue tr').length);
-      $id('showQueue').show();
+      $id('show-queue').text($('#sideloadQueue tr').length);
+      $id('show-queue').show();
     }
   });
 
   ipcRenderer.removeAllListeners('process_data');
   ipcRenderer.on('process_data', (event, data) => {
     console.log('process_data received', data);
-    if (!data) return (id('sideload_transfer_state').innerHTML = '');
+    if (!data) {
+      return (id('sideload_transfer_state').innerHTML = '');
+    }
 
     let line = `${data.cmd}: ${formatBytes(data.bytes)}`;
     if (data.size) {
@@ -498,19 +510,21 @@
     console.log('start_sideload msg came ! ');
     console.log(arg);
     const { success, path } = arg;
-    if (!success) return;
+    if (!success) {
+      return;
+    }
 
     const lastslashindex = path.lastIndexOf('/');
     const file = path.substring(lastslashindex + 1);
 
     $id('sideloadModal').modal('show');
-    id('sideloadText').innerHTML = 'pending: <br/><b>' + file + '</b>';
+    id('sideloadText').innerHTML = `pending: <br/><b>${file}</b>`;
   });
 
   ipcRenderer.removeAllListeners('sideload_process');
   ipcRenderer.on('sideload_process', (event, arg) => {
     console.log('sideload_process', arg);
-    const job = $id('queue' + hash(arg.path));
+    const job = $id(`queue${hash(arg.path)}`);
 
     if (arg.device) {
       badgeState(job.find('.deviceBadge'), arg.device);
@@ -558,7 +572,7 @@
 
     remote
       .getGlobal('win')
-      .setProgressBar($('.badge-warning').length / $('.badge').length);
+      .setProgressBar($('.bg-warning').length / $('.badge').length);
 
     if (arg.done) {
       badgeState(job.find('.sideloadDoneBadge'), arg.done);
@@ -573,12 +587,13 @@
         .removeClass('fa-spin')
         .addClass('fa-check-circle-o');
 
-      if (!arg.error)
+      if (!arg.error) {
         remote.getGlobal('notify')(
           'Sucesfully sideloaded',
           arg.location,
           'low',
         );
+      }
     }
 
     if (arg.update) {
@@ -592,23 +607,33 @@
     }
   });
 
-  function sideloadAddQueue(data) {}
+  function sideloadAddQueue(_data) {}
 
   function badgeState(badge, text) {
     badge.text(text);
-    if (!badge.hasClass('badge-warning')) return;
+    if (!badge.hasClass('bg-warning')) {
+      return;
+    }
 
     let state = '';
-    if (text === 'done') state = 'success';
-    else if (text === 'skip') state = 'secondary';
-    else if (text === 'fail') state = 'danger';
-    else if (text.includes('/')) {
+    if (text === 'done') {
+      state = 'success';
+    } else if (text === 'skip') {
+      state = 'secondary';
+    } else if (text === 'fail') {
+      state = 'danger';
+    } else if (text.includes('/')) {
       const parts = text.split('/');
-      if (parts[0] == parts[1]) state = 'success';
-      else return;
-    } else return;
+      if (parts[0] === parts[1]) {
+        state = 'success';
+      } else {
+        return;
+      }
+    } else {
+      return;
+    }
 
-    badge.removeClass('badge-warning').addClass('badge-' + state);
+    badge.removeClass('bg-warning').addClass(`bg-${state}`);
   }
 
   $id('sideloadDoneBtn').on('click', function () {

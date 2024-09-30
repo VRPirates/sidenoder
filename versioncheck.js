@@ -1,6 +1,4 @@
 const pkg = require("./package.json");
-const fetch = (...args) =>
-  import("node-fetch").then(({ default: fetch }) => fetch(...args));
 const compareVersions = require("compare-versions");
 global.version = pkg.version;
 

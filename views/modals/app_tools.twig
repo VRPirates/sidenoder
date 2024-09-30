@@ -1,21 +1,13 @@
 <!-- Modal -->
 <div class="modal" id="appToolModal">
   <div
+    class="modal-dialog"
     role="document"
-    style="margin: 1.75rem auto; min-width: 580px; max-width: 40%"
+    style="margin: 1.75rem auto; min-width:580px; max-width:40%"
   >
-    <!-- class="modal-dialog" -->
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="appToolModalLabel">App tools</h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
-          <span>&times;</span>
-        </button>
+        <h5 class="modal-title" id="appToolModalLabel">App Tools</h5>
       </div>
       <div class="modal-body">
         <h4 class="text-center" id="packageName"></h4>
@@ -28,7 +20,7 @@
               before
             </small>
           </div>
-          <div class="form-group">
+          <div>
             <label class="mb-1" for="app_username">
               <h6 class="card-title mb-0">User/Multiplayer name</h6>
               <small class="card-text">
@@ -64,7 +56,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Close
         </button>
       </div>
@@ -72,12 +64,15 @@
   </div>
 </div>
 <script>
+  /* global startApp, uninstall */
   console.log('ONLOAD APPTOOL MODAL');
 
   ipcRenderer.removeAllListeners('process_data');
   ipcRenderer.on('process_data', (event, data) => {
     console.log('process_data received', data);
-    if (!data) return (id('tools_transfer_state').innerHTML = '');
+    if (!data) {
+      return (id('tools_transfer_state').innerHTML = '');
+    }
 
     let line = `${data.cmd}: ${formatBytes(data.bytes)}`;
     if (data.size) {
@@ -141,11 +136,11 @@
     console.log('app_tools msg came: ', arg);
     $id('processingModal').modal('hide');
 
-    const { package, backupPath, availableRestore, availableConfig } = arg;
+    const { pkg, availableRestore, availableConfig } = arg;
 
     $id('packageName').text(pkg);
 
-    $id('startAppBtn').click(({ target }) => {
+    $id('startAppBtn').click(() => {
       startApp(pkg);
       return true;
     });
@@ -168,9 +163,9 @@
       ipcRenderer.send('data_restore', pkg);
       return true;
     });
-    $id('backupAppPath').click((e) => {
+    $id('backupAppPath').click(() => {
       shell.openPath(
-        path.join(remote.getGlobal('sidenoderHome'), 'backup_data', package),
+        path.join(remote.getGlobal('sidenoderHome'), 'backup_data', pkg),
       );
       return true;
     });
@@ -189,7 +184,7 @@
         .change(({ target }) => {
           $(target).removeClass('is-valid');
           ipcRenderer.send('app_config_set', {
-            package,
+            pkg,
             key: 'username',
             val: target.value,
           });
@@ -206,7 +201,9 @@
       message: 'Browse location for new backup',
       properties: ['openDirectory'],
     });
-    if (file.canceled) return $id('backupAppBtn').removeClass('disabled');
+    if (file.canceled) {
+      return $id('backupAppBtn').removeClass('disabled');
+    }
 
     console.log('setAppBackupPath', pkg, file);
     const location = file.filePaths[0];

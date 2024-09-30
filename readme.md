@@ -1,3 +1,5 @@
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+
 **SideNoder** - A **cross platform sideloader** for Quest(1&2&3) standalone vr headset.
 
 # Quest 3 compatibility fix added in v 0.8.0
@@ -55,9 +57,15 @@ Other version of rclone will not work.
 Also android tools and scrcpy is required:
 
 ```bash
- brew install scrcpy
+brew install scrcpy
 brew install android-platform-tools
 ```
+
+---
+
+## Contributing to Sidenoder
+
+To contribute to Sidenoder, please reqd our [Contributors Guide](./CONTRIBUTING.md).
 
 ---
 

@@ -1,6 +1,10 @@
-/*eslint no-unused-vars: ["error", {
-  "varsIgnorePattern": "openSearch|sortItems"
-}]*/
+/* eslint
+  no-unused-vars: [
+    "error", {
+      "varsIgnorePattern": "openSearch|sortItems"
+    }
+  ]
+*/
 
 /**
  * A class that manages a search functionality with keyboard events.
@@ -34,13 +38,19 @@ class FindDialog {
   /**
    * Toggle the visibility of the search box.
    *
+   * @param {boolean} [display] Use true to show the element or false to hide it.
+   *
    * @return {this} The instance of FindDialog.
    */
-  toggle() {
-    $(".find-box").toggle();
+  toggle(display) {
+    if (typeof display !== "undefined") {
+      $(".find-box").toggle(display);
+    } else {
+      $(".find-box").toggle();
+    }
     this.clear();
 
-    if (this.isVisible) {
+    if (FindDialog.isVisible) {
       this.dom.style.top = this.calcSearchTop;
       this.focus();
     }
@@ -71,10 +81,11 @@ class FindDialog {
   /**
    * Get search box visibility
    *
+   * @static
    * @readonly
    * @type {boolean} Is visible
    */
-  get isVisible() {
+  static get isVisible() {
     const $findBox = $(".find-box");
     return $findBox.length > 0 && $findBox.css("display") !== "none";
   }
@@ -119,7 +130,6 @@ class FindDialog {
   destroy() {
     document.removeEventListener("keydown", this._onKeydown);
     document.removeEventListener("keydown", this._onResize);
-    this._onKeydown = null;
     this._onResize = null;
     this._handler = null;
     FindDialog.instance = null;
@@ -137,17 +147,7 @@ class FindDialog {
    *   changed.
    */
   #addListeners() {
-    if (!this._onKeydown) {
-      this._onKeydown = (event) => {
-        const { code, ctrlKey, metaKey } = event;
-        if (
-          (code === "KeyF" && (ctrlKey || metaKey)) ||
-          (code === "Escape" && this.isVisible)
-        ) {
-          this.toggle();
-        }
-      };
-
+    if (!this._onResize) {
       this._onResize = () => {
         const navPanel = document.querySelector("#nav-panel");
 
@@ -174,7 +174,6 @@ class FindDialog {
         this.toggle(false);
       };
 
-      document.addEventListener("keydown", this._onKeydown);
       window.addEventListener("resize", this._onResize);
       $(document).on("newTemplate", this._onNewTemplate);
     }
@@ -273,7 +272,7 @@ class FindDialog {
  * The text is treated as a case-insensitive string, and the search is done
  * using the includes() method.
  */
-function openSearch() {
+function toggleSearch() {
   if (FindDialog.exists) {
     FindDialog.instance.toggle();
   } else {
@@ -312,6 +311,27 @@ function openSearch() {
   }
 }
 
+document.addEventListener("keydown", (event) => {
+  const { code, ctrlKey, metaKey } = event;
+  const platform = remote.getGlobal("platform");
+
+  // Ignore [Ctrl]+[f] on Mac
+  if (ctrlKey && platform === "mac") {
+    return;
+  }
+
+  // Toggle the search dialog on:
+  //   1. [Meta]+[f] on a Mac
+  //   2. [Ctrl]+[f] on Windows
+  //   3. [Esc] on any platform if the search dialog is visible
+  if (
+    ((ctrlKey || metaKey) && code === "KeyF") ||
+    (code === "Escape" && FindDialog.isVisible)
+  ) {
+    toggleSearch();
+  }
+});
+
 /**
  * Sorts two elements by their data-key attribute in ascending or descending order
  * @param {String} key - the data-key attribute to sort by
@@ -320,19 +340,17 @@ function openSearch() {
  */
 function sortBy(key, asc) {
   return (a, b) => {
-    return (a, b) => {
-      var valA = $(a).data(key);
-      var valB = $(b).data(key);
-      if (valA < valB) {
-        return asc ? -1 : 1;
-      }
+    const valA = $(a).data(key);
+    const valB = $(b).data(key);
+    if (valA < valB) {
+      return asc ? -1 : 1;
+    }
 
-      if (valA > valB) {
-        return asc ? 1 : -1;
-      }
+    if (valA > valB) {
+      return asc ? 1 : -1;
+    }
 
-      return 0;
-    };
+    return 0;
   };
 }
 
@@ -344,7 +362,6 @@ function sortBy(key, asc) {
 function sortItems(key, asc) {
   sortElements($("#browseCardBody"), key, asc);
   sortElements($("#listTable"), key, asc);
-  $("#searchdropdownmenu").hide();
 }
 
 /**

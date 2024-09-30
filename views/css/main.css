@@ -40,7 +40,7 @@ a {
 .badge {
   text-shadow: none;
 }
-.badge-success {
+.bg-success {
   background: #5a4;
 }
 .alert-warning {
@@ -250,6 +250,16 @@ html {
   overflow-y: scroll;
 }
 
+.small,
+small {
+  font-size: 0.75em;
+}
+
+.form-check-input:checked {
+  background-color: #bfbfbf;
+  border-color: #bfbfbf;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 6pt;
@@ -365,4 +375,12 @@ html {
 
 #installedmodaldiv .modal-content {
   min-height: 700px;
+}
+
+#bookmarksdropdown a {
+  text-decoration: none;
+}
+
+#bookmarksdropdown a:hover {
+  text-decoration: underline;
 }

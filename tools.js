@@ -30,7 +30,7 @@ const l = 32;
 const configLocationOld = path.join(global.homedir, "sidenoder-config.json");
 const configLocation = path.join(global.sidenoderHome, "config.json");
 
-let agentOculus, agentSteam, agentSQ;
+let agentOculus, agentSteam, agentSQ, tracker;
 
 init();
 
@@ -63,6 +63,7 @@ module.exports = {
   trackDevices,
   checkDeps,
   checkMount,
+  destroy,
   mount,
   killRClone,
   getDir,
@@ -908,7 +909,7 @@ async function trackDevices() {
   await getDeviceSync();
 
   try {
-    const tracker = await adb.trackDevices();
+    tracker = await adb.trackDevices();
     tracker.on("add", async (device) => {
       console.log("Device was plugged in", device.id);
       // await getDeviceSync();
@@ -926,13 +927,23 @@ async function trackDevices() {
     });
 
     tracker.on("end", () => {
-      console.error("Tracking stopped");
-      trackDevices();
+      console.log("Tracking stopped");
     });
   } catch (err) {
     console.error("Something went wrong:", err.stack);
     returnError(err);
   }
+}
+
+async function destroy() {
+  try {
+    await killRClone();
+  } catch (_err) {
+    console.log("rclone not started");
+  }
+
+  tracker.end();
+  tracker = null;
 }
 
 async function appInfo(args) {
@@ -1495,7 +1506,7 @@ async function killRClone() {
     platform == "win"
       ? `taskkill.exe /F /T /IM rclone.exe`
       : `killall -9 rclone`;
-  console.log("try kill rclone");
+  console.log("killing rclone");
   return new Promise((res, rej) => {
     exec(killCmd, (error, stdout, stderr) => {
       if (error) {
@@ -1624,17 +1635,23 @@ async function mount() {
   exec(
     `"${rcloneCmd}" ${mountCmd} --read-only --rc --rc-no-auth --config="${global.currentConfiguration.rcloneConf}" ${global.currentConfiguration.cfgSection}: "${global.mountFolder}"`,
     (error, stdout, stderr) => {
-      if (error) {
-        console.error("rclone error:", error);
-        if (RCLONE_ID != myId) error = false;
-        console.log({ RCLONE_ID, myId });
-        win.webContents.send("check_mount", { success: false, error });
-        // checkMount();
-        /*if (error.message.search('transport endpoint is not connected')) {
-        console.log('GEVONDE');
-      }*/
+      try {
+        // We need to use a try/catch here because the callback may have been
+        // called after rclone has been closed.
+        if (error) {
+          if (!tracker) {
+            // Window is closing
+            return;
+          }
+          console.error("rclone error:", error);
+          if (RCLONE_ID != myId) error = false;
+          console.log({ RCLONE_ID, myId });
+          win.webContents.send("check_mount", { success: false, error });
 
-        return;
+          return;
+        }
+      } catch (e) {
+        // Do nothing
       }
 
       if (stderr) {

@@ -1,21 +1,19 @@
 <!-- Modal -->
 <div class="modal" id="appinfoModal">
   <div
+    class="modal-dialog"
     role="document"
-    style="margin: 1.75rem auto; min-width: 800px; max-width: 834px"
+    style="margin: 1.75rem auto; min-width:800px; max-width:834px"
   >
-    <!-- class="modal-dialog" -->
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" data-bs-theme="dark">
         <h5 class="modal-title" id="appinfoModalLabel">Unknown</h5>
         <button
           type="button"
-          class="close"
-          data-dismiss="modal"
+          class="btn-close"
           aria-label="Close"
-        >
-          <span>&times;</span>
-        </button>
+          data-bs-dismiss="modal"
+        ></button>
       </div>
       <div class="modal-body">
         <div class="alert alert-warning">
@@ -56,7 +54,7 @@
         <div id="appinfoAbout" class="text-center"></div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Close
         </button>
       </div>
@@ -89,11 +87,15 @@
     $id('processingModal').modal('hide');
     console.log('app_info received');
     // console.log('app_info received', arg);
-    if (!arg || !arg.success) return console.log(arg);
+    if (!arg || !arg.success) {
+      return console.log(arg);
+    }
     const data = arg.data;
-    if (!data) return;
+    if (!data) {
+      return;
+    }
 
-    if (data.res == 'steam') {
+    if (data.res === 'steam') {
       $id('appinfoText').addClass('text-center');
     }
 
@@ -124,7 +126,7 @@
     if (data.url) {
       id('appinfoUrl').onclick = () => shell.openExternal(data.url);
       $id('appinfoUrl').show();
-      if (data.res != 'steam') {
+      if (data.res !== 'steam') {
         id('appinfoUrlDev').onclick = () =>
           ipcRenderer.send('dev_open_url', data.url);
         $id('appinfoUrlDev').show();
@@ -134,9 +136,11 @@
     if (data.genres) {
       for (const genre of data.genres) {
         const genre_text = genre.description || genre;
-        if (['Бесплатно', 'Free'].includes(genre_text)) continue;
+        if (['Бесплатно', 'Free'].includes(genre_text)) {
+          continue;
+        }
         $id('appinfoGenres').append(
-          `<span class="badge badge-secondary">${genre_text}</span> `,
+          `<span class="badge bg-secondary">${genre_text}</span> `,
         );
       }
     }
@@ -148,7 +152,9 @@
 
     if (data.movies) {
       for (const movie of data.movies) {
-        if (!movie.mp4) continue;
+        if (!movie.mp4) {
+          continue;
+        }
         slides += `<li><video width="800" style="max-height: 405px;" controls><source src="${movie.mp4['480']}" type="video/mp4"></video></li>`;
       }
     }

@@ -6,55 +6,94 @@
   "dependencies": {
     "@devicefarmer/adbkit": "3.2.6",
     "@electron/remote": "2.1.2",
+    "@eslint/js": "^9.10.0",
     "@fortawesome/fontawesome-free": "^6.6.0",
+    "@stylistic/eslint-plugin-js": "^2.7.2",
     "adbkit-apkreader": "3.2.0",
+    "bootstrap": "^5.3.3",
+    "bootswatch": "^5.3.3",
     "command-exists": "1.2.9",
     "compare-versions": "6.1.1",
     "electron-find": "1.0.7",
     "electron-twig": "1.1.1",
+    "eslint": "^9.10.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-html": "^8.1.1",
+    "eslint-plugin-json": "^4.0.1",
     "fix-path": "4.0.0",
+    "globals": "^15.9.0",
     "jquery": "3.7.1",
     "jquery-ui": "^1.14.0",
-    "node-fetch": "3.3.2",
     "socks-proxy-agent": "8.0.4",
     "web-auto-extractor": "1.0.17"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
     "@destination/prettier-plugin-twig": "^1.5.0",
     "electron": "32.0.2",
     "electron-builder": "25.0.5",
     "husky": "^9.1.5",
+    "inquirer": "^9.3.6",
     "lint-staged": "^15.2.10",
-    "prettier": "^3.3.3"
+    "markdownlint": "^0.35.0",
+    "markdownlint-cli": "^0.41.0",
+    "prettier": "^3.3.3",
+    "stylelint": "^16.9.0",
+    "stylelint-config-standard": "^36.0.1"
   },
   "scripts": {
-    "start": "electron ./ --dev",
-    "pack": "electron-builder --dir",
+    "clobber": "rm package-lock.json && rm -rf node_modules",
+    "commitlint": "commitlint --edit",
     "dist": "electron-builder -mwl",
     "dist-win": "electron-builder -w",
+    "dist-win-linux": "electron-builder -wl",
     "dist-mac": "electron-builder -m",
     "dist-linux": "electron-builder -l",
+    "eslint:check": "eslint .",
+    "eslint:fix": "eslint . --fix",
+    "markdownlint": "markdownlint \"**/*.md\"",
+    "markdownlint:fix": "markdownlint --fix \"**/*.md\"",
+    "pre-commit": "lint-staged --concurrent false",
     "prettier:check": "prettier --check \"**/*.{css,js,json,md,twig,yml}\"",
     "prettier:format": "prettier --write \"**/*.{css,js,json,md,twig,yml}\"",
     "postdist": "npm run pack-win && npm run pack-mac",
     "postinstall": "electron-builder install-app-deps",
+    "pack": "electron-builder --dir",
     "pack-win": "cd out/win-unpacked && cp ../windows-install.bat ./ && 7za a sidenoder-$npm_package_version-win.zip  ./* && mv sidenoder-$npm_package_version-win.zip ../",
     "pack-mac": "cd out/mac && tar -czf sidenoder-$npm_package_version-mac.tar.gz  ./* && mv sidenoder-$npm_package_version-mac.tar.gz ../",
-    "prepare": "husky"
+    "prepare": "husky",
+    "start": "electron ./ --dev",
+    "stylelint:check": "stylelint \"**/*.css\"",
+    "stylelint:fix": "stylelint --fix \"**/*.css\""
   },
   "lint-staged": {
-    "{**/*,*}.{css,js,json,md,twig,yml}": "prettier --write"
+    "*.md": "markdownlint --fix",
+    "*.css": "stylelint --fix",
+    "*.{js,html,twig}": "eslint --fix",
+    "*.{css,html,js,json,md,twig,yml}": "prettier --write"
   },
   "build": {
     "appId": "com.sidenoder.app",
     "asar": true,
     "directories": {
-      "output": "out"
+      "output": "/tmp/out"
     },
     "afterPack": "./removeLocales.js",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "VRPirates"
+      }
+    ],
     "mac": {
       "target": [
-        "dir"
+        {
+          "target": "dmg",
+          "arch": [
+            "universal"
+          ]
+        }
       ]
     },
     "win": {
@@ -77,6 +116,12 @@
         },
         {
           "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "rpm",
           "arch": [
             "x64"
           ]

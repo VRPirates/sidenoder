@@ -3,14 +3,18 @@ const LOCALES = ["en-US.pak", "ru.pak"];
 
 exports.default = async function (context) {
   // console.log(context);
-  var fs = require("fs");
-  var localeDir = context.appOutDir + "/locales/";
+  const fs = require("fs");
+  const localeDir = `${context.appOutDir}/locales/`;
 
   fs.readdir(localeDir, function (err, files) {
     //files is array of filenames (basename form)
-    if (!(files && files.length)) return;
+    if (!(files && files.length)) {
+      return;
+    }
     for (const file of files) {
-      if (LOCALES.includes(file)) continue;
+      if (LOCALES.includes(file)) {
+        continue;
+      }
       fs.unlinkSync(localeDir + file);
     }
   });

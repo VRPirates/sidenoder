@@ -1,0 +1,174 @@
+# This workflow runs on every new tag created, and builds the app for 3 platforms (mac, windows, linux).
+# It also creates a new release on the repo's Release page, and uploads the artifacts to there.
+#
+# Usage:
+#   git commit -m "Release v0.9.2"
+#   git push origin v0.9.2
+run-name: Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    name:  ${{ matrix.os == 'macos-latest' && 'Mac' || 'Linux' }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Get semver string
+        id: semver_parser
+        uses: booxmedialtd/ws-action-parse-semver@v1
+        with:
+          version_extractor_regex: 'v(.*)'
+          input_string: ${{ github.ref_name }}
+
+      - name: Get previous tag
+        run: |
+          PREVTAG=$(git describe --abbrev=0 --tags "${{ github.ref }}^")
+          echo "PREVTAG=$PREVTAG" >> $GITHUB_ENV
+
+      - name: Get version from package.json
+        run: |
+          echo PKGJSONVERSION=$(jq -r '.version' package.json) >> $GITHUB_ENV
+
+      - name: Version check
+        run: |
+          if [ "${{ env.PKGJSONVERSION }}" != "${{ steps.semver_parser.outputs.fullversion }}" ]; then
+            echo "Version mismatch: \"${{ env.PKGJSONVERSION }}\" != \""${{ steps.semver_parser.outputs.fullversion }}"\""
+            echo "You need to update the version number in package.json"
+            exit 1
+          fi
+
+      - name: Generate Changelog Body
+        if: matrix.os == 'macos-latest'
+        run: |
+          echo -e "# Sidenoder \`${{ github.ref_name }}\`" > changelog-body.md
+
+          git log ${{env.PREVTAG}}..HEAD^1 --pretty=format:"%s" | sort -f | while read line; do
+            line="$(tr '[:lower:]' '[:upper:]' <<< ${line:0:1})${line:1}"
+
+            case $line in
+            [Ff]eat*)
+                line=$(echo $line | sed -E "s/^[Ff]eat\(?.*\)?: //")
+                echo "- $line" >> commits-feat;;
+            [Ff]ix*)
+                line=$(echo $line | sed -E "s/^[Ff]ix\(?.*\)?: //")
+                echo "- $line" >> commits-fix;;
+            [Pp]erf*)
+                line=$(echo $line | sed -E "s/^[Pp]erf\(?.*\)?: //")
+                echo "- $line" >> commits-perf;;
+            [Ss]tyle*)
+                line=$(echo $line | sed -E "s/^[Ss]tyle\(?.*\)?: //")
+                echo "- $line" >> commits-style;;
+            [Mm]erge*)
+                # Skip merge commits
+                ;;
+            *)
+                echo "- $line" >> commits-other;;
+            esac
+          done
+
+          if [ -s commits-feat ]; then
+            echo -e "\n## New Features\n\n$(cat commits-feat)" > commits-feat
+              cat commits-feat >> changelog-body.md
+          fi
+
+          if [ -s commits-fix ]; then
+            echo -e "\n## Fixes\n\n$(cat commits-fix)" > commits-fix
+              cat commits-fix >> changelog-body.md
+          fi
+
+          if [ -s commits-perf ]; then
+            echo -e "\n## Performance Improvements\n\n$(cat commits-perf)" > commits-perf
+              cat commits-perf >> changelog-body.md
+          fi
+
+          if [ -s commits-style ]; then
+            echo -e "\n## Style Changes\n\n$(cat commits-style)" > commits-style
+              cat commits-style >> changelog-body.md
+          fi
+
+          if [ -s commits-other ]; then
+            echo -e "\n## Other Changes\n\n$(cat commits-other)" > commits-other
+              cat commits-other >> changelog-body.md
+          fi
+
+          echo -e "\n---\n\n" >> changelog-body.md
+          echo -e "### View the full changelog [here](https://github.com/MikeRatcliffe/sidenoder/compare/${{env.PREVTAG}}...${{ github.ref_name }})." >> changelog-body.md
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+
+      - name: Clobber And Install Dependencies
+        run: |
+          npm run clobber
+          npm install
+
+      - name: Build (Mac)
+        if: matrix.os == 'macos-latest'
+        run: |
+          npm run dist-mac
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Wine (Windows)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install wine32 wine64
+
+      - name: Build (Windows & Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: npm run dist-win-linux
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Build To Releases (Mac)
+        if: matrix.os == 'macos-latest'
+        uses: ncipollo/release-action@v1
+        with:
+          tag: v${{ steps.semver_parser.outputs.fullversion }}
+          allowUpdates: true
+          artifactErrorsFailBuild: true
+          bodyFile: changelog-body.md
+          generateReleaseNotes: false
+          makeLatest: false
+          prerelease: ${{ steps.semver_parser.outputs.prerelease != ''}}
+          replacesArtifacts: false
+          artifacts: /tmp/out/sidenoder*.dmg
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Builds To Releases (Windows & Linux)
+        if: matrix.os == 'ubuntu-latest'
+        uses: ncipollo/release-action@v1
+        with:
+          tag: v${{ steps.semver_parser.outputs.fullversion }}
+          allowUpdates: true
+          artifactErrorsFailBuild: true
+          generateReleaseNotes: false
+          makeLatest: true
+          omitBody: true
+          prerelease: ${{ steps.semver_parser.outputs.prerelease != ''}}
+          replacesArtifacts: false
+          artifacts: |
+            /tmp/out/sidenoder*.exe
+            /tmp/out/sidenoder*.AppImage
+            /tmp/out/sidenoder*.deb
+            /tmp/out/sidenoder*.rpm
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

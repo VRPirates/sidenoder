@@ -1,1 +1,1 @@
-npm run prettier:check
+npm run pre-commit

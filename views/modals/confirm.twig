@@ -4,21 +4,13 @@
   tabindex="-1"
   role="dialog"
   aria-labelledby="confirmModalLabel"
-  data-backdrop="static"
+  data-bs-backdrop="static"
   data-keyboard="false"
 >
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="confirmModalLabel">Confirm</h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
-          <span>&times;</span>
-        </button>
       </div>
       <div class="modal-body" id="confirmModalBody">
         <div id="confirmModalNotesCont" style="display: none">
@@ -50,13 +42,13 @@
         <div id="confirmModalMessage"></div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           No
         </button>
         <button
           type="button"
           id="confirmSideloadButton"
-          class="btn btn-primary disabled"
+          class="btn btn-primary"
         >
           Yes
         </button>
@@ -69,8 +61,8 @@
   //setup listener for confirm btn, takes path form data dir, and sends start_sideload
   $id('confirmSideloadButton').on('click', function () {
     $id('confirmModal').modal('hide');
-    //
-    data = {
+
+    const data = {
       path: $id('confirmSideloadButton').data('path'),
       update: $id('confirmSideloadButton').data('update'),
     };
@@ -84,7 +76,9 @@
     console.log('ask_sideload msg came ! ', arg);
     $id('processingModal').modal('hide');
     const { success, install, update } = arg;
-    if (!success) return;
+    if (!success) {
+      return;
+    }
 
     const lastslashindex = install.path.lastIndexOf('/');
     const file = install.path.substring(lastslashindex + 1);
@@ -92,7 +86,7 @@
     $id('confirmSideloadButton').data('path', install.path);
     $id('confirmSideloadButton').data('update', !!update);
     $id('confirmModalMessage').html(
-      'Do you want to sideload: <br><b>' + file + '</b>',
+      `Do you want to sideload: <br><b>${file}</b>`,
     );
 
     if (install.install_desc) {

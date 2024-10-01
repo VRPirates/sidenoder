@@ -1,3 +1,11 @@
+/* eslint
+  no-unused-vars: [
+    "error", {
+      "varsIgnorePattern": "getUpdates|update|uninstall|startApp|appTools",
+      "argsIgnorePattern": "^_"
+    }
+  ]
+*/
 console.log("ONLOAD INSTALLED");
 
 ipcRenderer.on("get_installed", (event, arg) => {
@@ -21,7 +29,7 @@ ipcRenderer.on("get_installed_with_updates", (event, arg) => {
   $id("processingModal").modal("hide");
 });
 
-ipcRenderer.on("uninstall", (event, arg) => {
+ipcRenderer.on("uninstall", (_event, _arg) => {
   console.log("uninstall msg came ! ");
   $id("installedModal").modal("hide");
   $id("appToolModal").modal("hide");

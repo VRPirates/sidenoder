@@ -1648,28 +1648,37 @@ async function mount() {
   );
 }
 
-function downloadMetadata() {
-  const rcloneCmd = global.currentConfiguration.rclonePath;
-  const syncCmd = global.currentConfiguration.syncCmd;
+async function downloadMetadata() {
+  try {
+    global.vrpPublic = await fetch(
+      "https://vrpirates.wiki/downloads/vrp-public.json",
+    );
+    global.vrpPublic = await global.vrpPublic.json();
 
-  exec(
-    `"${rcloneCmd}" copy --config="${global.currentConfiguration.rcloneConf}" --http-url "https://go.vrpyourself.online/" ":http:\/meta.7z" "${path.join(global.sidenoderHome, ".meta")}" --tpslimit 1.0 --tpslimit 1.0 --tpslimit-burst 31`,
-    (error, stdout, stderr) => {
-      if (error) {
-        console.error("metadata error:", error);
-        //win.webContents.send("check_mount", { success: false, error });
-        return;
-      }
+    const rcloneCmd = global.currentConfiguration.rclonePath;
+    const syncCmd = global.currentConfiguration.syncCmd;
 
-      if (stderr) {
-        console.log("metadata stderr:", stderr);
-        return;
-      }
+    exec(
+      `"${rcloneCmd}" copy --config="${global.currentConfiguration.rcloneConf}" --http-url "${global.vrpPublic.baseUri}" ":http:\/meta.7z" "${path.join(global.sidenoderHome, ".meta")}" --tpslimit 1.0 --tpslimit 1.0 --tpslimit-burst 31`,
+      (error, stdout, stderr) => {
+        if (error) {
+          console.error("metadata error:", error);
+          //win.webContents.send("check_mount", { success: false, error });
+          return;
+        }
 
-      extractMetadata();
-      console.log("metadata stdout:", stdout);
-    },
-  );
+        if (stderr) {
+          console.log("metadata stderr:", stderr);
+          return;
+        }
+
+        extractMetadata();
+        console.log("metadata stdout:", stdout);
+      },
+    );
+  } catch (e) {
+    console.log("Error downloading metadata", e);
+  }
 }
 
 function extractMetadata() {
@@ -1677,7 +1686,7 @@ function extractMetadata() {
   const syncCmd = global.currentConfiguration.syncCmd;
 
   exec(
-    `"${path.join(global.sidenoderHome, "7za")}" x -p${global.metaPassword} -y "${path.join(global.sidenoderHome, ".meta", "meta.7z")}" -o"${path.join(global.sidenoderHome)}"`,
+    `"${path.join(global.sidenoderHome, "7za")}" x -p${Buffer.from(global.vrpPublic.password, "base64")} -y "${path.join(global.sidenoderHome, ".meta", "meta.7z")}" -o"${path.join(global.sidenoderHome)}"`,
     (error, stdout, stderr) => {
       if (error) {
         console.error("metadata extract error:", error);

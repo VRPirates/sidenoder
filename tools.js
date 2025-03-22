@@ -64,6 +64,7 @@ module.exports = {
   checkDeps,
   checkMount,
   mount,
+  downloadMetadata,
   killRClone,
   getDir,
   returnError,
@@ -1647,6 +1648,57 @@ async function mount() {
   );
 }
 
+function downloadMetadata() {
+  const rcloneCmd = global.currentConfiguration.rclonePath;
+  const syncCmd = global.currentConfiguration.syncCmd;
+
+  exec(
+    `"${rcloneCmd}" copy --config="${global.currentConfiguration.rcloneConf}" --http-url "https://go.vrpyourself.online/" ":http:\/meta.7z" "${path.join(global.sidenoderHome, ".meta")}" --tpslimit 1.0 --tpslimit 1.0 --tpslimit-burst 31`,
+    (error, stdout, stderr) => {
+      if (error) {
+        console.error("metadata error:", error);
+        //win.webContents.send("check_mount", { success: false, error });
+        return;
+      }
+
+      if (stderr) {
+        console.log("metadata stderr:", stderr);
+        return;
+      }
+
+      extractMetadata();
+      console.log("metadata stdout:", stdout);
+    },
+  );
+}
+
+function extractMetadata() {
+  const rcloneCmd = global.currentConfiguration.rclonePath;
+  const syncCmd = global.currentConfiguration.syncCmd;
+
+  exec(
+    `"${path.join(global.sidenoderHome, "7za")}" x -p${global.metaPassword} -y "${path.join(global.sidenoderHome, ".meta", "meta.7z")}" -o"${path.join(global.sidenoderHome)}"`,
+    (error, stdout, stderr) => {
+      if (error) {
+        console.error("metadata extract error:", error);
+        //win.webContents.send("check_mount", { success: false, error });
+        return;
+      }
+
+      if (stderr) {
+        console.log("metadata extract stderr:", stderr);
+        return;
+      }
+
+      fs.unlink(
+        path.join(global.sidenoderHome, ".meta", "meta.7z"),
+        (err) => {},
+      );
+      console.log("metadata extract stdout:", stdout);
+    },
+  );
+}
+
 function resetCache(folder) {
   console.log("resetCache", folder);
   const oculusGamesDir = path
@@ -1712,7 +1764,7 @@ async function getDir(folder) {
               packageName: meta[3],
               versionCode: meta[4],
               versionName: meta[5],
-              imagePath: `file://${global.tmpdir}/mnt/${global.currentConfiguration.mntGamePath}/.meta/thumbnails/${meta[3]}.jpg`,
+              imagePath: `file://${global.sidenoderHome}/.meta/thumbnails/${meta[3]}.jpg`,
             };
           } else if (listVer == 2) {
             gameList[meta[1]] = {
@@ -1720,7 +1772,7 @@ async function getDir(folder) {
               releaseName: meta[1],
               packageName: meta[2],
               versionCode: meta[3],
-              imagePath: `file://${global.tmpdir}/mnt/${global.currentConfiguration.mntGamePath}/.meta/thumbnails/${meta[2]}.jpg`,
+              imagePath: `file://${global.sidenoderHome}/.meta/thumbnails/${meta[2]}.jpg`,
               size: meta[5],
             };
           }
@@ -2759,6 +2811,7 @@ async function reloadConfig() {
     rclonePath: "",
     rcloneConf: "",
     mountCmd: "mount",
+    syncCmd: "sync",
     cfgSection: "",
     snapshotsDelete: true,
     mntGamePath: "Quest Games",

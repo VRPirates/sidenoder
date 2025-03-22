@@ -141,7 +141,7 @@
     console.log('app_tools msg came: ', arg);
     $id('processingModal').modal('hide');
 
-    const { package, backupPath, availableRestore, availableConfig } = arg;
+    const { pkg, backupPath, availableRestore, availableConfig } = arg;
 
     $id('packageName').text(pkg);
 
@@ -170,7 +170,7 @@
     });
     $id('backupAppPath').click((e) => {
       shell.openPath(
-        path.join(remote.getGlobal('sidenoderHome'), 'backup_data', package),
+        path.join(remote.getGlobal('sidenoderHome'), 'backup_data', pkg),
       );
       return true;
     });
@@ -189,7 +189,7 @@
         .change(({ target }) => {
           $(target).removeClass('is-valid');
           ipcRenderer.send('app_config_set', {
-            package,
+            pkg,
             key: 'username',
             val: target.value,
           });

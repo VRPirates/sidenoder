@@ -9,14 +9,14 @@
           Rclone configs (needed for mount remote disks):
         </div>
         <div class="card-body">
-          <div class="form-group mb-3">
+          <div class="mb-3">
             <label for="cfgSection"
               >Select mirror(click on mount status button to remount):</label
             >
-            <select class="custom-select" id="cfgSection"></select>
+            <select class="form-select" id="cfgSection"></select>
           </div>
 
-          <div class="form-group mb-4">
+          <div class="mb-4">
             <label for="rclonePath">Custom binary path:</label>
             <div class="input-group">
               <input id="rclonePath" class="form-control" value="">
@@ -29,7 +29,7 @@
             </div>
           </div>
 
-          <div class="form-group mb-4">
+          <div class="mb-4">
             <label for="rcloneConf">Path config:</label>
             <div class="input-group">
               <input id="rcloneConf" class="form-control" value="">
@@ -38,10 +38,10 @@
           </div>
 
           {% if platform == 'mac' %}
-            <div class="form-group mb-4">
+            <div class="mb-4">
               <label for="rcloneConf">Path config:</label>
               <div class="input-group">
-                <select class="adbdev custom-select" id="mountCmd">
+                <select class="adbdev form-select" id="mountCmd">
                   <option value="mount">mount</option>
                   <option value="cmount">
                     cmount (support old rclone versions)
@@ -51,7 +51,7 @@
             </div>
           {% endif %}
 
-          <div class="form-check mb-0">
+          <div class="form-check form-switch mb-0">
             <label for="autoMount" class="form-check-label">
               <input class="form-check-input" type="checkbox" id="autoMount">
               Automatically mount drive on startup (if not already mounted)
@@ -63,7 +63,7 @@
       <div class="card bg-primary mb-2">
         <div class="card-header">Main:</div>
         <div class="card-body">
-          <div class="form-group mb-4">
+          <div class="mb-4">
             <label for="scrcpyPath"
               ><a onclick="shell.openExternal('https://github.com/Genymobile/scrcpy/releases/latest')"
                 >SCRCPY</a
@@ -81,7 +81,7 @@
             </div>
           </div>
 
-          <div class="form-group mb-4">
+          <div class="mb-4">
             <label for="tmpdir">Custom temp dirrectory:</label>
             <div class="input-group">
               <input id="tmpdir" class="form-control" value="">
@@ -89,7 +89,7 @@
             </div>
           </div>
 
-          <div class="form-check mb-3">
+          <div class="form-check form-switch">
             <label for="allowOtherDevices" class="form-check-label">
               <input
                 class="form-check-input"
@@ -100,7 +100,7 @@
             </label>
           </div>
 
-          <div class="form-check mb-3">
+          <div class="form-check form-switch">
             <label for="cacheOculusGames" class="form-check-label">
               <input
                 class="form-check-input"
@@ -111,7 +111,7 @@
             </label>
           </div>
 
-          <div class="form-check mb-0">
+          <div class="form-check form-switch mb-0">
             <label for="userHide" class="form-check-label">
               <input class="form-check-input" type="checkbox" id="userHide">
               Hide user name
@@ -119,7 +119,7 @@
           </div>
 
           <!--
-            <div class="form-group">
+            <div>
               <a id="debugTool" class="btn btn-primary">
                 <i class="fa fa-bug"></i> Open debug tools
               </a>
@@ -131,7 +131,7 @@
       <div class="card bg-primary mb-2">
         <div class="card-header">Proxy settings EXPERIMENTAL:</div>
         <div class="card-body">
-          <div class="form-group mb-4">
+          <div class="mb-4">
             <label for="proxyUrl"
               >Socks proxy url (for example from
               https://hideip.me/ru/proxy/socks5list):</label
@@ -144,21 +144,21 @@
             >
           </div>
 
-          <div class="form-check mb-0">
+          <div class="form-check form-switch mb-0">
             <label for="proxyOculus" class="form-check-label">
               <input class="form-check-input" type="checkbox" id="proxyOculus">
               <img src="img/oculus.svg" width="14" style="margin-top: -2px;">
               Enable proxy for fetch Oculus information
             </label>
           </div>
-          <div class="form-check mb-0">
+          <div class="form-check form-switch mb-0">
             <label for="proxySteam" class="form-check-label">
               <input class="form-check-input" type="checkbox" id="proxySteam">
               <i class="fa-brands fa-square-steam"></i> Enable proxy for fetch
               Steam information
             </label>
           </div>
-          <div class="form-check mb-0">
+          <div class="form-check form-switch mb-0">
             <label for="proxySQ" class="form-check-label">
               <input class="form-check-input" type="checkbox" id="proxySQ">
               <img src="img/sq-white.svg" width="14"> Enable proxy for fetch
@@ -167,7 +167,7 @@
           </div>
 
           <!--
-            <div class="form-group">
+            <div>
               <a id="debugTool" class="btn btn-primary">
                 <i class="fa fa-bug"></i> Open debug tools
               </a>

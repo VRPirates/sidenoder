@@ -1,21 +1,19 @@
 <!-- Modal -->
 <div class="modal" id="scrcpyModal">
   <div
+    class="modal-dialog"
     role="document"
-    style="margin: 1.75rem auto; min-width: 580px; max-width: 40%"
+    style="margin: 1.75rem auto; min-width:580px; max-width:40%"
   >
-    <!-- class="modal-dialog" -->
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" data-bs-theme="dark">
         <h5 class="modal-title" id="scrcpyModalLabel">Screen share</h5>
         <button
           type="button"
-          class="close"
-          data-dismiss="modal"
+          class="btn-close"
           aria-label="Close"
-        >
-          <span>&times;</span>
-        </button>
+          data-bs-dismiss="modal"
+        ></button>
       </div>
       <div class="modal-body">
         <div class="card-body">
@@ -28,14 +26,14 @@
               >scrcpy</a
             >
           </div>
-          <div class="form-group">
+          <div class="mb-3">
             <label class="mb-1" for="scrcpyBitrate">
               <h6 class="card-title mb-0">Video BitRate</h6>
               <small class="card-text"> Performance option </small>
             </label>
-            <select id="scrcpyBitrate" class="adbdev custom-select"></select>
+            <select id="scrcpyBitrate" class="adbdev form-select"></select>
           </div>
-          <div class="form-group">
+          <div class="mb-3">
             <label class="mb-1" for="scrcpyCrop">
               <h6 class="card-title mb-0">Crop</h6>
               <small class="card-text">
@@ -47,14 +45,14 @@
             </label>
             <input
               id="scrcpyCrop"
-              class="adbdev form-control col-6"
-              style="display: inline-block"
+              class="adbdev form-control col-6 mb-1"
+              style="display:inline-block;"
               value=""
             >
             <a class="btn btn-info" id="crop_quest2">Quest 2</a>
             <a class="btn btn-info" id="crop_quest1">Quest 1</a>
           </div>
-          <div class="form-group">
+          <div class="mb-3">
             <label class="mb-1" for="scrcpyFps">
               <h6 class="card-title mb-0">Max fps</h6>
               <small class="card-text">
@@ -63,7 +61,7 @@
             </label>
             <input id="scrcpyFps" class="adbdev form-control" value="">
           </div>
-          <div class="form-group">
+          <div class="mb-3">
             <label class="mb-1" for="scrcpySize">
               <h6 class="card-title mb-0">Max Size</h6>
               <small class="card-text">
@@ -74,7 +72,7 @@
             </label>
             <input id="scrcpySize" class="adbdev form-control" value="">
           </div>
-          <div class="form-check mb-3">
+          <div class="form-check form-switch mb-3">
             <label for="scrcpyWindow" class="form-check-label">
               <input
                 class="form-check-input"
@@ -84,7 +82,7 @@
               Cast in window
             </label>
           </div>
-          <div class="form-check mb-3">
+          <div class="form-check form-switch mb-3">
             <label for="scrcpyControl" class="form-check-label">
               <input
                 class="form-check-input"
@@ -101,11 +99,11 @@
           id="scrcpy_start"
           type="button"
           class="btn btn-primary"
-          data-dismiss="modal"
+          data-bs-dismiss="modal"
         >
           Start stream
         </button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Close
         </button>
       </div>

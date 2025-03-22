@@ -122,6 +122,7 @@ async function checkMount(event) {
   await tools.checkMount();
   event.reply("check_mount", { success: global.mounted });
   if (global.mounted && !rcloneProgress) {
+    tools.downloadMetadata();
     tools.updateRcloneProgress();
     rcloneProgress = true;
   }

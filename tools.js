@@ -1768,12 +1768,9 @@ async function getDir(folder) {
         let isGameFolder = false;
 
         if (info.isDirectory()) {
-          const dirCont = await fsp.readdir(path.join(folder, fileName));
-
-          isGameFolder =
-            dirCont.filter((file) => {
-              return /.*\.apk/.test(file);
-            }).length > 0;
+          isGameFolder = folder.includes(
+            global.currentConfiguration.mntGamePath,
+          );
         }
 
         let gameMeta = false;

@@ -320,19 +320,17 @@ function openSearch() {
  */
 function sortBy(key, asc) {
   return (a, b) => {
-    return (a, b) => {
-      var valA = $(a).data(key);
-      var valB = $(b).data(key);
-      if (valA < valB) {
-        return asc ? -1 : 1;
-      }
+    var valA = $(a).data(key);
+    var valB = $(b).data(key);
+    if (valA < valB) {
+      return asc ? -1 : 1;
+    }
 
-      if (valA > valB) {
-        return asc ? 1 : -1;
-      }
+    if (valA > valB) {
+      return asc ? 1 : -1;
+    }
 
-      return 0;
-    };
+    return 0;
   };
 }
 
